@@ -11,6 +11,11 @@ const configSchema = z.object({
     DATABASE: z.string(),
     PORT: z.string().transform(Number),
   }),
+  redis: z.object({
+    host: z.string(),
+    port: z.string().transform(Number),
+    password: z.string().optional(),
+  }),
 });
 
 const config = configSchema.parse({
@@ -22,6 +27,11 @@ const config = configSchema.parse({
     PASSWORD: process.env.DB_PASSWORD,
     DATABASE: process.env.DB_NAME,
     PORT: process.env.DB_PORT,
+  },
+  redis: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+    password: process.env.REDIS_PASSWORD,
   },
 });
 
