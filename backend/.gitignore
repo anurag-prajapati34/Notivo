@@ -8,3 +8,5 @@ dist/
 
 # dotenv
 .env
+#data querying test file
+notivo.session.sql
