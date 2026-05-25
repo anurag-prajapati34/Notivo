@@ -16,6 +16,16 @@ const configSchema = z.object({
     port: z.string().transform(Number),
     password: z.string().optional(),
   }),
+  email: z.object({
+    from: z.string(),
+    host: z.string(),
+    port: z.string().transform(Number),
+    secure: z.boolean(),
+    auth: z.object({
+      user: z.string(),
+      pass: z.string(),
+    }),
+  }),
 });
 
 const config = configSchema.parse({
@@ -32,6 +42,16 @@ const config = configSchema.parse({
     host: process.env.REDIS_HOST,
     port: process.env.REDIS_PORT,
     password: process.env.REDIS_PASSWORD,
+  },
+  email: {
+    from: process.env.SMTP_FROM,
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    secure: process.env.SMTP_SECURE === "true",
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
   },
 });
 
