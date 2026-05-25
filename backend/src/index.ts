@@ -4,9 +4,13 @@ import { logger } from "./utils/logger";
 import { testConnection } from "./database/connection";
 import { config } from "./config";
 import dotenv from "dotenv";
+import v1 from "./routes/v1/index.ts";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 //Start Server
 async function startServer() {
   try {
@@ -68,3 +72,7 @@ startServer().catch((error) => {
   logger.error("❌ Unhandled error during startup:", error);
   process.exit(1);
 });
+
+app.use("/api/v1", v1);
+
+export default app;
