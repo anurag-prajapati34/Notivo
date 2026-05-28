@@ -15,6 +15,13 @@
       "when": 1779950763644,
       "tag": "0001_oval_lightspeed",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1779969462315,
+      "tag": "0002_special_hiroim",
+      "breakpoints": true
     }
   ]
 }

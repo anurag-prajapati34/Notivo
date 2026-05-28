@@ -18,6 +18,8 @@ export const users = mysqlTable(
     email: varchar("email", { length: 255 }),
     password: varchar("password", { length: 500 }),
 
+    apiKey: varchar("api_key", { length: 500 }),
+
     //Audit fields
     status: boolean("status").default(true),
     createdAt: timestamp("created_at").defaultNow(),
