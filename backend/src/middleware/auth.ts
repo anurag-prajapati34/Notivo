@@ -26,6 +26,27 @@ const getUserByUserId = async (userId: number) => {
     .limit(1);
   return result.length > 0 ? result[0] : null;
 };
+/**
+ * Retrieves an active user from the database by their API key.
+ * * @param {string} apiKey - The API key of the user to fetch.
+ * @returns {Promise<object|null>} A promise that resolves to the user record object if found and active, or `null` otherwise.
+ */
+const getUserByApiKey = async (apiKey: string) => {
+  const result = await db
+    .select({
+      userId: users.userId,
+      firstName: users.firstName,
+      middleName: users.middleName,
+      lastName: users.lastName,
+      dialCode: users.dialCode,
+      mobile: users.mobile,
+      email: users.email,
+    })
+    .from(users)
+    .where(and(eq(users.apiKey, apiKey), eq(users.status, true)))
+    .limit(1);
+  return result.length > 0 ? result[0] : null;
+};
 
 /**
  * Express middleware that validates the authorization headers for a valid Bearer token.
@@ -70,5 +91,32 @@ export const authenticate = async (
     } else {
       next(error);
     }
+  }
+};
+
+export const authenticateApiKey = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      throw new Error("API key required");
+    }
+    const apiKey = authHeader.substring(7);
+    if (!apiKey) {
+      throw new Error("API key required");
+    }
+
+    const user = await getUserByApiKey(apiKey);
+    if (!user) {
+      throw new Error("Invalid api key");
+    }
+    (req as any).user = user;
+
+    next();
+  } catch (error) {
+    next(error);
   }
 };
