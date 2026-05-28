@@ -1,8 +1,10 @@
 import { handleHandlerError } from "@/utils/error-helpers";
 import { created } from "@/utils/response";
 import { Request, Response } from "express";
-import { loginService, signupService } from "./service";
+import { generateApiKeyService, loginService, signupService } from "./service";
 import { LoginRequestBodyType, SignupRequestBodyType } from "./validator";
+import { AuthRequest } from "@/utils/types";
+import { generateApiKey } from "@/utils/encryption";
 
 /**
  * Express controller handler for the user signup route.
@@ -26,6 +28,17 @@ export const loginHandler = async (req: Request, res: Response) => {
   try {
     const reqBody = req.body as LoginRequestBodyType;
     const result = await loginService(reqBody);
+    return created(res, result, "User created successfully");
+  } catch (error) {
+    handleHandlerError(res, error);
+  }
+};
+
+export const getApiKeyHandler = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.userId!;
+    if (!userId) throw new Error("User not found");
+    const result = await generateApiKeyService(userId);
     return created(res, result, "User created successfully");
   } catch (error) {
     handleHandlerError(res, error);

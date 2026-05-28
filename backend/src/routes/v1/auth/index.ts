@@ -1,5 +1,6 @@
+import { authenticate } from "@/middleware/auth";
 import express from "express";
-import { loginHandler, signupHandler } from "./handler";
+import { getApiKeyHandler, loginHandler, signupHandler } from "./handler";
 import {
   validateLoginRequestBody,
   validateSignupRequestBody,
@@ -8,4 +9,6 @@ const route = express.Router();
 
 route.post("/signup", validateSignupRequestBody, signupHandler);
 route.post("/login", validateLoginRequestBody, loginHandler);
+
+route.get("/api-key", authenticate, getApiKeyHandler);
 export default route;

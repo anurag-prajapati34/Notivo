@@ -5,8 +5,10 @@ import {
   insertUsersQuery,
   isUserExistsWithEmailQuery,
   isUserExistsWithMobileQuery,
+  updateUserQuery,
 } from "./queries";
 import { LoginRequestBodyType, SignupRequestBodyType } from "./validator";
+import { generateApiKey } from "@/utils/encryption";
 
 /**
  * Business logic service to handle new user registration.
@@ -100,6 +102,19 @@ export const loginService = async (input: LoginRequestBodyType) => {
       lastName: user.lastName,
       token: token,
     };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const generateApiKeyService = async (userId: number) => {
+  try {
+    const apiKey = generateApiKey();
+    await updateUserQuery(userId, {
+      apiKey: apiKey,
+      updatedAt: new Date(),
+    });
+    return { apiKey };
   } catch (error) {
     throw error;
   }

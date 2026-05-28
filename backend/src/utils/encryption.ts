@@ -1,5 +1,6 @@
 import { config } from "@/config";
 import CryptoJS from "crypto-js";
+import Crypto from "crypto";
 
 /**
  * Encrypts a plain text string using AES encryption and a configured secret key.
@@ -37,4 +38,18 @@ export const dcrypt = (text: string): string => {
     CryptoJS.enc.Utf8,
   );
   return decryptedText;
+};
+
+/**
+ * Generates a unique API key with a prefix "notivo_"
+ * * @returns {string} The generated API key.
+ */
+
+export const generateApiKey = () => {
+  //Generate raw api key
+  const rawApiKey = Crypto.randomBytes(32).toString("hex");
+  const prefix = "notivo";
+  const prefixedApiKey = `${prefix}_${rawApiKey}`;
+
+  return prefixedApiKey;
 };

@@ -1,5 +1,5 @@
 import { db } from "@/database/connection";
-import { NewUser, users } from "@/database/schema";
+import { NewUser, User, users } from "@/database/schema";
 import { TransactionContext } from "@/utils/types";
 import { and, eq } from "drizzle-orm";
 
@@ -90,4 +90,12 @@ export const getUserQuery = async (
     .limit(1);
 
   return result.length > 0 ? result[0] : null;
+};
+
+export const updateUserQuery = async (
+  userId: number,
+  input: Partial<User>,
+  trx: TransactionContext = db,
+) => {
+  return await trx.update(users).set(input).where(eq(users.userId, userId));
 };
