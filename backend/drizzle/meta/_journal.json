@@ -8,6 +8,13 @@
       "when": 1779631918240,
       "tag": "0000_odd_leper_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1779950763644,
+      "tag": "0001_oval_lightspeed",
+      "breakpoints": true
     }
   ]
 }
