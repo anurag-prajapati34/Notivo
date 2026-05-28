@@ -1,8 +1,8 @@
-import { created, internalServerError } from "@/utils/response";
-import { Request, Response } from "express";
-import { SignupRequestBodyType } from "./validator";
 import { handleHandlerError } from "@/utils/error-helpers";
-import { signupService } from "./service";
+import { created } from "@/utils/response";
+import { Request, Response } from "express";
+import { loginService, signupService } from "./service";
+import { LoginRequestBodyType, SignupRequestBodyType } from "./validator";
 
 /**
  * Express controller handler for the user signup route.
@@ -16,6 +16,16 @@ export const signupHandler = async (req: Request, res: Response) => {
   try {
     const reqBody = req.body as SignupRequestBodyType;
     const result = await signupService(reqBody);
+    return created(res, result, "User created successfully");
+  } catch (error) {
+    handleHandlerError(res, error);
+  }
+};
+
+export const loginHandler = async (req: Request, res: Response) => {
+  try {
+    const reqBody = req.body as LoginRequestBodyType;
+    const result = await loginService(reqBody);
     return created(res, result, "User created successfully");
   } catch (error) {
     handleHandlerError(res, error);

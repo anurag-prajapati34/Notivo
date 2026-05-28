@@ -66,3 +66,28 @@ export const insertUsersQuery = async (
 ) => {
   return await trx.insert(users).values(input);
 };
+
+export const getUserQuery = async (
+  input: {
+    email?: string;
+    mobile?: string;
+  },
+  trx: TransactionContext = db,
+) => {
+  const whereConditions = [eq(users.status, true)];
+
+  if (input.email) {
+    whereConditions.push(eq(users.email, input.email));
+  }
+  if (input.mobile) {
+    whereConditions.push(eq(users.mobile, input.mobile));
+  }
+
+  const result = await trx
+    .select()
+    .from(users)
+    .where(and(...whereConditions))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : null;
+};

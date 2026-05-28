@@ -1,10 +1,12 @@
-import { encrypt } from "@/utils/encryption";
+import { generateJwtAuthToken } from "@/utils/jwt-helpers";
+import bcrypt from "bcryptjs";
 import {
+  getUserQuery,
   insertUsersQuery,
   isUserExistsWithEmailQuery,
   isUserExistsWithMobileQuery,
 } from "./queries";
-import { SignupRequestBodyType } from "./validator";
+import { LoginRequestBodyType, SignupRequestBodyType } from "./validator";
 
 /**
  * Business logic service to handle new user registration.
@@ -42,6 +44,7 @@ export const signupService = async (input: SignupRequestBodyType) => {
       }
     }
 
+    const hashedPassword = bcrypt.hashSync(input.password, 10);
     //create user
     const inesrtResult = await insertUsersQuery([
       {
@@ -50,7 +53,7 @@ export const signupService = async (input: SignupRequestBodyType) => {
         lastName: input.lastName,
         mobile: input.mobile,
         dialCode: input.dialCode,
-        password: encrypt(input.password),
+        password: hashedPassword,
       },
     ]);
     const userId = inesrtResult[0].insertId;
@@ -58,6 +61,45 @@ export const signupService = async (input: SignupRequestBodyType) => {
       throw new Error("User not created");
     }
     return { userId };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const loginService = async (input: LoginRequestBodyType) => {
+  try {
+    const { email, mobile, password } = input;
+    const user = await getUserQuery({ email, mobile });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (user.password) {
+      const isPasswordMatch = bcrypt.compareSync(password, user.password);
+      if (!isPasswordMatch) {
+        throw new Error("Invalid password");
+      }
+    } else {
+      throw new Error("Password not set");
+    }
+
+    const token = await generateJwtAuthToken({
+      userId: user.userId,
+      email: user.email,
+      firstName: user.firstName,
+    });
+
+    return {
+      userId: user.userId,
+      email: user.email,
+      mobile: user.mobile,
+      dialCode: user.dialCode,
+      firstName: user.firstName,
+      middleName: user.middleName,
+      lastName: user.lastName,
+      token: token,
+    };
   } catch (error) {
     throw error;
   }

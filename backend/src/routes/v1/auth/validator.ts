@@ -3,7 +3,6 @@ import {
   mobileSchema,
   passwordSchema,
   stringSchema,
-  stringSchemaOptional,
 } from "@/utils/zod-helpers";
 import z from "zod";
 
@@ -17,3 +16,21 @@ export const SignupRequestBodySchema = z.object({
 });
 
 export type SignupRequestBodyType = z.infer<typeof SignupRequestBodySchema>;
+
+export const LoginRequestBodySchema = z
+  .object({
+    email: emailSchema().optional(),
+    mobile: mobileSchema().optional(),
+    password: passwordSchema("Password"),
+  })
+  .refine(
+    (data) => {
+      return data.mobile || data.email;
+    },
+    {
+      message: "Either email or mobile is required",
+      path: ["email", "mobile"],
+    },
+  );
+
+export type LoginRequestBodyType = z.infer<typeof LoginRequestBodySchema>;
