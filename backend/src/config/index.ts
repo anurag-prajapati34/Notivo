@@ -26,6 +26,7 @@ const configSchema = z.object({
       pass: z.string(),
     }),
   }),
+  encryptionKey: z.string(),
 });
 
 const config = configSchema.parse({
@@ -53,6 +54,7 @@ const config = configSchema.parse({
       pass: process.env.SMTP_PASS,
     },
   },
+  encryptionKey: process.env.ENCRYPTION_KEY,
 });
 
 export { config };
