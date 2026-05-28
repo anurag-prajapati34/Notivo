@@ -1,7 +1,7 @@
 import { config } from "@/config";
 import jwt from "jsonwebtoken";
 
-interface JwtAuthPayload {
+export interface JwtAuthPayload {
   userId: number;
   email: string | null;
   firstName: string | null;
@@ -17,4 +17,14 @@ export const generateJwtAuthToken = (payload: JwtAuthPayload) => {
   return jwt.sign(payload, config.jwt.secret, {
     expiresIn: config.jwt.expiresIn,
   });
+};
+/**
+ * Decodes a JSON Web Token (JWT) and returns the payload data.
+ *
+ * @param {string} token - The JWT to be decoded.
+ * @returns {any} The decoded payload data.
+ */
+
+export const decodeJwt = (token: string) => {
+  return jwt.verify(token, config.jwt.secret);
 };
