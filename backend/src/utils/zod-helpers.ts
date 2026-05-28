@@ -94,3 +94,45 @@ export const stringSchemaOptional = (
     })
     .optional();
 };
+
+export const mobileSchema = (name?: string) => {
+  return z
+    .string()
+    .min(10, {
+      message: `${name || "Mobile"} must be at least 10 characters long`,
+    })
+    .max(15, {
+      message: `${name || "Mobile"} must be at most 15 characters long`,
+    })
+    .regex(/^\d+$/, {
+      message: `${name || "Mobile"} must contain only digits`,
+    });
+};
+
+export const emailSchema = (name?: string) => {
+  return z
+    .email()
+    .min(5, {
+      message: `${name || "Email"} must be at least 5 characters long`,
+    })
+    .max(100, {
+      message: `${name || "Email"} must be at most 100 characters long`,
+    });
+};
+
+export const passwordSchema = (name?: string) => {
+  return z
+    .string()
+    .min(8, {
+      message: `${name || "Password"} must be at least 8 characters long`,
+    })
+    .max(100, {
+      message: `${name || "Password"} must be at most 100 characters long`,
+    })
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      {
+        message: `${name || "Password"} must contain at least one lowercase letter, one uppercase letter, one digit, and one special character`,
+      },
+    );
+};
