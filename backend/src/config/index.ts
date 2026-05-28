@@ -27,6 +27,34 @@ const configSchema = z.object({
     }),
   }),
   encryptionKey: z.string(),
+  jwt: z.object({
+    secret: z.string(),
+    expiresIn: z.union([
+      z.enum([
+        "1s",
+        "5s",
+        "10s",
+        "15s",
+        "30s",
+        "1m",
+        "5m",
+        "10m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "6h",
+        "12h",
+        "24h",
+        "1d",
+        "2d",
+        "7d",
+        "14d",
+        "30d",
+      ]),
+      z.number().positive(),
+    ]),
+  }),
 });
 
 const config = configSchema.parse({
@@ -55,6 +83,10 @@ const config = configSchema.parse({
     },
   },
   encryptionKey: process.env.ENCRYPTION_KEY,
+  jwt: {
+    secret: process.env.JWT_SECRET_KEY,
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  },
 });
 
 export { config };
