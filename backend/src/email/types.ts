@@ -23,3 +23,15 @@ export interface EmailResult {
   error?: string;
   recipient: string;
 }
+
+export interface EmailJobData {
+  templateId: string;
+  to: string | string[];
+  subject: string;
+  from?: string;
+  fromName?: string;
+  attachments?: Array<{
+    filename: string;
+    path: string;
+  }>;
+}

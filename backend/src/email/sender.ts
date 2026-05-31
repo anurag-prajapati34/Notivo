@@ -1,7 +1,8 @@
 import { config } from "@/config";
 import { logger } from "@/utils/logger";
 import nodemailer from "nodemailer";
-import { EmailOptions, EmailResult } from "./types";
+import { EmailJobData, EmailOptions, EmailResult } from "./types";
+import { template } from "./templates/test";
 
 const getEmailConfig = () => {
   const { host, auth, port, secure } = config.email;
@@ -103,4 +104,14 @@ export const sendEmail = async (
       recipient: Array.isArray(options.to) ? options.to.join(", ") : options.to,
     };
   }
+};
+
+export const sendUserEmail = async (jobData: EmailJobData) => {
+  // const template=await getEmailTemplate(jobData.templateId);
+  const result = await sendEmail({
+    to: jobData.to,
+    subject: jobData.subject,
+    html: template,
+  });
+  return result;
 };

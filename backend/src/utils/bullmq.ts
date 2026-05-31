@@ -42,12 +42,12 @@ export const defaultWorkerOptions = {
  * @param queueOptions - Additional BullMQ queue options (optional)
  * @returns BullMQ Queue instance
  */
-export function createQueue(
+export function createQueue<T = any, R = any>(
   queueName: string,
   customJobOptions?: Partial<typeof defaultJobOptions>,
   queueOptions?: QueueOptions,
-) {
-  const queue = new Queue(queueName, {
+): Queue<T, R> {
+  const queue = new Queue<T, R>(queueName, {
     connection: redisConnection,
     ...queueOptions,
     defaultJobOptions: {
@@ -55,6 +55,7 @@ export function createQueue(
       ...customJobOptions,
     },
   });
+
   logger.info(`BullMQ queue created: ${queueName}`);
   return queue;
 }
@@ -79,6 +80,27 @@ export function createWorker<T = any, R = any>(
 
   logger.info(`BullMQ worker created: ${queueName}`);
   return worker;
+}
+
+/**
+ * Gracefully shuts down a worker
+ *
+ * @param worker - BullMQ Worker instance
+ * @param queueName - Name of the queue (for logging)
+ */
+export async function shutdownWorker<T = any, R = any>(
+  worker: Worker<T, R>,
+  queueName: string,
+): Promise<void> {
+  try {
+    logger.info(`Shutting down worker for queue: ${queueName}`);
+    await worker.close();
+    logger.info(`Worker shutdown complete for queue: ${queueName}`);
+  } catch (error) {
+    logger.error(`Error shutting down worker for queue: ${queueName}`, {
+      error,
+    });
+  }
 }
 
 /**
