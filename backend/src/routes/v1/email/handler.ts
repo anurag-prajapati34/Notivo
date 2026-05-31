@@ -1,16 +1,14 @@
 import { sendEmail } from "@/email";
+import { template } from "@/email/templates/test";
+import { addEmailJob } from "@/jobs/email-queue";
 import { Request, Response } from "express";
 
 export async function sendEmailHandler(req: Request, res: Response) {
   try {
-    await sendEmail({
+    await addEmailJob({
+      templateId: "33e",
       to: "prajapatianurag73240@gmail.com",
       subject: "test",
-      text: "Testing , Hello Anurag",
-      html: `
-        <h1>Testing</h1>
-        <p>Hello Anurag</p>
-        `,
     });
     return res.status(200).json({
       success: true,
