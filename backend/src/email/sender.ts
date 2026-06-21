@@ -3,6 +3,8 @@ import { logger } from "@/utils/logger";
 import nodemailer from "nodemailer";
 import { EmailJobData, EmailOptions, EmailResult } from "./types";
 import { template } from "./templates/test";
+import { updateEmailQuery } from "@/routes/v1/email/queries";
+import { emailStatus } from "@/utils/enum";
 
 const getEmailConfig = () => {
   const { host, auth, port, secure } = config.email;
@@ -113,5 +115,17 @@ export const sendUserEmail = async (jobData: EmailJobData) => {
     subject: jobData.subject,
     html: template,
   });
+  if (result.success) {
+    await updateEmailQuery(jobData.emailId, {
+      emailStatus: emailStatus.SENT,
+      updatedAt: new Date(),
+    });
+  } else {
+    await updateEmailQuery(jobData.emailId, {
+      emailStatus: emailStatus.FAILED,
+      updatedAt: new Date(),
+      lastErrorMessage: result.error,
+    });
+  }
   return result;
 };

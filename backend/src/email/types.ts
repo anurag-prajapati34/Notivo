@@ -25,7 +25,8 @@ export interface EmailResult {
 }
 
 export interface EmailJobData {
-  templateId: string;
+  emailId: number;
+  templateId: number;
   to: string | string[];
   subject: string;
   from?: string;
