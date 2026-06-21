@@ -1,16 +1,44 @@
-import express from "express";
-import { initializeDatabase } from "./database/init";
-import { apiRequestLogger, logger } from "./utils/logger";
-import { testConnection } from "./database/connection";
-import { config } from "./config";
+import cors from "cors";
 import dotenv from "dotenv";
+import express from "express";
+import { config } from "./config";
+import { testConnection } from "./database/connection";
+import { initializeDatabase } from "./database/init";
 import v1 from "./routes/v1/index.ts";
+import { apiRequestLogger, logger } from "./utils/logger";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+    ],
+    exposedHeaders: ["Content-Length", "X-Requested-With"],
+  }),
+);
+
+/**
+ * Preflight CORS handling for all routes.
+ *
+ * @description
+ * Handles CORS preflight requests for all routes to ensure
+ * proper cross-origin request handling.
+ *
+ * @since 1.0.0
+ * @author System Administrator
+ */
+// app.options("*", cors()); // ✅ handles preflight
+
 //Start Server
 async function startServer() {
   try {
