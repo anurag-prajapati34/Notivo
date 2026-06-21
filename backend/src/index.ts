@@ -1,6 +1,6 @@
 import express from "express";
 import { initializeDatabase } from "./database/init";
-import { logger } from "./utils/logger";
+import { apiRequestLogger, logger } from "./utils/logger";
 import { testConnection } from "./database/connection";
 import { config } from "./config";
 import dotenv from "dotenv";
@@ -73,6 +73,9 @@ startServer().catch((error) => {
   process.exit(1);
 });
 
+// Log any incomming api requests
+app.use(apiRequestLogger);
+// Register routes
 app.use("/api/v1", v1);
 
 export default app;
