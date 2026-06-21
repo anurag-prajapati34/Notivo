@@ -13,7 +13,7 @@ export const signup = async (input: Signup) => {
   return data;
 };
 
-const getAuthTokenKey = () => {
+export const getAuthTokenKey = () => {
   return import.meta.env.VITE_TOKEN_KEY || "notivo";
 };
 

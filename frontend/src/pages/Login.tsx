@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { login } from "../apis/auth.api";
 import { useAuthContext } from "../hooks";
 
 export const LoginPage = () => {
-    const { setIsLoggedIn } = useAuthContext();
+    const { setIsLoggedIn, isLoggedIn, checkAuth } = useAuthContext();
+    const navigate = useNavigate();
     const [loginDetails, setLoginDetails] = useState<{
         email: string | null;
         password: string | null
@@ -38,7 +40,20 @@ export const LoginPage = () => {
         }
         await login(loginDetails as any);
         setIsLoggedIn(true);
+        navigate('/')
+
     }
+    checkAuth();
+
+
+    useEffect(() => {
+        console.log("isLoggedIn", isLoggedIn)
+        if (!isLoggedIn) {
+            navigate('/login')
+        } else {
+            navigate('/')
+        }
+    }, [])
 
     return (
         <>
