@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { setEmailCredsApi } from "../apis/creds.api";
+import { getApiKeyApi, setEmailCredsApi } from "../apis/creds.api";
 import { Button } from "../components/button";
 import type { EmailCreds } from "../types";
 
@@ -8,6 +8,8 @@ export const Credentials = () => {
         email: "",
         passKey: ""
     });
+
+    const [apiKey, setApiKey] = useState<string>("");
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -23,6 +25,16 @@ export const Credentials = () => {
         if (emailCreds.email.trim().length > 0 && emailCreds.passKey.trim().length > 0) {
             console.log(emailCreds);
             await setEmailCredsApi(emailCreds);
+        }
+    }
+
+    const handleGetApiKey = async (e: any) => {
+        e.preventDefault();
+
+        const result = await getApiKeyApi();
+        console.log("api key result---", result)
+        if (result && result.data && result.data.apiKey) {
+            setApiKey(result.data.apiKey);
         }
     }
     return (
@@ -41,6 +53,18 @@ export const Credentials = () => {
                 </div>
                 <Button text="Submit" disabled={false} onClick={handleSubmit} />
             </div>
+
+            <br />
+            <br />
+            <hr />
+
+            <h1 className="text-lg font-bold mb-1">API Key</h1>
+            <p className="text-lg font-semibold mb-4">Manage your API keys here.</p>
+            <div>
+                <label htmlFor="apiKey">API Key:</label>
+                <input className="text-red-400" type="text" name="apiKey " id="apiKey" placeholder="API Key" value={apiKey} readOnly />
+            </div>
+            <Button text="Generate API Key" disabled={false} onClick={handleGetApiKey} />
 
 
         </main>

@@ -3,6 +3,7 @@ const endpoints = {
   login: `${baseUrl}/auth/login`,
   signup: `${baseUrl}/auth/signup `,
   setEmailCreds: `${baseUrl}/email/creds`,
+  getApiKey: `${baseUrl}/auth/api-key`,
 };
 
 export { endpoints };

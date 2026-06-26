@@ -19,6 +19,7 @@ export const Button = ({
             type={type}
             onClick={onClick}
             disabled={disabled}
+            className=" hover:cursor-pointer"
         >
             {text}
         </button>

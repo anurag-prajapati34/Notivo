@@ -13,9 +13,14 @@ axios.interceptors.response.use(
   },
 );
 
-export const makeGetReuqest = async (url: string) => {
+export const makeGetReuqest = async (
+  url: string,
+  options?: {
+    headers?: any;
+  },
+) => {
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(url, options);
     return await response.data;
   } catch (error) {
     console.error(error);
