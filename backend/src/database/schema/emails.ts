@@ -17,7 +17,7 @@ export const emails = mysqlTable(
       .primaryKey()
       .autoincrement(),
     userId: bigint("user_id", { mode: "number" }),
-    templateId: bigint("template_id", { mode: "number" }),
+    templateId: varchar("template_id", { length: 100 }),
 
     toEmail: varchar("to_email", { length: 255 }),
     subject: varchar("subject", { length: 500 }),

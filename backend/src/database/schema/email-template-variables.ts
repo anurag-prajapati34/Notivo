@@ -5,7 +5,7 @@ import {
   foreignKey,
   index,
   mysqlTable,
-  unique,
+  uniqueIndex,
   varchar,
 } from "drizzle-orm/mysql-core";
 import { emailTemplates } from "./email-templates";
@@ -23,9 +23,7 @@ export const emailTemplateVariables = mysqlTable(
 
     variableName: varchar("variable_name", {
       length: 100,
-    })
-      .notNull()
-      .unique(),
+    }).notNull(),
 
     isRequired: boolean("is_required").default(true).notNull(),
 
@@ -37,6 +35,10 @@ export const emailTemplateVariables = mysqlTable(
   },
   (table) => [
     index("idx_email_template_variables_template").on(table.templateId),
+    uniqueIndex("uq_email_template_variable").on(
+      table.templateId,
+      table.variableName,
+    ),
     foreignKey({
       columns: [table.templateId],
       foreignColumns: [emailTemplates.templateId],

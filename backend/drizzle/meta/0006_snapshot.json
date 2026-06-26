@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "7e7b1aa3-a9e3-4777-a876-f72ac9cde4c1",
-  "prevId": "1a3abee0-4562-4006-a776-2c3df04a04ca",
+  "id": "68b1f9c5-d9d6-4404-8983-1a94dd2261d5",
+  "prevId": "67cd9f68-827e-4a16-a771-2616c7ab63e5",
   "tables": {
     "users": {
       "name": "users",
@@ -142,7 +142,7 @@
         },
         "template_id": {
           "name": "template_id",
-          "type": "bigint",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -519,10 +519,17 @@
         }
       },
       "indexes": {
-        "uq_email_templates_slug": {
-          "name": "uq_email_templates_slug",
+        "idx_email_templates_slug": {
+          "name": "idx_email_templates_slug",
           "columns": [
             "slug"
+          ],
+          "isUnique": false
+        },
+        "uq_email_templates_template_id": {
+          "name": "uq_email_templates_template_id",
+          "columns": [
+            "template_id"
           ],
           "isUnique": true
         }
@@ -550,20 +557,7 @@
           ]
         }
       },
-      "uniqueConstraints": {
-        "email_templates_template_id_unique": {
-          "name": "email_templates_template_id_unique",
-          "columns": [
-            "template_id"
-          ]
-        },
-        "email_templates_slug_unique": {
-          "name": "email_templates_slug_unique",
-          "columns": [
-            "slug"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "checkConstraint": {}
     },
     "email_template_variables": {
@@ -666,6 +660,14 @@
             "template_id"
           ],
           "isUnique": false
+        },
+        "uq_email_template_variable": {
+          "name": "uq_email_template_variable",
+          "columns": [
+            "template_id",
+            "variable_name"
+          ],
+          "isUnique": true
         }
       },
       "foreignKeys": {
@@ -691,14 +693,7 @@
           ]
         }
       },
-      "uniqueConstraints": {
-        "email_template_variables_variable_name_unique": {
-          "name": "email_template_variables_variable_name_unique",
-          "columns": [
-            "variable_name"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "checkConstraint": {}
     }
   },

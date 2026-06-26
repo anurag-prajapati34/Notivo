@@ -1,1 +1,0 @@
-ALTER TABLE `users` ADD `api_key` varchar(500);

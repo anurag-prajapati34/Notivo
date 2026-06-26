@@ -2,6 +2,7 @@ import { auditFields } from "@/utils/db-schema-helpers";
 import {
   bigint,
   foreignKey,
+  index,
   mysqlTable,
   text,
   uniqueIndex,
@@ -16,12 +17,12 @@ export const emailTemplates = mysqlTable(
       .primaryKey()
       .autoincrement(),
 
-    templateId: varchar("template_id", { length: 100 }).notNull().unique(),
+    templateId: varchar("template_id", { length: 100 }).notNull(),
     userId: bigint("user_id", { mode: "number" }),
 
     name: varchar("name", { length: 100 }).notNull(),
 
-    slug: varchar("slug", { length: 100 }).notNull().unique(),
+    slug: varchar("slug", { length: 100 }).notNull(),
 
     subject: varchar("subject", { length: 255 }).notNull(),
 
@@ -31,7 +32,8 @@ export const emailTemplates = mysqlTable(
     ...auditFields,
   },
   (table) => [
-    uniqueIndex("uq_email_templates_slug").on(table.slug),
+    index("idx_email_templates_slug").on(table.slug),
+    uniqueIndex("uq_email_templates_template_id").on(table.templateId),
     foreignKey({
       columns: [table.userId],
       foreignColumns: [users.userId],
