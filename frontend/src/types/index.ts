@@ -48,3 +48,15 @@ export interface EmailTemplate {
   userId: number;
   variables: EmailTemplateVariable[];
 }
+
+export interface Email {
+  templateId: string;
+  toEmail: string | null;
+  subject: string;
+  body: string | null;
+  emailStatus: "SENT" | "FAILED" | "PENDING";
+  attempts: number;
+  lastErrorMessage: string | null;
+  queuedAt: string | null;
+  sentAt: string | null;
+}
