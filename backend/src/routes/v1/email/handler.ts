@@ -5,6 +5,7 @@ import { success } from "@/utils/response";
 import { AuthRequest } from "@/utils/types";
 import { Request, Response } from "express";
 import {
+  getAllEmailsQuery,
   getEmailTemplatesWithVariablesQuery,
   insertEmailsQuery,
 } from "./queries";
@@ -57,3 +58,13 @@ export async function getEmailTemplatesHandler(
     handleHandlerError(res, error);
   }
 }
+
+export const getEmailsListHandler = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId: number = req.user?.userId!;
+    const result = await getAllEmailsQuery({ userId: userId });
+    return success(res, result, "Email credentials updated successfully");
+  } catch (error) {
+    handleHandlerError(res, error);
+  }
+};

@@ -130,3 +130,26 @@ export const getEmailTemplatesWithVariablesQuery = async () => {
 
   return result;
 };
+
+export const getAllEmailsQuery = async (input: { userId?: number }) => {
+  const whereConditions = [eq(emails.status, true)];
+
+  if (input.userId) {
+    whereConditions.push(eq(emails.userId, input.userId));
+  }
+
+  return await db
+    .select({
+      templateId: emails.templateId,
+      toEmail: emails.toEmail,
+      subject: emails.subject,
+      body: emails.body,
+      emailStatus: emails.emailStatus,
+      attempts: emails.attempts,
+      lastErrorMessage: emails.lastErrorMessage,
+      queuedAt: emails.queuedAt,
+      sentAt: emails.sentAt,
+    })
+    .from(emails)
+    .where(and(...whereConditions));
+};

@@ -101,6 +101,7 @@ export const sendEmailService = async (
               subject: subject,
               body: html,
               emailStatus: emailStatus.PENDING,
+              userId: input.userId,
             },
           ],
           trx,
