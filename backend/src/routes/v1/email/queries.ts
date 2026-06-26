@@ -69,8 +69,15 @@ export const getEmailCredsQuery = async (input: {
     .where(and(...whereConditions));
 };
 
-export const getEmailTemplatesQuery = async () => {
-  const emailTemplate = await db
+export const getEmailTemplatesQuery = async (input?: {
+  templateIds: string[];
+}) => {
+  const whereConditions = [eq(emailTemplates.status, true)];
+
+  if (input && input.templateIds && input.templateIds.length > 0) {
+    whereConditions.push(inArray(emailTemplates.templateId, input.templateIds));
+  }
+  return await db
     .select({
       templateId: emailTemplates.templateId,
       name: emailTemplates.name,
@@ -81,11 +88,22 @@ export const getEmailTemplatesQuery = async () => {
       userId: emailTemplates.userId,
     })
     .from(emailTemplates)
-    .where(and(eq(emailTemplates.status, true)));
+    .where(and(...whereConditions));
+};
 
-  const templateIds = emailTemplate.map((template) => template.templateId);
+export const getEmailTemplateVariablesQuery = async (input: {
+  templateIds?: string[];
+}) => {
+  const { templateIds } = input;
+  const whereConditions = [eq(emailTemplateVariables.status, true)];
 
-  const variables = await db
+  if (templateIds && templateIds.length > 0) {
+    whereConditions.push(
+      inArray(emailTemplateVariables.templateId, templateIds),
+    );
+  }
+
+  return await db
     .select({
       variableName: emailTemplateVariables.variableName,
       isRequired: emailTemplateVariables.isRequired,
@@ -93,13 +111,16 @@ export const getEmailTemplatesQuery = async () => {
       defaultValue: emailTemplateVariables.defaultValue,
     })
     .from(emailTemplateVariables)
-    .where(
-      and(
-        eq(emailTemplateVariables.status, true),
-        inArray(emailTemplateVariables.templateId, templateIds),
-      ),
-    );
+    .where(and(...whereConditions));
+};
 
+export const getEmailTemplatesWithVariablesQuery = async () => {
+  const emailTemplate = await getEmailTemplatesQuery();
+
+  const templateIds = emailTemplate.map((template) => template.templateId);
+  const variables = await getEmailTemplateVariablesQuery({
+    templateIds,
+  });
   const result = emailTemplate.map((template) => ({
     ...template,
     variables: variables.filter(

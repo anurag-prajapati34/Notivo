@@ -113,7 +113,7 @@ export const sendUserEmail = async (jobData: EmailJobData) => {
   const result = await sendEmail({
     to: jobData.to,
     subject: jobData.subject,
-    html: template,
+    html: jobData.html,
   });
   if (result.success) {
     await updateEmailQuery(jobData.emailId, {

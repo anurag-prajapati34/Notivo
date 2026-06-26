@@ -26,11 +26,13 @@ export interface EmailResult {
 
 export interface EmailJobData {
   emailId: number;
-  templateId: number;
+  templateId: string;
   to: string | string[];
   subject: string;
   from?: string;
   fromName?: string;
+  html: string;
+  text?: string;
   attachments?: Array<{
     filename: string;
     path: string;

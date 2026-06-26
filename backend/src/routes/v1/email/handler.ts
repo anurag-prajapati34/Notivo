@@ -4,37 +4,19 @@ import { handleHandlerError } from "@/utils/error-helpers";
 import { success } from "@/utils/response";
 import { AuthRequest } from "@/utils/types";
 import { Request, Response } from "express";
-import { getEmailTemplatesQuery, insertEmailsQuery } from "./queries";
-import { setEmailCredsService } from "./service";
+import {
+  getEmailTemplatesWithVariablesQuery,
+  insertEmailsQuery,
+} from "./queries";
+import { sendEmailService, setEmailCredsService } from "./service";
 
-export async function sendEmailHandler(req: Request, res: Response) {
+export async function sendEmailHandler(req: AuthRequest, res: Response) {
   try {
-    const payload = {
-      templateId: 1,
-      to: "prajapatianurag73240@gmail.com",
-      subject: "test",
-    };
-    const insertResult = await insertEmailsQuery([
-      {
-        ...payload,
-        emailStatus: emailStatus.PENDING,
-      },
-    ]);
-    const emailId =
-      (await insertResult.length) > 0 ? insertResult[0]?.insertId : null;
-
-    if (!emailId)
-      return res
-        .status(500)
-        .json({ success: false, message: "Something went wrong", data: null });
-
-    await addEmailJob({
-      emailId,
-      templateId: 1,
-      to: "prajapatianurag73240@gmail.com",
-      subject: "test",
+    const userId: number = req.user?.userId!;
+    await sendEmailService({
+      ...req.body,
+      userId,
     });
-
     return res.status(200).json({
       success: true,
       message: "Email sent successfully",
@@ -69,7 +51,7 @@ export async function getEmailTemplatesHandler(
 ) {
   try {
     const userId: number = req.user?.userId!;
-    const result = await getEmailTemplatesQuery();
+    const result = await getEmailTemplatesWithVariablesQuery();
     return success(res, result, "Email credentials updated successfully");
   } catch (error) {
     handleHandlerError(res, error);

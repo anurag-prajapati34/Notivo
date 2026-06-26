@@ -5,12 +5,20 @@ import {
   sendEmailHandler,
   setEmailCredsHandler,
 } from "./handler";
-import { validateEmailCredsRequestBody } from "./prehandler";
+import {
+  validateEmailCredsRequestBody,
+  validateSendEmailRequestBody,
+} from "./prehandler";
 
 const route = express.Router();
 
 // send email route
-route.post("/send", authenticateApiKey, sendEmailHandler);
+route.post(
+  "/send",
+  authenticateApiKey,
+  validateSendEmailRequestBody,
+  sendEmailHandler,
+);
 route.post(
   "/creds",
   authenticate,
