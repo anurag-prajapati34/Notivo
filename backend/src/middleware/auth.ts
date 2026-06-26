@@ -1,6 +1,7 @@
 import { db } from "@/database/connection";
 import { users } from "@/database/schema";
 import { decodeJwt, JwtAuthPayload } from "@/utils/jwt-helpers";
+import { unauthorized } from "@/utils/response";
 import { and, eq } from "drizzle-orm";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
@@ -67,29 +68,32 @@ export const authenticate = async (
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      throw new Error("Access token required");
+      return unauthorized(res, "Access token required");
     }
     const token = authHeader.substring(7);
 
     const decoded = decodeJwt(token) as JwtAuthPayload;
 
     if (!decoded || !decoded.userId) {
-      throw new Error("Invalid access token");
+      return unauthorized(res, "Invalid access token");
     }
     const user = await getUserByUserId(decoded.userId);
     if (!user) {
-      throw new Error("Invalid access token");
+      return unauthorized(res, "Invalid access token");
     }
     (req as any).user = user;
 
     next();
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
-      next(new Error("Invalid access token"));
+      // next(new Error("Invalid access token"));
+      next(unauthorized(res, "Invalid access token"));
     } else if (error instanceof jwt.TokenExpiredError) {
-      next(new Error("Access token expired"));
+      // next(new Error("Access token expired"));
+      next(unauthorized(res, "Access token expired"));
     } else {
-      next(error);
+      // next(error);
+      next(unauthorized(res, "Invalid access token"));
     }
   }
 };
