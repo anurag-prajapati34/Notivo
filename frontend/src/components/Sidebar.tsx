@@ -5,6 +5,7 @@ export const Sidebar = () => {
         <SidebarOption path="/emails" name="Emails" />
         <SidebarOption path="/dashboard" name="Dasbhoard" />
         <SidebarOption path="/template" name="Templates" />
+        <SidebarOption path="/credentials" name="Credentials" />
         {/* <SidebarOption name="API Keys" />
         <SidebarOption name="Settings" />
         <SidebarOption name="Logs" /> */}

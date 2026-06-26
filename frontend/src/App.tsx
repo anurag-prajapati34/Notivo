@@ -6,6 +6,7 @@ import { Home } from './pages/Home'
 import { Dashboard } from './pages/Dashboard'
 import { Template } from './pages/Template'
 import { Emails } from './pages/Emails'
+import { Credentials } from './pages/Credentials'
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
             <Route index path='emails' element={<Emails />} />
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='template' element={<Template />} />
+            <Route path='credentials' element={<Credentials />} />
           </Route>
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />

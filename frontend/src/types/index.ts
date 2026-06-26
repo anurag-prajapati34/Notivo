@@ -25,3 +25,8 @@ export interface ApiResponseType<T> {
   message: string;
   success: boolean;
 }
+
+export interface EmailCreds {
+  email: string;
+  passKey: string;
+}

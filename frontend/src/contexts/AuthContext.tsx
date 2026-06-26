@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import type { User } from "../types";
-import { getAuthTokenKey } from "../apis/auth.api";
+import { getAuthTokenKey } from "../utils/auth-helpers";
+
 
 interface AuthContextType {
     user: User | null
