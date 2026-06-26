@@ -4,7 +4,7 @@ import { handleHandlerError } from "@/utils/error-helpers";
 import { success } from "@/utils/response";
 import { AuthRequest } from "@/utils/types";
 import { Request, Response } from "express";
-import { insertEmailsQuery } from "./queries";
+import { getEmailTemplatesQuery, insertEmailsQuery } from "./queries";
 import { setEmailCredsService } from "./service";
 
 export async function sendEmailHandler(req: Request, res: Response) {
@@ -58,6 +58,19 @@ export async function setEmailCredsHandler(req: AuthRequest, res: Response) {
       userId,
     });
     return success(res, null, "Email credentials updated successfully");
+  } catch (error) {
+    handleHandlerError(res, error);
+  }
+}
+
+export async function getEmailTemplatesHandler(
+  req: AuthRequest,
+  res: Response,
+) {
+  try {
+    const userId: number = req.user?.userId!;
+    const result = await getEmailTemplatesQuery();
+    return success(res, result, "Email credentials updated successfully");
   } catch (error) {
     handleHandlerError(res, error);
   }

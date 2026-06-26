@@ -4,11 +4,13 @@ import {
   EmailCreds,
   emailCreds,
   emails,
+  emailTemplates,
+  emailTemplateVariables,
   NewEmail,
   NewEmailCreds,
 } from "@/database/schema";
 import { TransactionContext } from "@/utils/types";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 
 export const insertEmailsQuery = (
   payload: NewEmail[],
@@ -65,4 +67,45 @@ export const getEmailCredsQuery = async (input: {
     })
     .from(emailCreds)
     .where(and(...whereConditions));
+};
+
+export const getEmailTemplatesQuery = async () => {
+  const emailTemplate = await db
+    .select({
+      templateId: emailTemplates.templateId,
+      name: emailTemplates.name,
+      subject: emailTemplates.subject,
+      html: emailTemplates.html,
+      slug: emailTemplates.slug,
+      description: emailTemplates.description,
+      userId: emailTemplates.userId,
+    })
+    .from(emailTemplates)
+    .where(and(eq(emailTemplates.status, true)));
+
+  const templateIds = emailTemplate.map((template) => template.templateId);
+
+  const variables = await db
+    .select({
+      variableName: emailTemplateVariables.variableName,
+      isRequired: emailTemplateVariables.isRequired,
+      templateId: emailTemplateVariables.templateId,
+      defaultValue: emailTemplateVariables.defaultValue,
+    })
+    .from(emailTemplateVariables)
+    .where(
+      and(
+        eq(emailTemplateVariables.status, true),
+        inArray(emailTemplateVariables.templateId, templateIds),
+      ),
+    );
+
+  const result = emailTemplate.map((template) => ({
+    ...template,
+    variables: variables.filter(
+      (variable) => variable.templateId === template.templateId,
+    ),
+  }));
+
+  return result;
 };
