@@ -5,6 +5,7 @@ import { generateApiKeyService, loginService, signupService } from "./service";
 import { LoginRequestBodyType, SignupRequestBodyType } from "./validator";
 import { AuthRequest } from "@/utils/types";
 import { generateApiKey } from "@/utils/encryption";
+import { getEmailCredsQuery } from "../email/queries";
 
 /**
  * Express controller handler for the user signup route.
@@ -38,6 +39,8 @@ export const getApiKeyHandler = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user?.userId!;
     if (!userId) throw new Error("User not found");
+    const [emailCreds] = await getEmailCredsQuery({ userId });
+    if (!emailCreds) throw new Error("Email credentials not found");
     const result = await generateApiKeyService(userId);
     return created(res, result, "User created successfully");
   } catch (error) {
