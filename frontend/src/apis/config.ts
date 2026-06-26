@@ -4,6 +4,7 @@ const endpoints = {
   signup: `${baseUrl}/auth/signup `,
   setEmailCreds: `${baseUrl}/email/creds`,
   getApiKey: `${baseUrl}/auth/api-key`,
+  getEmailTemplates: `${baseUrl}/email/templates`,
 };
 
 export { endpoints };

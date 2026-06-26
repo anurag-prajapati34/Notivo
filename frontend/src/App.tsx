@@ -15,9 +15,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Home />} >
-            <Route index path='emails' element={<Emails />} />
+            <Route index path='template' element={<Template />} />
+            <Route path='emails' element={<Emails />} />
             <Route path='dashboard' element={<Dashboard />} />
-            <Route path='template' element={<Template />} />
             <Route path='credentials' element={<Credentials />} />
           </Route>
           <Route path='/login' element={<Login />} />

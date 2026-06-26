@@ -30,3 +30,21 @@ export interface EmailCreds {
   email: string;
   passKey: string;
 }
+
+export interface EmailTemplateVariable {
+  variableName: string;
+  isRequired: boolean;
+  templateId: string;
+  defaultValue: string | null;
+}
+
+export interface EmailTemplate {
+  templateId: string;
+  name: string;
+  subject: string;
+  slug: string;
+  html: string;
+  description: string;
+  userId: number;
+  variables: EmailTemplateVariable[];
+}
