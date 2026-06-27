@@ -19,6 +19,25 @@ export const Dashboard = () => {
     }, []);
 
 
+    const getColorByEmailStatus = (emailStatus: string) => {
+        const normalizedEmailStatus = emailStatus.toLowerCase();
+        switch (normalizedEmailStatus) {
+            case "sent":
+                return "#10b981"; // Dark Green
+
+            case "failed":
+                return "#ef4444"; // Dark Red
+
+            case "pending":
+                return "#f59e0b"; // Olive (dark yellowish)
+
+            default:
+                return "#6366f1"; // Very Dark Gray (instead of pure black)
+        }
+
+    }
+
+
     return (
         <main>
             <div className="w-full h-full rounded-md flex  text-2xl font-semibold">Overview</div>
@@ -61,12 +80,13 @@ export const Dashboard = () => {
                 {
 
                     analyticsStats && analyticsStats.recentEmails.map((item) => {
+                        const color = getColorByEmailStatus(item.emailStatus || 'Unknown')
                         return (
                             <div className="border border-gray-50 rounded-md bg-white p-2  shadow-2xs grid grid-cols-4 gap-4 text-start">
                                 <p className="rounded-md  ">{item.subject || 'Unknown'}</p>
                                 <p className="rounded-md  ">{item.toEmail || 'Unknown'}</p>
                                 <p className="rounded-md">{convertToIndianDate(item.date) || 'Unknown'}</p>
-                                <p className="rounded-md">{item.emailStatus || 'Unknown'}</p>
+                                <p style={{ color: color }} className={`rounded-md  font-semibold`}>{item.emailStatus || 'Unknown'}</p>
                             </div>
                         )
                     })
@@ -75,6 +95,6 @@ export const Dashboard = () => {
             </div>
 
 
-        </main>
+        </main >
     )
 }
