@@ -5,6 +5,7 @@ import EmailTemplateUsageChart from "../components/EmailTemplateUsageChart";
 import type { AnalyticsStats } from "../types";
 import { parseAnalyticsOverviewObject, parseAnalyticsTemplateUsageData } from "../utils/analytics-helpers";
 import { convertToIndianDate } from "../utils/date-helpers";
+import { EamilCard } from "../components/EmailCard";
 
 export const Dashboard = () => {
 
@@ -70,7 +71,7 @@ export const Dashboard = () => {
 
             <br />
             <div className="w-full h-full rounded-md flex  text-lg font-semibold mb-2">Recent Emails</div>
-            <div className="grid grid-cols-1 gap-2">
+            {/* <div className="grid grid-cols-1 gap-2">
                 <div className="border border-gray-600 rounded-md bg-white p-2  shadow-2xs grid grid-cols-4 gap-4 text-start">
                     <p className="rounded-md text-lg font-semibold">Subject</p>
                     <p className="rounded-md text-lg font-semibold">Recipient</p>
@@ -92,7 +93,30 @@ export const Dashboard = () => {
                     })
 
                 }
-            </div>
+            </div> */}
+
+            <table className="w-full">
+                <thead>
+                    <tr className="border-b border-gray-100 bg-gray-50">
+                        <th className="text-left text-xs font-medium text-gray-500 px-5 py-3">Recipient</th>
+                        <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Subject</th>
+                        <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Template</th>
+                        <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Status</th>
+                        <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Attempts</th>
+                        <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Sent at</th>
+                        <th className="text-left text-xs font-medium text-gray-500 px-4 py-3"></th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                    {analyticsStats && analyticsStats.recentEmails.map((email, index) => (
+                        <EamilCard
+                            key={email.emailId ?? index}
+                            email={email}
+                            onView={() => () => { }}
+                        />
+                    ))}
+                </tbody>
+            </table>
 
 
         </main >

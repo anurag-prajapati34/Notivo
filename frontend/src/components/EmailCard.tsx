@@ -1,59 +1,156 @@
+// ─── pages/Emails.tsx ────────────────────────────────────────────────────────
+
+import { AlertCircle, Eye } from "lucide-react";
 import type { Email } from "../types";
+import { convertToIndianDate } from "../utils/date-helpers";
 
-type Props = {
-    email: Email;
-    onView: (email: Email) => void;
-};
 
-export function EmailCard({ email, onView }: Props) {
-    const preview =
-        email.body
-            ?.replace(/<[^>]+>/g, "")
-            .replace(/\s+/g, " ")
-            .trim()
-            .slice(0, 120) ?? "";
+
+// ─── Status badge ─────────────────────────────────────────────────────────────
+
+const StatusBadge = ({ status }: { status: string }) => {
+    const s = status?.toLowerCase();
+
+    const styles: Record<string, string> = {
+        sent: "bg-emerald-50 text-emerald-700 border-emerald-200",
+        delivered: "bg-emerald-50 text-emerald-700 border-emerald-200",
+        failed: "bg-red-50 text-red-700 border-red-200",
+        pending: "bg-amber-50 text-amber-700 border-amber-200",
+        retrying: "bg-orange-50 text-orange-700 border-orange-200",
+        processing: "bg-blue-50 text-blue-700 border-blue-200",
+    };
+
+    const dots: Record<string, string> = {
+        sent: "bg-emerald-500",
+        delivered: "bg-emerald-500",
+        failed: "bg-red-500",
+        pending: "bg-amber-500",
+        retrying: "bg-orange-500",
+        processing: "bg-blue-500",
+    };
+
+    const cls = styles[s] ?? "bg-gray-50 text-gray-600 border-gray-200";
+    const dot = dots[s] ?? "bg-gray-400";
 
     return (
-        <div className="rounded-xl border bg-white p-5 shadow-sm transition hover:shadow-md">
-            <div className="flex items-center justify-between">
-                <span
-                    className={`rounded-full px-3 py-1 text-xs font-semibold ${email.emailStatus === "SENT"
-                        ? "bg-green-100 text-green-700"
-                        : email.emailStatus === "FAILED"
-                            ? "bg-red-100 text-red-700"
-                            : "bg-yellow-100 text-yellow-700"
-                        }`}
-                >
-                    {email.emailStatus}
-                </span>
-
-                <span className="text-xs text-gray-400">
-                    {email.templateId}
-                </span>
-            </div>
-
-            <div className="mt-4 space-y-2">
-                <p>
-                    <span className="font-semibold">To:</span>{" "}
-                    {email.toEmail}
-                </p>
-
-                <p>
-                    <span className="font-semibold">Subject:</span>{" "}
-                    {email.subject}
-                </p>
-
-                <p className="text-sm text-gray-600">
-                    {preview}...
-                </p>
-            </div>
-
-            <button
-                onClick={() => onView(email)}
-                className="mt-5 rounded-lg bg-black px-4 py-2 text-white hover:bg-gray-800"
-            >
-                View Email
-            </button>
-        </div>
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md border text-xs font-medium ${cls}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
+            {status?.toUpperCase()}
+        </span>
     );
-}
+};
+
+
+
+// ─── Format template slug → readable ──────────────────────────────────────────
+
+const formatTemplateSlug = (slug: string | null | undefined): string => {
+    if (!slug) return "—";
+    // return slug
+    //     .split("-")
+    //     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    //     .join(" ");
+
+    return slug;
+};
+
+// ─── Attempts indicator ───────────────────────────────────────────────────────
+
+const AttemptsIndicator = ({ attempts, status }: { attempts: number | null; status: string }) => {
+    const count = attempts ?? 0;
+    const isFailed = status?.toLowerCase() === "failed";
+
+    if (count === 0) return <span className="text-gray-400 text-xs">—</span>;
+
+    return (
+        <span className={`text-xs font-medium ${isFailed && count >= 3 ? "text-red-600" : "text-gray-600"}`}>
+            {count}/3
+            {isFailed && count >= 3 && (
+                <span className="ml-1 text-red-400">(exhausted)</span>
+            )}
+        </span>
+    );
+};
+export const EamilCard = ({
+    email,
+    onView,
+}: {
+    email: Email;
+    onView: () => void;
+}) => {
+    const isFailed = email.emailStatus?.toLowerCase() === "failed";
+
+    return (
+        <tr className="hover:bg-gray-50 transition-colors group">
+            {/* Recipient */}
+            <td className="px-5 py-3.5">
+                <span className="text-sm text-gray-900 font-medium">{email.toEmail}</span>
+            </td>
+
+            {/* Subject */}
+            <td className="px-4 py-3.5 max-w-[220px]">
+                <span className="text-sm text-gray-700 truncate block" title={email.subject ?? ""}>
+                    {email.subject ?? "—"}
+                </span>
+            </td>
+
+            {/* Template */}
+            <td className="px-4 py-3.5">
+                <span className="text-xs font-mono bg-gray-100 text-gray-600 px-2 py-1 rounded-md">
+                    {formatTemplateSlug(email.templateId)}
+                </span>
+            </td>
+
+            {/* Status */}
+            <td className="px-4 py-3.5">
+                <div className="flex flex-col gap-1">
+                    <StatusBadge status={email.emailStatus ?? "unknown"} />
+                    {isFailed && email.lastErrorMessage && (
+                        <div className="flex items-center gap-1 mt-0.5">
+                            <AlertCircle size={10} className="text-red-400 shrink-0" />
+                            <span
+                                className="text-xs text-red-500 truncate max-w-[160px]"
+                                title={email.lastErrorMessage}
+                            >
+                                {email.lastErrorMessage}
+                            </span>
+                        </div>
+                    )}
+                </div>
+            </td>
+
+            {/* Attempts */}
+            <td className="px-4 py-3.5">
+                <AttemptsIndicator
+                    attempts={email.attempts}
+                    status={email.emailStatus ?? ""}
+                />
+            </td>
+
+            {/* Sent at */}
+            <td className="px-4 py-3.5">
+                <div className="flex flex-col gap-0.5">
+                    <span className="text-xs text-gray-600">
+                        {convertToIndianDate(email.sentAt ?? email.createdAt)}
+                    </span>
+                    {email.queuedAt && email.sentAt && (
+                        <span className="text-xs text-gray-400">
+                            queued {convertToIndianDate(email.queuedAt)}
+                        </span>
+                    )}
+                </div>
+            </td>
+
+            {/* View button */}
+            <td className="px-4 py-3.5">
+                <button
+                    onClick={onView}
+                    className="opacity-0 group-hover:opacity-100 h-8 px-3 bg-white border border-gray-200 rounded-lg flex items-center gap-1.5 text-xs text-gray-600 hover:bg-gray-50 transition-all"
+                >
+                    <Eye size={12} />
+                    View
+                </button>
+            </td>
+        </tr>
+    );
+};

@@ -64,6 +64,8 @@ export interface Email {
   lastErrorMessage: string | null;
   queuedAt: string | null;
   sentAt: string | null;
+  createdAt: string;
+  emailId: number;
 }
 
 export interface AnalyticsStats {
@@ -83,14 +85,7 @@ export interface AnalyticsStats {
     templateName: string;
     count: number;
   }[];
-  recentEmails: {
-    emailId: number;
-    toEmail: string;
-    subject: string;
-    emailStatus: string;
-    templateName: string;
-    date: string;
-  }[];
+  recentEmails: Email[];
 }
 
 export interface SmtpForm {
