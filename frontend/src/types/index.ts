@@ -60,3 +60,30 @@ export interface Email {
   queuedAt: string | null;
   sentAt: string | null;
 }
+
+export interface AnalyticsStats {
+  overview: {
+    total: number;
+    delivered: number;
+    failed: number;
+    pending: number;
+  };
+  last7Days: {
+    date: string;
+    total: number;
+    failed: number;
+    delivered: number;
+  }[];
+  templateUsage: {
+    templateName: string;
+    count: number;
+  }[];
+  recentEmails: {
+    emailId: number;
+    toEmail: string;
+    subject: string;
+    emailStatus: string;
+    templateName: string;
+    date: string;
+  }[];
+}

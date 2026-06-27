@@ -8,18 +8,9 @@ import {
     ResponsiveContainer
 } from 'recharts'
 
-// Data from your API
-const data = [
-    { date: 'Mon', delivered: 35, failed: 2, total: 37 },
-    { date: 'Tue', delivered: 42, failed: 5, total: 47 },
-    { date: 'Wed', delivered: 28, failed: 1, total: 29 },
-    { date: 'Thu', delivered: 50, failed: 3, total: 53 },
-    { date: 'Fri', delivered: 38, failed: 4, total: 38 },
-    { date: 'Sat', delivered: 20, failed: 0, total: 20 },
-    { date: 'Sun', delivered: 15, failed: 1, total: 16 },
-]
 
-const EmailChart = () => (
+
+const EmailChart = ({ data }: any) => (
     <ResponsiveContainer width="100%" height={300}>
         <AreaChart
             data={data}
