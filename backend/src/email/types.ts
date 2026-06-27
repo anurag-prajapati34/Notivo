@@ -1,17 +1,27 @@
+export interface EmailCreds {
+  email: string;
+  passKey: string;
+  username: string;
+  name: string;
+  host: string;
+  port: number;
+  secure: boolean;
+}
 /**
  * Email sending options interface
  */
 export interface EmailOptions {
-  to: string | string[];
-  subject: string;
-  html: string;
-  text?: string;
-  from?: string;
-  fromName?: string;
-  attachments?: Array<{
-    filename: string;
-    path: string;
-  }>;
+  emailCreds: EmailCreds;
+  emailData: {
+    to: string | string[];
+    subject: string;
+    html: string;
+    text?: string;
+    attachments?: Array<{
+      filename: string;
+      path: string;
+    }>;
+  };
 }
 
 /**
@@ -25,16 +35,17 @@ export interface EmailResult {
 }
 
 export interface EmailJobData {
-  emailId: number;
-  templateId: string;
-  to: string | string[];
-  subject: string;
-  from?: string;
-  fromName?: string;
-  html: string;
-  text?: string;
-  attachments?: Array<{
-    filename: string;
-    path: string;
-  }>;
+  emailCreds: EmailCreds;
+  emailData: {
+    emailId: number;
+    templateId: string;
+    to: string | string[];
+    subject: string;
+    html: string;
+    text?: string;
+    attachments?: Array<{
+      filename: string;
+      path: string;
+    }>;
+  };
 }

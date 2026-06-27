@@ -50,6 +50,13 @@
       "when": 1782472348283,
       "tag": "0006_public_rocket_racer",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1782559358867,
+      "tag": "0007_peaceful_silver_sable",
+      "breakpoints": true
     }
   ]
 }

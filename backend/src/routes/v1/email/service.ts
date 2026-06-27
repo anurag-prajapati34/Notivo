@@ -36,6 +36,12 @@ export const sendEmailService = async (
 ) => {
   try {
     const { templateId } = input;
+
+    const [emailCreds] = await getEmailCredsQuery({ userId: input.userId });
+
+    if (!emailCreds) {
+      throw new Error("Email credentials not found");
+    }
     const [template] = await getEmailTemplatesQuery({
       templateIds: [templateId],
     });
@@ -112,11 +118,14 @@ export const sendEmailService = async (
         if (!emailId)
           throw new Error("Something went wrong while inserting email");
         await addEmailJob({
-          emailId,
-          templateId: template.templateId,
-          to: recipient,
-          subject: subject,
-          html,
+          emailCreds,
+          emailData: {
+            emailId,
+            templateId: template.templateId,
+            to: recipient,
+            subject: subject,
+            html,
+          },
         });
       }
     });

@@ -136,3 +136,9 @@ export const passwordSchema = (name?: string) => {
       },
     );
 };
+
+export const numberSchema = (name?: string) => {
+  return z.number().min(1, {
+    message: `${name || "Number"} must be at least 1`,
+  });
+};

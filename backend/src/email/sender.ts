@@ -1,10 +1,9 @@
 import { config } from "@/config";
-import { logger } from "@/utils/logger";
-import nodemailer from "nodemailer";
-import { EmailJobData, EmailOptions, EmailResult } from "./types";
-import { template } from "./templates/test";
 import { updateEmailQuery } from "@/routes/v1/email/queries";
 import { emailStatus } from "@/utils/enum";
+import { logger } from "@/utils/logger";
+import nodemailer from "nodemailer";
+import { EmailCreds, EmailJobData, EmailOptions, EmailResult } from "./types";
 
 const getEmailConfig = () => {
   const { host, auth, port, secure } = config.email;
@@ -30,15 +29,17 @@ const getEmailConfig = () => {
  * await transporter.sendMail(mailOptions)
  * ```
  */
-const createTransporter = async () => {
-  const { host, auth, port, secure } = getEmailConfig();
+const createTransporter = async (creds: EmailCreds) => {
   const transporter = nodemailer.createTransport({
-    host: host,
-    port: port,
-    secure: secure,
-    auth: auth,
+    host: creds.host,
+    port: creds.port,
+    secure: creds.secure,
+    auth: {
+      user: creds.username,
+      pass: creds.passKey,
+    },
     tls: {
-      rejectUnauthorized: false,
+      rejectUnauthorized: true,
     },
   });
 
@@ -70,17 +71,18 @@ const createTransporter = async () => {
 export const sendEmail = async (
   options: EmailOptions,
 ): Promise<EmailResult> => {
+  const { emailCreds, emailData } = options;
   try {
-    const transporter = await createTransporter();
-    const emailConfig = await getEmailConfig();
+    const transporter = await createTransporter(emailCreds);
+    // const emailConfig = await getEmailConfig();
 
     const mailOptions = {
-      from: options.from || emailConfig.from,
-      to: options.to,
-      subject: options.subject,
-      html: options.html,
-      text: options.text,
-      attachments: options.attachments,
+      from: emailCreds.email,
+      to: emailData.to,
+      subject: emailData.subject,
+      html: emailData.html,
+      text: emailData.text,
+      attachments: emailData.attachments,
     };
 
     const info = await transporter.sendMail(mailOptions);
@@ -88,7 +90,9 @@ export const sendEmail = async (
     return {
       success: true,
       messageId: info.messageId,
-      recipient: Array.isArray(options.to) ? options.to.join(", ") : options.to,
+      recipient: Array.isArray(emailData.to)
+        ? emailData.to.join(", ")
+        : emailData.to,
     };
   } catch (error: unknown) {
     const errorMessage =
@@ -96,35 +100,39 @@ export const sendEmail = async (
 
     logger.error("Failed to send email", {
       error: errorMessage,
-      to: options.to,
-      subject: options.subject,
+      to: emailData.to,
+      subject: emailData.subject,
     });
 
     return {
       success: false,
       error: errorMessage,
-      recipient: Array.isArray(options.to) ? options.to.join(", ") : options.to,
+      recipient: Array.isArray(emailData.to)
+        ? emailData.to.join(", ")
+        : emailData.to,
     };
   }
 };
 
 export const sendUserEmail = async (jobData: EmailJobData) => {
+  const { emailCreds, emailData } = jobData;
   // const template=await getEmailTemplate(jobData.templateId);
   const result = await sendEmail({
-    to: jobData.to,
-    subject: jobData.subject,
-    html: jobData.html,
+    emailCreds,
+    emailData,
   });
+  const errorMessage = result.error ? result.error : "";
   if (result.success) {
-    await updateEmailQuery(jobData.emailId, {
+    await updateEmailQuery(emailData.emailId, {
+      sentAt: new Date(),
       emailStatus: emailStatus.SENT,
       updatedAt: new Date(),
     });
   } else {
-    await updateEmailQuery(jobData.emailId, {
+    await updateEmailQuery(emailData.emailId, {
       emailStatus: emailStatus.FAILED,
       updatedAt: new Date(),
-      lastErrorMessage: result.error,
+      lastErrorMessage: errorMessage,
     });
   }
   return result;

@@ -61,9 +61,14 @@ export const getEmailCredsQuery = async (input: {
   return await db
     .select({
       emailCredsId: emailCreds.emailCredsId,
-      email: emailCreds.email,
-      passKey: emailCreds.passKey,
       userId: emailCreds.userId,
+      username: emailCreds.username,
+      passKey: emailCreds.passKey,
+      email: emailCreds.email,
+      name: emailCreds.name,
+      host: emailCreds.host,
+      port: emailCreds.port,
+      secure: emailCreds.secure,
     })
     .from(emailCreds)
     .where(and(...whereConditions));

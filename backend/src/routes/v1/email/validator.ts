@@ -1,9 +1,14 @@
-import { emailSchema, stringSchema } from "@/utils/zod-helpers";
+import { emailSchema, numberSchema, stringSchema } from "@/utils/zod-helpers";
 import z from "zod";
 
 export const EmailCredentialsSchema = z.object({
   email: emailSchema("Email"),
-  passKey: z.string(),
+  passKey: stringSchema("Pass Key"),
+  username: stringSchema("Username"),
+  name: stringSchema("Name"),
+  host: stringSchema("Host"),
+  port: numberSchema("Port"),
+  secure: z.boolean().default(false),
 });
 export type EmailCredentials = z.infer<typeof EmailCredentialsSchema>;
 

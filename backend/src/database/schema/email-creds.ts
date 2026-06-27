@@ -18,8 +18,13 @@ export const emailCreds = mysqlTable(
       .primaryKey()
       .autoincrement(),
     userId: bigint("user_id", { mode: "number" }),
-    email: varchar("email", { length: 255 }).notNull(),
+    username: varchar("username", { length: 255 }).notNull(),
     passKey: varchar("pass_key", { length: 255 }).notNull(),
+    email: varchar("email", { length: 255 }).notNull(),
+    name: varchar("name", { length: 255 }).notNull(),
+    host: varchar("host", { length: 255 }).notNull(),
+    port: bigint("port", { mode: "number" }).notNull(),
+    secure: boolean("secure").default(false).notNull(),
     ...auditFields,
   },
   (table) => [
