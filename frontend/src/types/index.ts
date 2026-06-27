@@ -29,6 +29,11 @@ export interface ApiResponseType<T> {
 export interface EmailCreds {
   email: string;
   passKey: string;
+  username: string;
+  name: string;
+  host: string;
+  port: number;
+  secure?: boolean;
 }
 
 export interface EmailTemplateVariable {
@@ -86,4 +91,13 @@ export interface AnalyticsStats {
     templateName: string;
     date: string;
   }[];
+}
+
+export interface SmtpForm {
+  fromName: string;
+  fromEmail: string;
+  host: string;
+  port: number;
+  username: string;
+  passKey: string;
 }

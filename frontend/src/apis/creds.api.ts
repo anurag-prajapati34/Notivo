@@ -1,4 +1,4 @@
-import type { EmailCreds } from "../types";
+import type { ApiResponseType, EmailCreds } from "../types";
 import { getAuthToken } from "../utils/auth-helpers";
 import { makeGetReuqest, makePostRequest } from "../utils/axios";
 import { endpoints } from "./config";
@@ -20,6 +20,32 @@ export const getApiKeyApi = async () => {
   if (!token) {
     throw new Error("No token found");
   }
+  console.log("make get api request");
   const headers = { Authorization: `Bearer ${token}` };
-  return await makeGetReuqest(endpoints.getApiKey, { headers });
+  const result = (await makeGetReuqest(endpoints.getApiKey, {
+    headers,
+  })) as ApiResponseType<{ apiKey: string }>;
+
+  console.log("get api result----", result);
+  return result;
+};
+
+export const generateApiKeyApi = async () => {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error("No token found");
+  }
+  const headers = { Authorization: `Bearer ${token}` };
+  return await makePostRequest(endpoints.generateApiKey, {}, { headers });
+};
+
+export const getEmailCredsApi = async () => {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error("No token found");
+  }
+  const headers = { Authorization: `Bearer ${token}` };
+  return (await makeGetReuqest(endpoints.getEmailCreds, {
+    headers,
+  })) as ApiResponseType<EmailCreds>;
 };

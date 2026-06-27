@@ -7,6 +7,8 @@ const endpoints = {
   getEmailTemplates: `${baseUrl}/email/templates`,
   getEmailsList: `${baseUrl}/email/list`,
   getAnalyticsStats: `${baseUrl}/analytics/stats`,
+  generateApiKey: `${baseUrl}/auth/generate-api-key`,
+  getEmailCreds: `${baseUrl}/email/creds`,
 };
 
 export { endpoints };
