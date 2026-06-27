@@ -1,13 +1,10 @@
 import { SidebarOption } from "./SidebarOption";
 
 export const Sidebar = () => {
-    return <div className='w-1/6 bg-black h-screen text-white rounded-lg p-2 mr-1'>
-        <SidebarOption path="/emails" name="Emails" />
+    return <div className='fixed top-12 left-0 h-[calc(100vh-3rem)] w-64 border-r bg-white p-1'>
         <SidebarOption path="/dashboard" name="Dasbhoard" />
+        <SidebarOption path="/emails" name="Emails" />
         <SidebarOption path="/template" name="Templates" />
         <SidebarOption path="/credentials" name="Credentials" />
-        {/* <SidebarOption name="API Keys" />
-        <SidebarOption name="Settings" />
-        <SidebarOption name="Logs" /> */}
     </div>
 };

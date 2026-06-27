@@ -38,7 +38,7 @@ export const Credentials = () => {
         }
     }
     return (
-        <main>
+        <main className="ml-64 mt-12 h-[calc(100vh-3rem)] flex-1 overflow-y-auto p-6">
             <h1 className="text-lg font-bold mb-1">Credentials Page</h1>
             <p className="text-lg font-semibold mb-4">Manage your email credentials here.</p>
             {/* Add your email credentials management logic here */}

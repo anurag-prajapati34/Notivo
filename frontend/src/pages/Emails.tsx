@@ -4,7 +4,7 @@ import { EmailPreviewModal } from "../components/EmailPreviewModal";
 import { EmailCard } from "../components/EmailCard";
 import { getEmailsListApi } from "../apis/email.api";
 
-export default function Emails() {
+export const Emails = () => {
     const [emails, setEmails] = useState<Email[]>([]);
     const [selectedEmail, setSelectedEmail] =
         useState<Email | null>(null);
@@ -18,7 +18,7 @@ export default function Emails() {
     }, [])
 
     return (
-        <div className="mx-auto max-w-6xl p-8">
+        <main>
             <h1 className="mb-8 text-3xl font-bold">
                 Sent Emails
             </h1>
@@ -39,6 +39,6 @@ export default function Emails() {
                     onClose={() => setSelectedEmail(null)}
                 />
             )}
-        </div>
+        </main>
     );
 }
