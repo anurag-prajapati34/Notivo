@@ -1,13 +1,11 @@
-import { addEmailJob } from "@/jobs/email-queue";
-import { emailStatus } from "@/utils/enum";
 import { handleHandlerError } from "@/utils/error-helpers";
 import { success } from "@/utils/response";
 import { AuthRequest } from "@/utils/types";
-import { Request, Response } from "express";
+import { Response } from "express";
 import {
   getAllEmailsQuery,
+  getEmailCredsQuery,
   getEmailTemplatesWithVariablesQuery,
-  insertEmailsQuery,
 } from "./queries";
 import { sendEmailService, setEmailCredsService } from "./service";
 
@@ -64,6 +62,16 @@ export const getEmailsListHandler = async (req: AuthRequest, res: Response) => {
     const userId: number = req.user?.userId!;
     const result = await getAllEmailsQuery({ userId: userId });
     return success(res, result, "Email credentials updated successfully");
+  } catch (error) {
+    handleHandlerError(res, error);
+  }
+};
+
+export const getEmailCredsHandler = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId: number = req.user?.userId!;
+    const [result] = await getEmailCredsQuery({ userId: userId });
+    return success(res, result, "Email credentials fetched successfully");
   } catch (error) {
     handleHandlerError(res, error);
   }

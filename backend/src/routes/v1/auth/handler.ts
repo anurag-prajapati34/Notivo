@@ -1,11 +1,11 @@
 import { handleHandlerError } from "@/utils/error-helpers";
 import { created } from "@/utils/response";
+import { AuthRequest } from "@/utils/types";
 import { Request, Response } from "express";
+import { getEmailCredsQuery } from "../email/queries";
+import { getUserQuery } from "./queries";
 import { generateApiKeyService, loginService, signupService } from "./service";
 import { LoginRequestBodyType, SignupRequestBodyType } from "./validator";
-import { AuthRequest } from "@/utils/types";
-import { generateApiKey } from "@/utils/encryption";
-import { getEmailCredsQuery } from "../email/queries";
 
 /**
  * Express controller handler for the user signup route.
@@ -35,7 +35,10 @@ export const loginHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const getApiKeyHandler = async (req: AuthRequest, res: Response) => {
+export const generateApiKeyHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
   try {
     const userId = req.user?.userId!;
     if (!userId) throw new Error("User not found");
@@ -43,6 +46,20 @@ export const getApiKeyHandler = async (req: AuthRequest, res: Response) => {
     if (!emailCreds) throw new Error("Email credentials not found");
     const result = await generateApiKeyService(userId);
     return created(res, result, "User created successfully");
+  } catch (error) {
+    handleHandlerError(res, error);
+  }
+};
+
+export const getApiKeyHandler = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.userId!;
+    if (!userId) throw new Error("User not found");
+    const user = await getUserQuery({ userId });
+    if (!user) throw new Error("User not found");
+    const apiKey = await user.apiKey;
+
+    return created(res, { apiKey }, "User created successfully");
   } catch (error) {
     handleHandlerError(res, error);
   }

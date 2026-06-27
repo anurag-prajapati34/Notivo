@@ -1,6 +1,7 @@
 import { authenticate, authenticateApiKey } from "@/middleware/auth";
 import express from "express";
 import {
+  getEmailCredsHandler,
   getEmailsListHandler,
   getEmailTemplatesHandler,
   sendEmailHandler,
@@ -26,6 +27,7 @@ route.post(
   validateEmailCredsRequestBody,
   setEmailCredsHandler,
 );
+route.get("/creds", authenticate, getEmailCredsHandler);
 
 route.get("/templates", authenticate, getEmailTemplatesHandler);
 

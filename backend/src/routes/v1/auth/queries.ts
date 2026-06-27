@@ -69,6 +69,7 @@ export const insertUsersQuery = async (
 
 export const getUserQuery = async (
   input: {
+    userId?: number;
     email?: string;
     mobile?: string;
   },
@@ -81,6 +82,9 @@ export const getUserQuery = async (
   }
   if (input.mobile) {
     whereConditions.push(eq(users.mobile, input.mobile));
+  }
+  if (input.userId) {
+    whereConditions.push(eq(users.userId, input.userId));
   }
 
   const result = await trx

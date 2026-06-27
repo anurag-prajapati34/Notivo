@@ -1,6 +1,11 @@
 import { authenticate } from "@/middleware/auth";
 import express from "express";
-import { getApiKeyHandler, loginHandler, signupHandler } from "./handler";
+import {
+  generateApiKeyHandler,
+  getApiKeyHandler,
+  loginHandler,
+  signupHandler,
+} from "./handler";
 import {
   validateLoginRequestBody,
   validateSignupRequestBody,
@@ -11,4 +16,5 @@ route.post("/signup", validateSignupRequestBody, signupHandler);
 route.post("/login", validateLoginRequestBody, loginHandler);
 
 route.get("/api-key", authenticate, getApiKeyHandler);
+route.post("/generate-api-key", authenticate, generateApiKeyHandler);
 export default route;
