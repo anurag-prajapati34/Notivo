@@ -154,6 +154,8 @@ export const getAllEmailsQuery = async (input: { userId?: number }) => {
       lastErrorMessage: emails.lastErrorMessage,
       queuedAt: emails.queuedAt,
       sentAt: emails.sentAt,
+      createdAt: emails.createdAt,
+      emailId: emails.emailId,
     })
     .from(emails)
     .where(and(...whereConditions));

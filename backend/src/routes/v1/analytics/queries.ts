@@ -60,12 +60,17 @@ export const getAnalyticsStatusQuery = async (input: { userId: number }) => {
     // recent emails
     db
       .select({
-        emailId: emails.emailId,
+        templateId: emails.templateId,
         toEmail: emails.toEmail,
-        emailStatus: emails.emailStatus,
-        date: emails.createdAt,
-        templateName: emailTemplates.name,
         subject: emails.subject,
+        body: emails.body,
+        emailStatus: emails.emailStatus,
+        attempts: emails.attempts,
+        lastErrorMessage: emails.lastErrorMessage,
+        queuedAt: emails.queuedAt,
+        sentAt: emails.sentAt,
+        createdAt: emails.createdAt,
+        emailId: emails.emailId,
       })
       .from(emails)
       .innerJoin(
