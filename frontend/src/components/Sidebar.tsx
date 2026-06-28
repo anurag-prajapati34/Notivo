@@ -4,6 +4,7 @@ import {
     LayoutDashboard,
     LayoutTemplate,
     Mail,
+    Send,
     Settings
 } from "lucide-react"
 import { SidebarOption } from "./SidebarOption"
@@ -25,6 +26,11 @@ const navItems = [
         path: "/templates",
         name: "Templates",
         icon: LayoutTemplate,
+    },
+    {
+        path: "/send-email",
+        name: "Send email",
+        icon: Send,
     },
     {
         path: "/settings",

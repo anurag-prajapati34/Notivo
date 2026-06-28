@@ -11,6 +11,7 @@ const endpoints = {
   getEmailCreds: `${baseUrl}/email/creds`,
   sendTestEmail: `${baseUrl}/email/test`,
   getEmailDetails: `${baseUrl}/email/details`,
+  sendEmail: `${baseUrl}/email/send`,
 };
 
 export { endpoints };

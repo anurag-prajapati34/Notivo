@@ -117,3 +117,12 @@ export interface EmailDetail {
   attempts: EmailAttempt[];
   meta: EmailDetailMeta;
 }
+
+export interface SendEmail {
+  templateId: string;
+  recipients: string[];
+  variables: {
+    variableName: string;
+    variableValue: string;
+  }[];
+}

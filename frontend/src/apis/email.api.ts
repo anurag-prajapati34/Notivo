@@ -4,10 +4,12 @@ import type {
   EmailCreds,
   EmailDetail,
   EmailTemplate,
+  SendEmail,
 } from "../types";
 import { getAuthToken } from "../utils/auth-helpers";
 import { makeGetReuqest, makePostRequest } from "../utils/axios";
 import { endpoints } from "./config";
+import { getApiKeyApi } from "./creds.api";
 
 export const getEmailTemplatesApi = async () => {
   const token = getAuthToken();
@@ -51,4 +53,15 @@ export const getEmailDetailApi = async (emailId: number) => {
   return (await makeGetReuqest(endpoints.getEmailDetails + `/${emailId}`, {
     headers,
   })) as ApiResponseType<EmailDetail>;
+};
+
+export const sendEmailApi = async (payload: SendEmail) => {
+  const result = await getApiKeyApi();
+  const apiKey = result.data.apiKey;
+  if (!apiKey) throw new Error("API key not found");
+
+  const headers = { Authorization: `Bearer ${apiKey}` };
+  return (await makePostRequest(endpoints.sendEmail, payload, {
+    headers,
+  })) as ApiResponseType<null | {}>;
 };

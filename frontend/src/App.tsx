@@ -8,6 +8,7 @@ import { Template } from './pages/Template'
 import { Emails } from './pages/Emails'
 import { Credentials } from './pages/Credentials'
 import { EmailDetails } from './pages/EmailDetails'
+import { SendEmail } from './pages/SendEmail'
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
             <Route path="templates" element={<Template />} />
             <Route path="emails" element={<Emails />} />
             <Route path="emails/:id" element={<EmailDetails />} />
+            <Route path="send-email" element={<SendEmail />} />
 
             <Route path="settings" element={<Credentials />} />
           </Route>
