@@ -14,14 +14,16 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Home />} >
-            <Route index path='template' element={<Template />} />
-            <Route path='emails' element={<Emails />} />
-            <Route path='dashboard' element={<Dashboard />} />
-            <Route path='credentials' element={<Credentials />} />
+          <Route path="/" element={<Home />}>
+            <Route index element={<Dashboard />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="template" element={<Template />} />
+            <Route path="emails" element={<Emails />} />
+            <Route path="settings" element={<Credentials />} />
           </Route>
-          <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
+
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </BrowserRouter>
     </>

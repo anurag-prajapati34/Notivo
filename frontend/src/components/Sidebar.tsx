@@ -4,6 +4,6 @@ export const Sidebar = () => {
         <SidebarOption path="/dashboard" name="Dasbhoard" iconClass="fa-solid fa-chart-simple" />
         <SidebarOption path="/emails" name="Emails" iconClass="fa-solid fa-envelope" />
         <SidebarOption path="/template" name="Templates" iconClass="fa-solid fa-folder-tree" />
-        <SidebarOption path="/credentials" name="Credentials" iconClass="fa-solid fa-key" />
+        <SidebarOption path="/settings" name="Settings" iconClass="fa-solid fa-key" />
     </div>
 };
