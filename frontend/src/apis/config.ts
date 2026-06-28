@@ -9,6 +9,7 @@ const endpoints = {
   getAnalyticsStats: `${baseUrl}/analytics/stats`,
   generateApiKey: `${baseUrl}/auth/generate-api-key`,
   getEmailCreds: `${baseUrl}/email/creds`,
+  sendTestEmail: `${baseUrl}/email/test`,
 };
 
 export { endpoints };

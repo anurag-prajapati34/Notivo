@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { generateApiKeyApi, getApiKeyApi, getEmailCredsApi, setEmailCredsApi } from "../apis/creds.api";
 import type { EmailCreds, SmtpForm } from "../types";
+import { sendTestEmailApi } from "../apis/email.api";
 
 
 
@@ -142,6 +143,15 @@ export const Credentials = () => {
         try {
             // Call your test email endpoint here
             // await sendTestEmailApi();
+            await sendTestEmailApi({
+                email: smtpForm.fromEmail,
+                name: smtpForm.fromName,
+                host: smtpForm.host,
+                port: smtpForm.port,
+                secure: smtpForm.port === 465,
+                username: smtpForm.username,
+                passKey: smtpForm.passKey
+            });
             await new Promise((r) => setTimeout(r, 1500)); // placeholder
         } catch (err) {
             console.error("Test email failed", err);

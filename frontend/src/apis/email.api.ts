@@ -1,6 +1,11 @@
-import type { ApiResponseType, Email, EmailTemplate } from "../types";
+import type {
+  ApiResponseType,
+  Email,
+  EmailCreds,
+  EmailTemplate,
+} from "../types";
 import { getAuthToken } from "../utils/auth-helpers";
-import { makeGetReuqest } from "../utils/axios";
+import { makeGetReuqest, makePostRequest } from "../utils/axios";
 import { endpoints } from "./config";
 
 export const getEmailTemplatesApi = async () => {
@@ -23,4 +28,15 @@ export const getEmailsListApi = async () => {
   return (await makeGetReuqest(endpoints.getEmailsList, {
     headers,
   })) as ApiResponseType<Email[]>;
+};
+
+export const sendTestEmailApi = async (emailCreds: EmailCreds) => {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error("No token found");
+  }
+  const headers = { Authorization: `Bearer ${token}` };
+  return (await makePostRequest(endpoints.sendTestEmail, emailCreds, {
+    headers,
+  })) as ApiResponseType<null | {}>;
 };
