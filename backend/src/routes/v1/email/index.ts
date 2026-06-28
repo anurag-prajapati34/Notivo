@@ -5,11 +5,13 @@ import {
   getEmailsListHandler,
   getEmailTemplatesHandler,
   sendEmailHandler,
+  sendTestEmailHandler,
   setEmailCredsHandler,
 } from "./handler";
 import {
   validateEmailCredsRequestBody,
   validateSendEmailRequestBody,
+  validateSendTestEmailRequestBody,
 } from "./prehandler";
 
 const route = express.Router();
@@ -32,5 +34,12 @@ route.get("/creds", authenticate, getEmailCredsHandler);
 route.get("/templates", authenticate, getEmailTemplatesHandler);
 
 route.get("/list", authenticate, getEmailsListHandler);
+
+route.post(
+  "/test",
+  authenticate,
+  validateSendTestEmailRequestBody,
+  sendTestEmailHandler,
+);
 
 export default route;

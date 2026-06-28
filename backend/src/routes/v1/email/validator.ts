@@ -23,3 +23,14 @@ export const SendEmailSchema = z.object({
   ),
 });
 export type SendEmail = z.infer<typeof SendEmailSchema>;
+
+export const SendTestEmailSchema = z.object({
+  email: emailSchema("Email"),
+  passKey: stringSchema("Pass Key"),
+  username: stringSchema("Username"),
+  name: stringSchema("Name"),
+  host: stringSchema("Host"),
+  port: numberSchema("Port"),
+  secure: z.boolean().default(false),
+});
+export type SendTestEmail = z.infer<typeof SendTestEmailSchema>;

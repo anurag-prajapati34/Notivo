@@ -10,7 +10,7 @@ import {
   NewEmailCreds,
 } from "@/database/schema";
 import { TransactionContext } from "@/utils/types";
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, sql } from "drizzle-orm";
 
 export const insertEmailsQuery = (
   payload: NewEmail[],
@@ -75,12 +75,17 @@ export const getEmailCredsQuery = async (input: {
 };
 
 export const getEmailTemplatesQuery = async (input?: {
-  templateIds: string[];
+  templateIds?: string[];
+  slugs?: string[];
 }) => {
   const whereConditions = [eq(emailTemplates.status, true)];
 
   if (input && input.templateIds && input.templateIds.length > 0) {
     whereConditions.push(inArray(emailTemplates.templateId, input.templateIds));
+  }
+
+  if (input && input.slugs && input.slugs.length > 0) {
+    whereConditions.push(inArray(emailTemplates.slug, input.slugs));
   }
   return await db
     .select({
@@ -93,7 +98,8 @@ export const getEmailTemplatesQuery = async (input?: {
       userId: emailTemplates.userId,
     })
     .from(emailTemplates)
-    .where(and(...whereConditions));
+    .where(and(...whereConditions))
+    .orderBy(desc(emailTemplates.createdAt));
 };
 
 export const getEmailTemplateVariablesQuery = async (input: {
@@ -158,5 +164,6 @@ export const getAllEmailsQuery = async (input: { userId?: number }) => {
       emailId: emails.emailId,
     })
     .from(emails)
-    .where(and(...whereConditions));
+    .where(and(...whereConditions))
+    .orderBy(desc(emails.createdAt));
 };

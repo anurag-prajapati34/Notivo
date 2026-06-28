@@ -7,7 +7,11 @@ import {
   getEmailCredsQuery,
   getEmailTemplatesWithVariablesQuery,
 } from "./queries";
-import { sendEmailService, setEmailCredsService } from "./service";
+import {
+  sendEmailService,
+  sendTestEmailService,
+  setEmailCredsService,
+} from "./service";
 
 export async function sendEmailHandler(req: AuthRequest, res: Response) {
   try {
@@ -72,6 +76,19 @@ export const getEmailCredsHandler = async (req: AuthRequest, res: Response) => {
     const userId: number = req.user?.userId!;
     const [result] = await getEmailCredsQuery({ userId: userId });
     return success(res, result, "Email credentials fetched successfully");
+  } catch (error) {
+    handleHandlerError(res, error);
+  }
+};
+
+export const sendTestEmailHandler = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId: number = req.user?.userId!;
+    await sendTestEmailService({
+      ...req.body,
+      userId,
+    });
+    return success(res, null, "Email sent successfully");
   } catch (error) {
     handleHandlerError(res, error);
   }

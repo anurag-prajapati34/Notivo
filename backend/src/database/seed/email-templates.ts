@@ -3,10 +3,16 @@
 import { db } from "../connection";
 import { emailTemplates, emailTemplateVariables } from "../schema";
 
+export const slugs = {
+  otpVerification: "otp-verification",
+  welcomeEmail: "welcome-email",
+  passwordReset: "password-reset",
+  smtpTestEmail: "smtp-test-email",
+};
 export const emailTemplateSeeds = [
   {
     name: "OTP Verification",
-    slug: "otp-verification",
+    slug: slugs.otpVerification,
     subject: "Your verification code is {{otp}}",
     html: `
       <h2>Hello {{name}},</h2>
@@ -24,7 +30,7 @@ export const emailTemplateSeeds = [
 
   {
     name: "Welcome Email",
-    slug: "welcome-email",
+    slug: slugs.welcomeEmail,
     subject: "Welcome to {{platformName}} 🎉",
     html: `
       <h2>Welcome {{name}}!</h2>
@@ -40,7 +46,7 @@ export const emailTemplateSeeds = [
 
   {
     name: "Password Reset",
-    slug: "password-reset",
+    slug: slugs.passwordReset,
     subject: "Reset your password",
     html: `
       <h2>Hello {{name}}</h2>
@@ -52,6 +58,36 @@ export const emailTemplateSeeds = [
       </a>
     `,
     variables: ["name", "resetLink"],
+  },
+  {
+    name: "SMTP Test Email",
+    slug: slugs.smtpTestEmail,
+    subject: "SMTP Test Email from {{platformName}}",
+    html: `
+    <h2>SMTP Test Successful ✅</h2>
+
+    <p>Hello {{name}},</p>
+
+    <p>
+      This is a test email from <strong>{{platformName}}</strong>.
+    </p>
+
+    <p>
+      If you received this email, your SMTP configuration is working correctly.
+    </p>
+
+    <p>
+      Sent at: <strong>{{timestamp}}</strong>
+    </p>
+
+    <hr />
+
+    <p style="color:#666;font-size:12px;">
+      This email was automatically generated to verify your SMTP credentials.
+      No action is required.
+    </p>
+  `,
+    variables: ["name", "platformName", "timestamp"],
   },
 ];
 
