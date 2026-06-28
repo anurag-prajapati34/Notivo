@@ -7,6 +7,7 @@ import { Dashboard } from './pages/Dashboard'
 import { Template } from './pages/Template'
 import { Emails } from './pages/Emails'
 import { Credentials } from './pages/Credentials'
+import { LogDetail } from './pages/LogDetails'
 
 
 function App() {
@@ -19,6 +20,8 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="template" element={<Template />} />
             <Route path="emails" element={<Emails />} />
+            <Route path="emails/:id" element={<LogDetail />} />
+
             <Route path="settings" element={<Credentials />} />
           </Route>
 

@@ -6,6 +6,7 @@ import { getEmailsListApi } from "../apis/email.api";
 import { EamilCard } from "../components/EmailCard";
 import { EmailPreviewModal } from "../components/EmailPreviewModal";
 import type { Email } from "../types";
+import { useNavigate } from "react-router-dom";
 
 
 // ─── Empty state ──────────────────────────────────────────────────────────────
@@ -32,6 +33,7 @@ type StatusFilter = "all" | "sent" | "delivered" | "failed" | "pending" | "retry
 
 export const Emails = () => {
     const [emails, setEmails] = useState<Email[]>([]);
+    const navigate = useNavigate();
     const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
@@ -167,6 +169,7 @@ export const Emails = () => {
                                         key={email.emailId ?? index}
                                         email={email}
                                         onView={() => setSelectedEmail(email)}
+                                        onClick={() => navigate(`/emails/${email.emailId}`)}
                                     />
                                 ))}
                             </tbody>

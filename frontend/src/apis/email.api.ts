@@ -40,3 +40,14 @@ export const sendTestEmailApi = async (emailCreds: EmailCreds) => {
     headers,
   })) as ApiResponseType<null | {}>;
 };
+
+export const getEmailDetailApi = async (emailId: number) => {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error("No token found");
+  }
+  const headers = { Authorization: `Bearer ${token}` };
+  return (await makeGetReuqest(endpoints.getLogs, {
+    headers,
+  })) as ApiResponseType<Email>;
+};

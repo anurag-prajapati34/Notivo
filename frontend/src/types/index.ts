@@ -96,3 +96,24 @@ export interface SmtpForm {
   username: string;
   passKey: string;
 }
+
+export interface EmailAttempt {
+  attemptId: number;
+  emailId: number;
+  attemptNumber: number;
+  status: "success" | "failed";
+  errorMessage: string | null;
+  attemptedAt: string;
+}
+
+export interface EmailDetailMeta {
+  totalAttempts: number;
+  deliveryTimeMs: number | null;
+  deliveryTimeSeconds: string | null;
+}
+
+export interface EmailDetail {
+  email: Email;
+  attempts: EmailAttempt[];
+  meta: EmailDetailMeta;
+}

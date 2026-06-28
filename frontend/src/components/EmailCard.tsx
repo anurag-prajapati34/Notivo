@@ -74,14 +74,16 @@ const AttemptsIndicator = ({ attempts, status }: { attempts: number | null; stat
 export const EamilCard = ({
     email,
     onView,
+    onClick,
 }: {
     email: Email;
     onView: () => void;
+    onClick: () => void;
 }) => {
     const isFailed = email.emailStatus?.toLowerCase() === "failed";
 
     return (
-        <tr className="hover:bg-gray-50 transition-colors group">
+        <tr onClick={onClick} className="hover:bg-gray-50 transition-colors group">
             {/* Recipient */}
             <td className="px-5 py-3.5">
                 <span className="text-sm text-gray-900 font-medium">{email.toEmail}</span>
