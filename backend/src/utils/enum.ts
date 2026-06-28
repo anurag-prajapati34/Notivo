@@ -1,6 +1,7 @@
 export const emailStatus = {
   PENDING: "PENDING",
-  SENT: "SENT",
+  PROCESSING: "PROCESSING",
+  DELIVERED: "DELIVERED",
   FAILED: "FAILED",
 } as const;
 export type EmailStatus = (typeof emailStatus)[keyof typeof emailStatus];

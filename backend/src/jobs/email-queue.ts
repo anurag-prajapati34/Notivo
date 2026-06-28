@@ -1,7 +1,13 @@
+import { Email, NewEmailAttempt } from "@/database/schema";
 import { EmailJobData, EmailResult, sendUserEmail } from "@/email";
+import {
+  insertEmailAttemptQuery,
+  updateEmailQuery,
+} from "@/routes/v1/email/queries";
 import { addJob, createQueue, createWorker } from "@/utils/bullmq";
+import { emailStatus } from "@/utils/enum";
 import { logger } from "@/utils/logger";
-import { Job, Queue, Worker, JobsOptions } from "bullmq";
+import { Job, JobsOptions, Queue, Worker } from "bullmq";
 
 /**
  * The unique name designation for the BullMQ email processing queue.
@@ -29,13 +35,73 @@ export const emailQueue = createQueue<EmailJobData, EmailResult>(
 export const processEmailJob = async (
   job: Job<EmailJobData>,
 ): Promise<EmailResult> => {
+  const attemptNumber = job.attemptsMade + 1;
+  const { emailData } = job.data;
   try {
+    //Update status to processing
+    await updateEmailQuery(emailData.emailId, {
+      emailStatus: emailStatus.PROCESSING,
+      attempts: attemptNumber,
+      lastErrorMessage: null,
+    });
+
     logger.info("Processing email job", { jobId: job.id });
     const result = await sendUserEmail(job.data);
+
+    const emalAttempt = {
+      emailId: emailData.emailId,
+      attemptNumber,
+      attemptedAt: new Date(),
+      emailStatus: result.success ? emailStatus.DELIVERED : emailStatus.FAILED,
+      errorMessage: result.success ? null : result.error,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    } as NewEmailAttempt;
+
+    const updatedEmail = {
+      attempts: attemptNumber,
+      updatedAt: new Date(),
+      ...(result.success
+        ? {
+            emailStatus: emailStatus.DELIVERED,
+            deliveredAt: new Date(),
+          }
+        : {
+            emailStatus: emailStatus.FAILED,
+            lastErrorMessage: result.error,
+          }),
+    } as Partial<Email>;
+
+    await Promise.all([
+      updateEmailQuery(emailData.emailId, updatedEmail),
+      insertEmailAttemptQuery([emalAttempt]),
+    ]);
+
     logger.info("Email job processed", { jobId: job.id, result });
     return result;
   } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error("Error processing email job", { jobId: job.id, error });
+    const emalAttempt = {
+      emailId: emailData.emailId,
+      attemptNumber,
+      attemptedAt: new Date(),
+      emailStatus: emailStatus.FAILED,
+      errorMessage: errorMessage,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    } as NewEmailAttempt;
+
+    const updatedEmail = {
+      attempts: attemptNumber,
+      updatedAt: new Date(),
+      emailStatus: emailStatus.FAILED,
+      lastErrorMessage: errorMessage,
+    } as Partial<Email>;
+    await Promise.all([
+      updateEmailQuery(emailData.emailId, updatedEmail),
+      insertEmailAttemptQuery([emalAttempt]),
+    ]);
     throw error;
   }
 };

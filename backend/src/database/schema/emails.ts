@@ -9,6 +9,7 @@ import {
   varchar,
 } from "drizzle-orm/mysql-core";
 import { users } from "./users";
+import { auditFields } from "@/utils/db-schema-helpers";
 
 export const emails = mysqlTable(
   "emails",
@@ -29,13 +30,9 @@ export const emails = mysqlTable(
     lastErrorMessage: varchar("last_error_message", { length: 1000 }),
     // bullJobId: varchar("bull_job_id", { length: 255 }),
 
-    queuedAt: timestamp("queued_at"),
-    sentAt: timestamp("sent_at"),
+    deliveredAt: timestamp("delivered_at"),
 
-    //Audit fields
-    status: boolean("status").default(true),
-    createdAt: timestamp("created_at").defaultNow(),
-    updatedAt: timestamp("updated_at").defaultNow(),
+    ...auditFields,
   },
   (table) => [
     index("idx_emails_to_email").on(table.toEmail),

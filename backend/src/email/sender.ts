@@ -121,19 +121,6 @@ export const sendUserEmail = async (jobData: EmailJobData) => {
     emailCreds,
     emailData,
   });
-  const errorMessage = result.error ? result.error : "";
-  if (result.success) {
-    await updateEmailQuery(emailData.emailId, {
-      sentAt: new Date(),
-      emailStatus: emailStatus.SENT,
-      updatedAt: new Date(),
-    });
-  } else {
-    await updateEmailQuery(emailData.emailId, {
-      emailStatus: emailStatus.FAILED,
-      updatedAt: new Date(),
-      lastErrorMessage: errorMessage,
-    });
-  }
+
   return result;
 };

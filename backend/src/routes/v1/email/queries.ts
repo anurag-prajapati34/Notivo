@@ -1,16 +1,18 @@
 import { db } from "@/database/connection";
 import {
   Email,
+  emailAttempts,
   EmailCreds,
   emailCreds,
   emails,
   emailTemplates,
   emailTemplateVariables,
   NewEmail,
+  NewEmailAttempt,
   NewEmailCreds,
 } from "@/database/schema";
 import { TransactionContext } from "@/utils/types";
-import { and, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 
 export const insertEmailsQuery = (
   payload: NewEmail[],
@@ -158,12 +160,15 @@ export const getAllEmailsQuery = async (input: { userId?: number }) => {
       emailStatus: emails.emailStatus,
       attempts: emails.attempts,
       lastErrorMessage: emails.lastErrorMessage,
-      queuedAt: emails.queuedAt,
-      sentAt: emails.sentAt,
+      deliveredAt: emails.deliveredAt,
       createdAt: emails.createdAt,
       emailId: emails.emailId,
     })
     .from(emails)
     .where(and(...whereConditions))
     .orderBy(desc(emails.createdAt));
+};
+
+export const insertEmailAttemptQuery = async (input: NewEmailAttempt[]) => {
+  return await db.insert(emailAttempts).values(input);
 };
