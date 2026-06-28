@@ -63,7 +63,7 @@ export interface Email {
   attempts: number;
   lastErrorMessage: string | null;
   queuedAt: string | null;
-  sentAt: string | null;
+  deliveredAt: string | null;
   createdAt: string;
   emailId: number;
 }
@@ -101,7 +101,7 @@ export interface EmailAttempt {
   attemptId: number;
   emailId: number;
   attemptNumber: number;
-  status: "success" | "failed";
+  emailStatus: string;
   errorMessage: string | null;
   attemptedAt: string;
 }

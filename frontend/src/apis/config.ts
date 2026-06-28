@@ -10,7 +10,7 @@ const endpoints = {
   generateApiKey: `${baseUrl}/auth/generate-api-key`,
   getEmailCreds: `${baseUrl}/email/creds`,
   sendTestEmail: `${baseUrl}/email/test`,
-  getLogs: `${baseUrl}/logs`,
+  getEmailDetails: `${baseUrl}/email/details`,
 };
 
 export { endpoints };

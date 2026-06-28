@@ -18,6 +18,7 @@ import {
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import type { EmailAttempt, EmailDetail } from "../types"
+import { getEmailDetailApi } from "../apis/email.api"
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -169,7 +170,9 @@ const AttemptTimelineItem = ({
     prevAttempt: EmailAttempt | null
     maxAttempts: number
 }) => {
-    const isSuccess = attempt.status === "success"
+    const isSuccess = ["delivered", "sent"].includes(
+        attempt.emailStatus?.toLowerCase() ?? ""
+    )
     const waitTime =
         prevAttempt && !isSuccess
             ? timeBetween(prevAttempt.attemptedAt, attempt.attemptedAt)
@@ -309,95 +312,14 @@ export const LogDetail = () => {
     useEffect(() => {
         if (!id) return
         const fetch = async () => {
-            // setIsLoading(true)
+            setIsLoading(true)
             try {
-                // const res = await getEmailDetailApi(parseInt(id))
-                // Assuming you already have an Email type defined somewhere
-                const data = {
-                    email: {
-                        emailId: 42,
-                        // userId: 1,
-                        templateId: "welcome-email",
-                        toEmail: "rahul.sharma@gmail.com",
-                        subject: "Welcome to Notivo, Rahul!",
-                        body: `<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body { margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif; }
-    .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 8px; overflow: hidden; }
-    .header { background-color: #6366f1; padding: 32px; text-align: center; }
-    .header h1 { color: #ffffff; margin: 0; font-size: 24px; }
-    .body { padding: 32px; }
-    .body h2 { color: #111827; font-size: 20px; margin-top: 0; }
-    .body p { color: #6b7280; font-size: 15px; line-height: 1.6; }
-    .footer { background-color: #f9fafb; padding: 20px; text-align: center; }
-    .footer p { color: #9ca3af; font-size: 12px; margin: 0; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header"><h1>Welcome to Notivo</h1></div>
-    <div class="body">
-      <h2>Hey Rahul, great to have you!</h2>
-      <p>Your account has been created successfully. We are excited to have you on board.</p>
-      <p>If you have any questions, just reply to this email. We are always happy to help.</p>
-      <p>Cheers,<br/>The Notivo Team</p>
-    </div>
-    <div class="footer"><p>You received this email because you signed up at Notivo.</p></div>
-  </div>
-</body>
-</html>`,
-                        emailStatus: "SENT",
-                        attempts: 3,
-                        lastErrorMessage: null,
-                        queuedAt: "2026-06-27T08:30:00.000Z",
-                        sentAt: "2026-06-27T08:31:08.000Z",
-                        status: true,
-                        createdAt: "2026-06-27T08:30:00.000Z",
-                        updatedAt: "2026-06-27T08:31:08.000Z",
-                    },
-
-                    attempts: [
-                        {
-                            attemptId: 1,
-                            emailId: 42,
-                            attemptNumber: 1,
-                            status: "failed",
-                            errorMessage: "Connection timeout: Unable to connect to smtp.gmail.com:465 after 5000ms",
-                            attemptedAt: "2026-06-27T08:30:05.000Z",
-                        },
-                        {
-                            attemptId: 2,
-                            emailId: 42,
-                            attemptNumber: 2,
-                            status: "failed",
-                            errorMessage: "535 Authentication failed: Invalid credentials or app password incorrect",
-                            attemptedAt: "2026-06-27T08:30:35.000Z",
-                        },
-                        {
-                            attemptId: 3,
-                            emailId: 42,
-                            attemptNumber: 3,
-                            status: "success",
-                            errorMessage: null,
-                            attemptedAt: "2026-06-27T08:31:08.000Z",
-                        },
-                    ],
-
-                    meta: {
-                        totalAttempts: 3,
-                        deliveryTimeMs: 68000,
-                        deliveryTimeSeconds: "68.00",
-                    },
-                }
-
-
-                setData(data as any)
+                const res = await getEmailDetailApi(parseInt(id))
+                setData(res.data)
             } catch (err) {
                 console.error("Failed to fetch log detail", err)
             } finally {
-                // setIsLoading(false)
+                setIsLoading(false)
             }
         }
         fetch()
@@ -586,7 +508,7 @@ export const LogDetail = () => {
                                                     }`}
                                             >
                                                 {isDelivered
-                                                    ? `Delivered at ${formatDateTime(email.sentAt)}`
+                                                    ? `Delivered at ${formatDateTime(email.deliveredAt)}`
                                                     : isFailed
                                                         ? email.lastErrorMessage ?? "Unknown error"
                                                         : "Worker is processing this job"}
@@ -645,11 +567,11 @@ export const LogDetail = () => {
                                     </p>
                                 </div>
 
-                                {email.sentAt && (
+                                {email.deliveredAt && (
                                     <div>
                                         <p className="text-xs text-gray-400 mb-0.5">Delivered at</p>
                                         <p className="text-xs text-gray-700">
-                                            {formatDateTime(email.sentAt)}
+                                            {formatDateTime(email.deliveredAt)}
                                         </p>
                                     </div>
                                 )}

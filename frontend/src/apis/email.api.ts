@@ -2,6 +2,7 @@ import type {
   ApiResponseType,
   Email,
   EmailCreds,
+  EmailDetail,
   EmailTemplate,
 } from "../types";
 import { getAuthToken } from "../utils/auth-helpers";
@@ -47,7 +48,7 @@ export const getEmailDetailApi = async (emailId: number) => {
     throw new Error("No token found");
   }
   const headers = { Authorization: `Bearer ${token}` };
-  return (await makeGetReuqest(endpoints.getLogs, {
+  return (await makeGetReuqest(endpoints.getEmailDetails + `/${emailId}`, {
     headers,
-  })) as ApiResponseType<Email>;
+  })) as ApiResponseType<EmailDetail>;
 };
