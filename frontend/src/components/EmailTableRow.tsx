@@ -3,6 +3,7 @@
 import { AlertCircle, Eye } from "lucide-react";
 import type { Email } from "../types";
 import { convertToIndianDate } from "../utils/date-helpers";
+import { formatTemplateSlug } from "../utils/name-helpers";
 
 
 
@@ -42,18 +43,6 @@ const StatusBadge = ({ status }: { status: string }) => {
 
 
 
-// ─── Format template slug → readable ──────────────────────────────────────────
-
-const formatTemplateSlug = (slug: string | null | undefined): string => {
-    if (!slug) return "—";
-    // return slug
-    //     .split("-")
-    //     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    //     .join(" ");
-
-    return slug;
-};
-
 // ─── Attempts indicator ───────────────────────────────────────────────────────
 
 const AttemptsIndicator = ({ attempts, status }: { attempts: number | null; status: string }) => {
@@ -71,7 +60,7 @@ const AttemptsIndicator = ({ attempts, status }: { attempts: number | null; stat
         </span>
     );
 };
-export const EamilCard = ({
+export const EmailTableRow = ({
     email,
     onView,
     onClick,
@@ -83,7 +72,7 @@ export const EamilCard = ({
     const isFailed = email.emailStatus?.toLowerCase() === "failed";
 
     return (
-        <tr onClick={onClick} className="hover:bg-gray-50 transition-colors group">
+        <tr onClick={onClick} className="hover:bg-gray-50 transition-colors group hover:cursor-pointer">
             {/* Recipient */}
             <td className="px-5 py-3.5">
                 <span className="text-sm text-gray-900 font-medium">{email.toEmail}</span>
@@ -131,20 +120,20 @@ export const EamilCard = ({
 
             {/* Sent at */}
             <td className="px-4 py-3.5">
-                <div className="flex flex-col gap-0.5">
-                    <span className="text-xs text-gray-600">
-                        {convertToIndianDate(email.sentAt ?? email.createdAt)}
-                    </span>
-                    {email.queuedAt && email.sentAt && (
-                        <span className="text-xs text-gray-400">
-                            queued {convertToIndianDate(email.queuedAt)}
-                        </span>
-                    )}
-                </div>
+                <span className="text-xs text-gray-600">
+                    {convertToIndianDate(email.createdAt)}
+                </span>
+            </td>
+
+            {/* Delivered at */}
+            <td className="px-4 py-3.5">
+                <span className="text-xs text-gray-600">
+                    {email.deliveredAt ? convertToIndianDate(email.deliveredAt) : '-'}
+                </span>
             </td>
 
             {/* View button */}
-            <td className="px-4 py-3.5">
+            {/* <td className="px-4 py-3.5">
                 <button
                     onClick={onView}
                     className="opacity-0 group-hover:opacity-100 h-8 px-3 bg-white border border-gray-200 rounded-lg flex items-center gap-1.5 text-xs text-gray-600 hover:bg-gray-50 transition-all"
@@ -152,7 +141,7 @@ export const EamilCard = ({
                     <Eye size={12} />
                     View
                 </button>
-            </td>
+            </td> */}
         </tr>
     );
 };

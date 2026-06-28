@@ -3,10 +3,11 @@
 import { Mail, RefreshCw, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getEmailsListApi } from "../apis/email.api";
-import { EamilCard } from "../components/EmailCard";
+import { EmailTableRow } from "../components/EmailTableRow";
 import { EmailPreviewModal } from "../components/EmailPreviewModal";
 import type { Email } from "../types";
 import { useNavigate } from "react-router-dom";
+import { EmailTableHeader } from "../components/EmailTableHeader";
 
 
 // ─── Empty state ──────────────────────────────────────────────────────────────
@@ -152,20 +153,10 @@ export const Emails = () => {
                         <EmptyState filtered={searchQuery !== "" || statusFilter !== "all"} />
                     ) : (
                         <table className="w-full">
-                            <thead>
-                                <tr className="border-b border-gray-100 bg-gray-50">
-                                    <th className="text-left text-xs font-medium text-gray-500 px-5 py-3">Recipient</th>
-                                    <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Subject</th>
-                                    <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Template</th>
-                                    <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Status</th>
-                                    <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Attempts</th>
-                                    <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Sent at</th>
-                                    <th className="text-left text-xs font-medium text-gray-500 px-4 py-3"></th>
-                                </tr>
-                            </thead>
+                            <EmailTableHeader />
                             <tbody className="divide-y divide-gray-50">
                                 {filtered.map((email, index) => (
-                                    <EamilCard
+                                    <EmailTableRow
                                         key={email.emailId ?? index}
                                         email={email}
                                         onView={() => setSelectedEmail(email)}

@@ -1,21 +1,50 @@
+import {
+    ChevronRight
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+export const SidebarOption = ({
+    path,
+    name,
+    icon: Icon,
+}: {
+    path: string
+    name: string
+    icon: React.ElementType
+}) => {
+    const { pathname } = useLocation()
 
-export const SidebarOption = (props: { name: string; path: string; iconClass?: string }) => {
-    const { name, path, iconClass } = props;
-    const location = useLocation();
-
-    const isActive = location.pathname === path;
+    // Active if exact match or nested route (e.g. /emails/42)
+    const isActive =
+        pathname === path || pathname.startsWith(path + "/")
 
     return (
         <Link
             to={path}
-            key={name}
-            id={name}
-            className={`flex cursor-pointer justify-start text-start py-2 px-4 items-center mb-1
-        ${isActive ? "text-gray-600 bg-gray-300 border border-gray-600" : "text-gray-600 hover:bg-gray-300 hover:border hover:border-gray-600"}`}
+            className={`
+        group flex items-center gap-3 px-3 py-2 rounded-lg text-sm
+        transition-all duration-150 relative
+        ${isActive
+                    ? "bg-indigo-600 text-white shadow-sm"
+                    : "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
+                }
+      `}
         >
-            {iconClass && <i className={iconClass}></i>}
-            <span className="ml-2">{name}</span>
+            {/* Icon */}
+            <Icon
+                size={16}
+                className={`shrink-0 transition-colors ${isActive ? "text-white" : "text-gray-500 group-hover:text-gray-300"
+                    }`}
+            />
+
+            {/* Label */}
+            <span className={`font-medium ${isActive ? "text-white" : ""}`}>
+                {name}
+            </span>
+
+            {/* Active indicator arrow */}
+            {isActive && (
+                <ChevronRight size={13} className="ml-auto text-indigo-300" />
+            )}
         </Link>
-    );
-};
+    )
+}

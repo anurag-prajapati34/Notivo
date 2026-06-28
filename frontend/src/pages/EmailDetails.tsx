@@ -19,6 +19,7 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import type { EmailAttempt, EmailDetail } from "../types"
 import { getEmailDetailApi } from "../apis/email.api"
+import { EmailPreviewModal } from "../components/EmailPreviewModal"
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -302,7 +303,7 @@ const AttemptTimelineItem = ({
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 
-export const LogDetail = () => {
+export const EmailDetails = () => {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
     const [data, setData] = useState<EmailDetail | null>(null)
@@ -357,7 +358,7 @@ export const LogDetail = () => {
 
     return (
         <main >
-            <div className="max-w-5xl mx-auto px-8 py-8">
+            <div >
 
                 {/* Back button */}
                 <button
@@ -590,7 +591,7 @@ export const LogDetail = () => {
                         </div>
 
                         {/* Queue info */}
-                        <div className="bg-white border border-gray-200 rounded-xl p-5">
+                        {/* <div className="bg-white border border-gray-200 rounded-xl p-5">
                             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4">
                                 Queue Info
                             </h3>
@@ -618,7 +619,7 @@ export const LogDetail = () => {
                                     <span className="text-xs text-gray-600">3 workers</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Email preview button */}
                         <button
@@ -634,41 +635,10 @@ export const LogDetail = () => {
 
             {/* Email body preview modal */}
             {showEmailPreview && (
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-                    onClick={(e) => {
-                        if (e.target === e.currentTarget) setShowEmailPreview(false)
-                    }}
-                >
-                    <div className="flex flex-col w-[680px] h-[80vh] bg-white rounded-xl shadow-2xl overflow-hidden">
-                        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-                            <div>
-                                <h3 className="text-sm font-semibold text-gray-900">
-                                    Email Preview
-                                </h3>
-                                <p className="text-xs text-gray-500 mt-0.5">
-                                    {email.subject}
-                                </p>
-                            </div>
-                            <button
-                                onClick={() => setShowEmailPreview(false)}
-                                className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
-                            >
-                                ✕
-                            </button>
-                        </div>
-                        <div className="px-5 py-2.5 bg-gray-50 border-b border-gray-100 flex items-center gap-2">
-                            <span className="text-xs text-gray-400">To:</span>
-                            <span className="text-xs text-gray-700">{email.toEmail}</span>
-                        </div>
-                        <iframe
-                            srcDoc={email.body ?? "<p>No content</p>"}
-                            className="flex-1 w-full"
-                            title="Email body preview"
-                            sandbox="allow-same-origin"
-                        />
-                    </div>
-                </div>
+                <EmailPreviewModal
+                    email={email}
+                    onClose={() => setShowEmailPreview(false)}
+                />
             )}
         </main>
     )

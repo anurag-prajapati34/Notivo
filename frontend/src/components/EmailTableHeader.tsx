@@ -1,0 +1,18 @@
+
+
+export const EmailTableHeader = () => {
+    return (
+        <thead>
+            <tr className="border-b border-gray-100 bg-gray-50">
+                <th className="text-left text-xs font-medium text-gray-500 px-5 py-3">Recipient</th>
+                <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Subject</th>
+                <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Template</th>
+                <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Status</th>
+                <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Attempts</th>
+                <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Sent at</th>
+                <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">Delivered at</th>
+                <th className="text-left text-xs font-medium text-gray-500 px-4 py-3"></th>
+            </tr>
+        </thead>
+    )
+}

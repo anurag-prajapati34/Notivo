@@ -24,7 +24,7 @@ export const Home = () => {
             <div className="flex pt-12 h-full">
                 <Sidebar />
 
-                <main className="ml-64 flex-1 overflow-y-auto p-4 bg-gray-50">
+                <main className=" flex-1 overflow-y-auto p-4 bg-gray-50">
                     <Outlet />
                 </main>
             </div>

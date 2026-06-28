@@ -9,6 +9,7 @@ interface AuthContextType {
     isLoggedIn: boolean
     setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
     checkAuth: () => void
+    logout: () => void
 }
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
@@ -21,13 +22,19 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
             setIsLoggedIn(true);
         }
     }
+    const logout = () => {
+        localStorage.removeItem(getAuthTokenKey());
+        setIsLoggedIn(false);
+        setUser(null);
+    }
     return (
         <AuthContext.Provider value={{
             user,
             setUser,
             isLoggedIn,
             setIsLoggedIn,
-            checkAuth
+            checkAuth,
+            logout
 
         }} >
             {children}
