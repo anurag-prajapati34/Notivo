@@ -1,6 +1,8 @@
 import { addEmailJob } from "@/jobs/email-queue";
 import { emailStatus } from "@/utils/enum";
 import {
+  getAllEmailsQuery,
+  getEmailAttemptsQuery,
   getEmailCredsQuery,
   getEmailTemplatesQuery,
   getEmailTemplateVariablesQuery,
@@ -244,6 +246,47 @@ export const sendTestEmailService = async (
         });
       }
     });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getEmailDetailsService = async (input: {
+  emailId: number;
+  userId: number;
+}) => {
+  try {
+    // Get email — ensure it belongs to this user
+    const [email] = await getAllEmailsQuery({
+      userId: input.userId,
+      emailId: input.emailId,
+    });
+
+    if (!email) {
+      return null;
+    }
+
+    // Get all attempts for this email ordered by attempt number
+    const attempts = await getEmailAttemptsQuery({ emailId: email.emailId });
+
+    // Calculate delivery time if delivered
+    const deliveryTimeMs =
+      email.deliveredAt && email.createdAt
+        ? new Date(email.deliveredAt).getTime() -
+          new Date(email.createdAt).getTime()
+        : null;
+
+    return {
+      email,
+      attempts,
+      meta: {
+        totalAttempts: attempts.length,
+        deliveryTimeMs,
+        deliveryTimeSeconds: deliveryTimeMs
+          ? (deliveryTimeMs / 1000).toFixed(2)
+          : null,
+      },
+    };
   } catch (error) {
     throw error;
   }

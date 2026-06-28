@@ -12,7 +12,7 @@ export const getAnalyticsStatusQuery = async (input: { userId: number }) => {
       .select({
         total: count(),
         delivered: count(
-          sql`CASE WHEN email_status = ${emailStatus.SENT} THEN 1 END`,
+          sql`CASE WHEN email_status = ${emailStatus.DELIVERED} THEN 1 END`,
         ),
         failed: count(
           sql`CASE WHEN email_status = ${emailStatus.FAILED} THEN 1 END`,
@@ -33,7 +33,7 @@ export const getAnalyticsStatusQuery = async (input: { userId: number }) => {
           sql`CASE WHEN email_status = ${emailStatus.FAILED} THEN 1 END`,
         ),
         delivered: count(
-          sql`CASE WHEN email_status = ${emailStatus.SENT} THEN 1 END`,
+          sql`CASE WHEN email_status = ${emailStatus.DELIVERED} THEN 1 END`,
         ),
       })
       .from(emails)
@@ -67,8 +67,7 @@ export const getAnalyticsStatusQuery = async (input: { userId: number }) => {
         emailStatus: emails.emailStatus,
         attempts: emails.attempts,
         lastErrorMessage: emails.lastErrorMessage,
-        queuedAt: emails.queuedAt,
-        sentAt: emails.sentAt,
+        deliveredAt: emails.deliveredAt,
         createdAt: emails.createdAt,
         emailId: emails.emailId,
       })

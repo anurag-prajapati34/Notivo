@@ -57,6 +57,13 @@
       "when": 1782559358867,
       "tag": "0007_peaceful_silver_sable",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1782640377739,
+      "tag": "0008_public_speed_demon",
+      "breakpoints": true
     }
   ]
 }

@@ -2,6 +2,7 @@ import { authenticate, authenticateApiKey } from "@/middleware/auth";
 import express from "express";
 import {
   getEmailCredsHandler,
+  getEmailDetailsHandler,
   getEmailsListHandler,
   getEmailTemplatesHandler,
   sendEmailHandler,
@@ -41,5 +42,7 @@ route.post(
   validateSendTestEmailRequestBody,
   sendTestEmailHandler,
 );
+
+route.get("/details/:emailId", authenticate, getEmailDetailsHandler);
 
 export default route;

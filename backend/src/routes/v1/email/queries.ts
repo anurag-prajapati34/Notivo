@@ -13,6 +13,7 @@ import {
 } from "@/database/schema";
 import { TransactionContext } from "@/utils/types";
 import { and, desc, eq, inArray } from "drizzle-orm";
+import { create } from "node:domain";
 
 export const insertEmailsQuery = (
   payload: NewEmail[],
@@ -144,11 +145,18 @@ export const getEmailTemplatesWithVariablesQuery = async () => {
   return result;
 };
 
-export const getAllEmailsQuery = async (input: { userId?: number }) => {
+export const getAllEmailsQuery = async (input: {
+  userId?: number;
+  emailId?: number;
+}) => {
   const whereConditions = [eq(emails.status, true)];
 
   if (input.userId) {
     whereConditions.push(eq(emails.userId, input.userId));
+  }
+
+  if (input.emailId) {
+    whereConditions.push(eq(emails.emailId, input.emailId));
   }
 
   return await db
@@ -171,4 +179,19 @@ export const getAllEmailsQuery = async (input: { userId?: number }) => {
 
 export const insertEmailAttemptQuery = async (input: NewEmailAttempt[]) => {
   return await db.insert(emailAttempts).values(input);
+};
+
+export const getEmailAttemptsQuery = async (input: { emailId: number }) => {
+  return await db
+    .select({
+      emailAttemptId: emailAttempts.emailAttemptId,
+      emailId: emailAttempts.emailId,
+      attemptNumber: emailAttempts.attemptNumber,
+      emailStatus: emailAttempts.emailStatus,
+      errorMessage: emailAttempts.errorMessage,
+      attemptedAt: emailAttempts.attemptedAt,
+      createdAt: emailAttempts.createdAt,
+    })
+    .from(emailAttempts)
+    .where(eq(emailAttempts.emailId, input.emailId));
 };

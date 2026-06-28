@@ -5,6 +5,7 @@ import {
   updateEmailQuery,
 } from "@/routes/v1/email/queries";
 import { addJob, createQueue, createWorker } from "@/utils/bullmq";
+import { getCurrentDate } from "@/utils/date-helpers";
 import { emailStatus } from "@/utils/enum";
 import { logger } from "@/utils/logger";
 import { Job, JobsOptions, Queue, Worker } from "bullmq";
@@ -48,28 +49,25 @@ export const processEmailJob = async (
     logger.info("Processing email job", { jobId: job.id });
     const result = await sendUserEmail(job.data);
 
+    // return result;
+    if (!result.success) {
+      throw new Error(result.error || "Error processing email job");
+    }
+
     const emalAttempt = {
       emailId: emailData.emailId,
       attemptNumber,
-      attemptedAt: new Date(),
-      emailStatus: result.success ? emailStatus.DELIVERED : emailStatus.FAILED,
-      errorMessage: result.success ? null : result.error,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      attemptedAt: getCurrentDate(),
+      emailStatus: emailStatus.DELIVERED,
+      createdAt: getCurrentDate(),
+      updatedAt: getCurrentDate(),
     } as NewEmailAttempt;
 
     const updatedEmail = {
       attempts: attemptNumber,
-      updatedAt: new Date(),
-      ...(result.success
-        ? {
-            emailStatus: emailStatus.DELIVERED,
-            deliveredAt: new Date(),
-          }
-        : {
-            emailStatus: emailStatus.FAILED,
-            lastErrorMessage: result.error,
-          }),
+      updatedAt: getCurrentDate(),
+      emailStatus: emailStatus.DELIVERED,
+      deliveredAt: getCurrentDate(),
     } as Partial<Email>;
 
     await Promise.all([
@@ -78,6 +76,7 @@ export const processEmailJob = async (
     ]);
 
     logger.info("Email job processed", { jobId: job.id, result });
+
     return result;
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -85,16 +84,16 @@ export const processEmailJob = async (
     const emalAttempt = {
       emailId: emailData.emailId,
       attemptNumber,
-      attemptedAt: new Date(),
+      attemptedAt: getCurrentDate(),
       emailStatus: emailStatus.FAILED,
       errorMessage: errorMessage,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: getCurrentDate(),
+      updatedAt: getCurrentDate(),
     } as NewEmailAttempt;
 
     const updatedEmail = {
       attempts: attemptNumber,
-      updatedAt: new Date(),
+      updatedAt: getCurrentDate(),
       emailStatus: emailStatus.FAILED,
       lastErrorMessage: errorMessage,
     } as Partial<Email>;

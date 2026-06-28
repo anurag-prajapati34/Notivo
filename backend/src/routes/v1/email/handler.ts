@@ -8,6 +8,7 @@ import {
   getEmailTemplatesWithVariablesQuery,
 } from "./queries";
 import {
+  getEmailDetailsService,
   sendEmailService,
   sendTestEmailService,
   setEmailCredsService,
@@ -89,6 +90,25 @@ export const sendTestEmailHandler = async (req: AuthRequest, res: Response) => {
       userId,
     });
     return success(res, null, "Email sent successfully");
+  } catch (error) {
+    handleHandlerError(res, error);
+  }
+};
+
+export const getEmailDetailsHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const userId: number = req.user?.userId!;
+    const emailIdStr = req.params.emailId;
+    if (!emailIdStr) throw new Error("Email id is required");
+    const emailId = Number(emailIdStr);
+    const result = await getEmailDetailsService({
+      userId: userId,
+      emailId: emailId,
+    });
+    return success(res, result, "Email credentials fetched successfully");
   } catch (error) {
     handleHandlerError(res, error);
   }
