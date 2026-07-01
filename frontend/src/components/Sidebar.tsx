@@ -13,7 +13,7 @@ import { SidebarOption } from "./SidebarOption"
 
 const navItems = [
     {
-        path: "/dashboard",
+        path: "/",
         name: "Dashboard",
         icon: LayoutDashboard,
     },

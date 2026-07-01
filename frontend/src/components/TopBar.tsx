@@ -34,7 +34,7 @@ export const TopBar = () => {
         <header className="fixed top-0 left-0 right-0 z-50 h-12 bg-gray-400 border-b border-gray-800 flex items-center justify-between px-4  text-white">
 
             {/* Left — Logo */}
-            <div onClick={() => navigate('/')} className="flex items-center gap-2 w-56">
+            <div onClick={() => navigate('/intro')} className="flex items-center gap-2 w-56">
                 <div className="w-6 h-6 rounded-md bg-indigo-600 flex items-center justify-center shrink-0">
                     <Zap size={13} className="text-white" />
                 </div>
