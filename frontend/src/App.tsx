@@ -9,6 +9,7 @@ import { Emails } from './pages/Emails'
 import { Credentials } from './pages/Credentials'
 import { EmailDetails } from './pages/EmailDetails'
 import { SendEmail } from './pages/SendEmail'
+import { Landing } from './pages/LandingPage'
 
 
 function App() {
@@ -16,13 +17,15 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />}>
+          <Route path="/" element={<Landing />} />
+          <Route path="/home" element={<Home />}>
             <Route index element={<Dashboard />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="templates" element={<Template />} />
             <Route path="emails" element={<Emails />} />
             <Route path="emails/:id" element={<EmailDetails />} />
             <Route path="send-email" element={<SendEmail />} />
+
 
             <Route path="settings" element={<Credentials />} />
           </Route>

@@ -22,7 +22,7 @@ export const TopBar = () => {
 
     const handleLogout = () => {
         logout()
-        navigate("/login")
+        navigate("/")
     }
 
     // Get initials from name
@@ -34,7 +34,7 @@ export const TopBar = () => {
         <header className="fixed top-0 left-0 right-0 z-50 h-12 bg-gray-400 border-b border-gray-800 flex items-center justify-between px-4  text-white">
 
             {/* Left — Logo */}
-            <div className="flex items-center gap-2 w-56">
+            <div onClick={() => navigate('/')} className="flex items-center gap-2 w-56">
                 <div className="w-6 h-6 rounded-md bg-indigo-600 flex items-center justify-center shrink-0">
                     <Zap size={13} className="text-white" />
                 </div>
@@ -55,14 +55,14 @@ export const TopBar = () => {
             <div className="flex items-center gap-2 w-56 justify-end">
 
                 {/* Docs link */}
-                <a
+                {/* <a
                     href="https://docs.notivo.app"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="h-7 px-2.5 rounded-md text-xs  text-white font-semibold hover:text-gray-200 hover:bg-gray-800 transition-colors flex items-center"
                 >
                     Docs
-                </a>
+                </a> */}
 
                 {/* Divider */}
                 <div className="w-px h-4 bg-gray-800" />

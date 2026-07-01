@@ -40,7 +40,7 @@ export const LoginPage = () => {
         }
         await login(loginDetails as any);
         setIsLoggedIn(true);
-        navigate('/')
+        navigate('/home')
 
     }
     checkAuth();
@@ -51,7 +51,7 @@ export const LoginPage = () => {
         if (!isLoggedIn) {
             navigate('/login')
         } else {
-            navigate('/')
+            navigate('/home')
         }
     }, [])
 

@@ -44,11 +44,20 @@ export const TemplateCard = ({
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
-    to: "user@example.com",
-    templateId: "${template.slug}",
-    data: {
-${template.variables.map((v) => `      ${v.variableName}: "value"`).join(",\n")}
-    }
+    templateId: "${template.templateId}",
+    recipients: [
+      "user@example.com"
+    ],
+    variables: [
+${template.variables
+            .map(
+                (v) => `      {
+        variableName: "${v.variableName}",
+        variableValue: "Sample ${v.variableName}"
+      }`
+            )
+            .join(",\n")}
+    ]
   })
 })`
 
@@ -77,9 +86,9 @@ ${template.variables.map((v) => `      ${v.variableName}: "value"`).join(",\n")}
                 {/* Template ID — copyable */}
                 <div className="flex items-center gap-1.5">
                     <Hash size={10} className="text-gray-400 shrink-0" />
-                    <code className="text-xs text-gray-500 font-mono">{template.slug}</code>
+                    <code className="text-xs text-gray-500 font-mono">{template.templateId}</code>
                     <button
-                        onClick={() => copy(template.slug, `slug-${template.templateId}`)}
+                        onClick={() => copy(template.templateId, template.templateId)}
                         className="ml-auto opacity-0 group-hover:opacity-100 h-6 w-6 flex items-center justify-center rounded text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all"
                         title="Copy template ID"
                     >

@@ -466,27 +466,50 @@ export const Credentials = () => {
                                 <span className="text-gray-300">application/json</span>
                                 <br />
                                 <br />
+
                                 <span className="text-gray-500">{"{"}</span>
                                 <br />
-                                <span className="text-gray-500">{"  "}</span>
-                                <span className="text-blue-400">"to"</span>
-                                <span className="text-gray-500">: </span>
-                                <span className="text-amber-400">"user@example.com"</span>
-                                <span className="text-gray-500">,</span>
-                                <br />
+
                                 <span className="text-gray-500">{"  "}</span>
                                 <span className="text-blue-400">"templateId"</span>
                                 <span className="text-gray-500">: </span>
                                 <span className="text-amber-400">"welcome-email"</span>
                                 <span className="text-gray-500">,</span>
                                 <br />
+
                                 <span className="text-gray-500">{"  "}</span>
-                                <span className="text-blue-400">"data"</span>
-                                <span className="text-gray-500">{": { "}</span>
-                                <span className="text-blue-400">"name"</span>
+                                <span className="text-blue-400">"recipients"</span>
+                                <span className="text-gray-500">: [</span>
+                                <br />
+                                <span className="text-gray-500">{"    "}</span>
+                                <span className="text-amber-400">"user@example.com"</span>
+                                <br />
+                                <span className="text-gray-500">{"  "}</span>
+                                <span className="text-gray-500">],</span>
+                                <br />
+
+                                <span className="text-gray-500">{"  "}</span>
+                                <span className="text-blue-400">"variables"</span>
+                                <span className="text-gray-500">: [</span>
+                                <br />
+
+                                <span className="text-gray-500">{"    {"}</span>
+                                <br />
+                                <span className="text-gray-500">{"      "}</span>
+                                <span className="text-blue-400">"variableName"</span>
                                 <span className="text-gray-500">: </span>
-                                <span className="text-amber-400">"Rahul"</span>
-                                <span className="text-gray-500">{" }"}</span>
+                                <span className="text-amber-400">"name"</span>
+                                <span className="text-gray-500">,</span>
+                                <br />
+                                <span className="text-gray-500">{"      "}</span>
+                                <span className="text-blue-400">"variableValue"</span>
+                                <span className="text-gray-500">: </span>
+                                <span className="text-amber-400">"Anurag"</span>
+                                <br />
+                                <span className="text-gray-500">{"    }"}</span>
+                                <br />
+
+                                <span className="text-gray-500">{"  ]"}</span>
                                 <br />
                                 <span className="text-gray-500">{"}"}</span>
                             </div>

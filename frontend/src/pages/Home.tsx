@@ -13,7 +13,7 @@ export const Home = () => {
         if (!isLoggedIn) {
             navigate('/login')
         } else {
-            navigate('/')
+            navigate('/home')
         }
     }, [])
     console.log("HOme isLoggedIn----", isLoggedIn)
