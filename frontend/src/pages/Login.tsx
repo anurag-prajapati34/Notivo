@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../apis/auth.api";
 import { useAuthContext } from "../hooks";
+import { toast } from "react-toastify";
 
 export const LoginPage = () => {
     const { setIsLoggedIn, isLoggedIn, checkAuth } = useAuthContext();
@@ -37,6 +38,7 @@ export const LoginPage = () => {
         }
         await login(loginDetails as any);
         setIsLoggedIn(true);
+        toast.success('Logged in successfully');
         navigate('/')
     }
 

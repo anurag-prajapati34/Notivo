@@ -14,6 +14,7 @@ import {
 import { generateApiKeyApi, getApiKeyApi, getEmailCredsApi, setEmailCredsApi } from "../apis/creds.api";
 import type { EmailCreds, SmtpForm } from "../types";
 import { sendTestEmailApi } from "../apis/email.api";
+import { toast } from "react-toastify";
 
 
 
@@ -127,11 +128,17 @@ export const Credentials = () => {
         try {
             const creds: EmailCreds = { email: fromEmail, passKey, host: smtpForm.host, port: smtpForm.port, username: smtpForm.username, name: smtpForm.fromName, secure: smtpForm.port === 465 };
 
-            await setEmailCredsApi(creds);
-            setSmtpSaved(true);
-            setTimeout(() => setSmtpSaved(false), 3000);
+            const res = await setEmailCredsApi(creds);
+            if (res?.success) {
+                setSmtpSaved(true);
+                toast.success('SMTP credentials saved successfully');
+                setTimeout(() => setSmtpSaved(false), 3000);
+
+            } else {
+                toast.error('Failed to save SMTP credentials');
+            }
         } catch (err) {
-            console.error("Failed to save SMTP credentials", err);
+            toast.error('Failed to save SMTP credentials');
         } finally {
             setIsSmtpSaving(false);
         }
@@ -140,9 +147,8 @@ export const Credentials = () => {
     const handleTestEmail = async () => {
         setIsTestSending(true);
         try {
-            // Call your test email endpoint here
-            // await sendTestEmailApi();
-            await sendTestEmailApi({
+
+            const response = await sendTestEmailApi({
                 email: smtpForm.fromEmail,
                 name: smtpForm.fromName,
                 host: smtpForm.host,
@@ -151,9 +157,14 @@ export const Credentials = () => {
                 username: smtpForm.username,
                 passKey: smtpForm.passKey
             });
+            if (response?.success) {
+                toast.success('Test email sent successfully');
+            } else {
+                toast.error('Test email failed');
+            }
             await new Promise((r) => setTimeout(r, 1500)); // placeholder
         } catch (err) {
-            console.error("Test email failed", err);
+            toast.error('Test email failed');
         } finally {
             setIsTestSending(false);
         }

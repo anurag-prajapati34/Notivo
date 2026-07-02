@@ -1,5 +1,6 @@
 import axios from "axios";
 import { clearUserAuthSession } from "./auth-helpers";
+import type { ApiResponseType } from "../types";
 
 // Configure the Axios instance
 axios.interceptors.response.use(
@@ -36,8 +37,7 @@ export const makePostRequest = async (
 ) => {
   try {
     const response = await axios.post(url, data, options);
-
-    return response.data;
+    return response.data as ApiResponseType<any>;
   } catch (error) {
     console.error(error);
   }

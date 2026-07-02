@@ -21,6 +21,7 @@ import {
 import { useEffect, useRef, useState } from "react"
 import { getEmailTemplatesApi, sendEmailApi } from "../apis/email.api"
 import type { EmailTemplate } from "../types"
+import { toast } from "react-toastify"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -509,12 +510,18 @@ export const SendEmail = () => {
                         variableValue,
                     })
                 );
-                await sendEmailApi({
+                const res = await sendEmailApi({
                     templateId: form.selectedTemplate.templateId,
                     variables: parsedVariables,
                     recipients: form.recipients,
                     // scheduleAt,
                 })
+
+                if (res?.success) {
+                    toast.success('Email sent successfully');
+                } else {
+                    toast.error('Failed to send email');
+                }
             }
 
             setSentCount(form.recipients.length)

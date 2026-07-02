@@ -39,9 +39,9 @@ export const sendTestEmailApi = async (emailCreds: EmailCreds) => {
     throw new Error("No token found");
   }
   const headers = { Authorization: `Bearer ${token}` };
-  return (await makePostRequest(endpoints.sendTestEmail, emailCreds, {
+  return await makePostRequest(endpoints.sendTestEmail, emailCreds, {
     headers,
-  })) as ApiResponseType<null | {}>;
+  });
 };
 
 export const getEmailDetailApi = async (emailId: number) => {

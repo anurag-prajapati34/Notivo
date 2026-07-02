@@ -2,6 +2,7 @@ import { useState } from "react";
 import { signup } from "../apis/auth.api";
 import { useAuthContext } from "../hooks";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const Signup = () => {
     const { setIsLoggedIn } = useAuthContext();
@@ -39,6 +40,7 @@ export const Signup = () => {
         }
         await signup(signupDetails as any);
         setIsLoggedIn(true);
+        toast.success('Account created successfully, please login');
         navigate('/login')
     }
 
