@@ -33,7 +33,6 @@ export const LoginPage = () => {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         if (!loginDetails.email || !loginDetails.password) {
-            console.log("Enter email and password")
             return
         }
         await login(loginDetails as any);
@@ -44,7 +43,6 @@ export const LoginPage = () => {
     checkAuth();
 
     useEffect(() => {
-        console.log("isLoggedIn", isLoggedIn)
         if (!isLoggedIn) {
             navigate('/login')
         } else {

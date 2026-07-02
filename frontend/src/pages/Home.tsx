@@ -9,14 +9,12 @@ export const Home = () => {
     const navigate = useNavigate();
     checkAuth();
     useEffect(() => {
-        console.log("isLoggedIn", isLoggedIn)
         if (!isLoggedIn) {
             navigate('/login')
         } else {
             navigate('/')
         }
     }, [])
-    console.log("HOme isLoggedIn----", isLoggedIn)
     return (
         <div className="h-screen overflow-hidden">
             <TopBar />

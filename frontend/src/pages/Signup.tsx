@@ -35,7 +35,6 @@ export const Signup = () => {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         if (!signupDetails.email || !signupDetails.password) {
-            console.log("Enter all details")
             return
         }
         await signup(signupDetails as any);

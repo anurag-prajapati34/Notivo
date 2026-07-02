@@ -11,7 +11,6 @@ export const getAnalyticsStatsHandler = async (
   try {
     const userId: number = req.user?.userId!;
     const result = await getAnalyticsStatsService({ userId: userId });
-    console.log("result---", result);
     return success(res, result, "Analytics stats fetched successfully");
   } catch (error: unknown) {
     await handleHandlerError(res, error);

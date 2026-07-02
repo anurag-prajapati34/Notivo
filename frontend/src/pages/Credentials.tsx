@@ -127,7 +127,6 @@ export const Credentials = () => {
         try {
             const creds: EmailCreds = { email: fromEmail, passKey, host: smtpForm.host, port: smtpForm.port, username: smtpForm.username, name: smtpForm.fromName, secure: smtpForm.port === 465 };
 
-            console.log("creds-----", creds)
             await setEmailCredsApi(creds);
             setSmtpSaved(true);
             setTimeout(() => setSmtpSaved(false), 3000);
@@ -209,7 +208,6 @@ export const Credentials = () => {
             ])
 
 
-            console.log("emailCredsData ----", emailCredsData)
 
             if (apiKeyData?.apiKey) {
                 setApiKey(apiKeyData.apiKey)

@@ -201,11 +201,6 @@ export const sendTestEmailService = async (
       templateVariables,
     );
 
-    console.log("before updated0---------", {
-      html: testTemplate.html,
-      subject: testTemplate.subject,
-    });
-    console.log("updated0---------", { html, subject });
     await db.transaction(async (trx) => {
       for (const recipient of [input.email]) {
         const insertResult = await insertEmailsQuery(

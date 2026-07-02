@@ -27,7 +27,6 @@ export async function sendEmailHandler(req: AuthRequest, res: Response) {
       data: null,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Something went wrong",

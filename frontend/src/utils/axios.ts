@@ -35,9 +35,7 @@ export const makePostRequest = async (
   },
 ) => {
   try {
-    console.log("Post request api call---");
     const response = await axios.post(url, data, options);
-    console.log("Post request response---", response);
 
     return response.data;
   } catch (error) {

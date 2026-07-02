@@ -3,7 +3,6 @@ import type { AnalyticsStats } from "../types";
 export const parseAnalyticsOverviewObject = (
   overview: AnalyticsStats["overview"],
 ) => {
-  console.log("Overview---", overview);
   if (!overview) return [];
   const delivered = overview.delivered || 0;
   const failed = overview.failed || 0;

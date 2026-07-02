@@ -20,13 +20,11 @@ export const getApiKeyApi = async () => {
   if (!token) {
     throw new Error("No token found");
   }
-  console.log("make get api request");
   const headers = { Authorization: `Bearer ${token}` };
   const result = (await makeGetReuqest(endpoints.getApiKey, {
     headers,
   })) as ApiResponseType<{ apiKey: string }>;
 
-  console.log("get api result----", result);
   return result;
 };
 
