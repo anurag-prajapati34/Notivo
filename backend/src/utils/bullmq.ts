@@ -5,10 +5,7 @@ import { logger } from "./logger";
 
 export { Redis } from "ioredis";
 
-const redisConnection = new Redis({
-  host: config.redis.host,
-  port: config.redis.port,
-  password: config.redis.password,
+const redisConnection = new Redis(config.redis.URL, {
   enableReadyCheck: false,
   maxRetriesPerRequest: null, // BullMQ requires this to be null
 });

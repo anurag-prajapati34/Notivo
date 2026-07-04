@@ -38,10 +38,15 @@ export const Signup = () => {
         if (!signupDetails.email || !signupDetails.password) {
             return
         }
-        await signup(signupDetails as any);
-        setIsLoggedIn(true);
-        toast.success('Account created successfully, please login');
-        navigate('/login')
+        const result = await signup(signupDetails as any);
+        // console.log("result--", result?.message)
+        if (result?.success) {
+            setIsLoggedIn(true);
+            toast.success('Account created successfully, please login');
+            navigate('/login')
+        } else {
+            toast.error('Failed to create account');
+        }
     }
 
     return (

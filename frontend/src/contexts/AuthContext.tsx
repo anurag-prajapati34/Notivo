@@ -18,6 +18,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
     const [user, setUser] = useState<User | null>(null);
     const checkAuth = () => {
         const token = localStorage.getItem(getAuthTokenKey());
+        // console.log("token----", token)
         if (token) {
             setIsLoggedIn(true);
         }

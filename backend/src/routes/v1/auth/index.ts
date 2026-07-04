@@ -1,4 +1,4 @@
-import { authenticate } from "@/middleware/auth";
+import { authenticate } from "@/middleware/auth.js";
 import express from "express";
 import {
   generateApiKeyHandler,

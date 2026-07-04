@@ -1,11 +1,11 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-import { config } from "./config";
-import { testConnection } from "./database/connection";
-import { initializeDatabase } from "./database/init";
-import v1 from "./routes/v1/index.ts";
-import { apiRequestLogger, logger } from "./utils/logger";
+import { config } from "./config/index.js";
+import { testConnection } from "./database/connection.js";
+import { initializeDatabase } from "./database/init.js";
+import v1 from "./routes/v1/index.js";
+import { apiRequestLogger, logger } from "./utils/logger.js";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;

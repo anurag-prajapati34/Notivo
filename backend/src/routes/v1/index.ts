@@ -1,7 +1,7 @@
 import express from "express";
-import auth from "./auth/index.ts";
-import email from "./email/index.ts";
-import analytics from "./analytics/index.ts";
+import auth from "./auth/index.js";
+import email from "./email/index.js";
+import analytics from "./analytics/index.js";
 const route = express.Router();
 
 route.use("/auth", auth);

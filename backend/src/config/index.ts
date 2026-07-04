@@ -12,9 +12,10 @@ const configSchema = z.object({
     PORT: z.string().transform(Number),
   }),
   redis: z.object({
-    host: z.string(),
-    port: z.string().transform(Number),
-    password: z.string().optional(),
+    // host: z.string(),
+    // port: z.string().transform(Number),
+    // password: z.string().optional(),
+    URL: z.string(),
   }),
   email: z.object({
     from: z.string(),
@@ -68,9 +69,10 @@ const config = configSchema.parse({
     PORT: process.env.DB_PORT,
   },
   redis: {
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    password: process.env.REDIS_PASSWORD,
+    // host: process.env.REDIS_HOST,
+    // port: process.env.REDIS_PORT,
+    // password: process.env.REDIS_PASSWORD,
+    URL: process.env.REDIS_URL,
   },
   email: {
     from: process.env.SMTP_FROM,

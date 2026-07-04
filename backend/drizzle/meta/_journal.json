@@ -5,64 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1779631918240,
-      "tag": "0000_odd_leper_queen",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1779950763644,
-      "tag": "0001_oval_lightspeed",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1779969462315,
-      "tag": "0002_special_hiroim",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1782049827393,
-      "tag": "0003_dusty_betty_brant",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1782449907574,
-      "tag": "0004_harsh_wither",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1782462102828,
-      "tag": "0005_mixed_doctor_strange",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1782472348283,
-      "tag": "0006_public_rocket_racer",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "5",
-      "when": 1782559358867,
-      "tag": "0007_peaceful_silver_sable",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "5",
-      "when": 1782640377739,
-      "tag": "0008_public_speed_demon",
+      "when": 1783145912098,
+      "tag": "0000_cooing_mattie_franklin",
       "breakpoints": true
     }
   ]

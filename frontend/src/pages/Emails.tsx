@@ -82,7 +82,7 @@ export const Emails = () => {
 
     const filterTabs: { key: StatusFilter; label: string }[] = [
         { key: "all", label: "All" },
-        { key: "sent", label: "Sent" },
+        { key: "delivered", label: "Delivered" },
         { key: "failed", label: "Failed" },
         { key: "pending", label: "Pending" },
         { key: "retrying", label: "Retrying" },
