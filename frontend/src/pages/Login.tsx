@@ -32,14 +32,27 @@ export const LoginPage = () => {
     };
 
     const handleSubmit = async (e: any) => {
+
+
         e.preventDefault();
-        if (!loginDetails.email || !loginDetails.password) {
-            return
+        try {
+
+            if (!loginDetails.email || !loginDetails.password) {
+                return
+            }
+            const result = await login(loginDetails as any);
+
+            // console.log("result---", result)
+            if (result.success) {
+                setIsLoggedIn(true);
+                toast.success('Logged in successfully');
+                navigate('/')
+            } else {
+                toast.error(result.message ?? 'Failed to login');
+            }
+        } catch (err) {
+            toast.error('Failed to login');
         }
-        await login(loginDetails as any);
-        setIsLoggedIn(true);
-        toast.success('Logged in successfully');
-        navigate('/')
     }
 
     checkAuth();
