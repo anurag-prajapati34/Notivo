@@ -1,6 +1,6 @@
 // ─── pages/Emails.tsx ────────────────────────────────────────────────────────
 
-import { AlertCircle, Eye } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import type { Email } from "../types";
 import { convertToIndianDate } from "../utils/date-helpers";
 import { formatTemplateSlug } from "../utils/name-helpers";
@@ -62,7 +62,7 @@ const AttemptsIndicator = ({ attempts, status }: { attempts: number | null; stat
 };
 export const EmailTableRow = ({
     email,
-    onView,
+    // onView,
     onClick,
 }: {
     email: Email;

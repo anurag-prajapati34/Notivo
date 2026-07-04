@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { signup } from "../apis/auth.api";
-import { useAuthContext } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { signup } from "../apis/auth.api";
+import { useAuthContext } from "../hooks";
 
 export const Signup = () => {
     const { setIsLoggedIn } = useAuthContext();

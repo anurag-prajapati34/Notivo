@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useAuthContext } from "../hooks";
 import { Sidebar } from "../components/Sidebar";
 import { TopBar } from "../components/TopBar";
+import { useAuthContext } from "../hooks";
 
 export const Home = () => {
     const { isLoggedIn, checkAuth } = useAuthContext()

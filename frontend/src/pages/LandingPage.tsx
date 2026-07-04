@@ -1,20 +1,19 @@
 // ─── pages/Landing.tsx ───────────────────────────────────────────────────────
 
-import { useEffect, useRef, useState } from "react"
-import { Link } from "react-router-dom"
 import {
-  Zap,
   ArrowRight,
-  RefreshCw,
-  Shield,
-  Clock,
   BarChart3,
   CheckCircle2,
-  LayoutTemplate,
-  Send,
+  Clock,
   GitBranch,
-  // Github,
+  LayoutTemplate,
+  RefreshCw,
+  Send,
+  Shield,
+  Zap,
 } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
+import { Link } from "react-router-dom"
 
 // ─── Terminal animation ───────────────────────────────────────────────────────
 

@@ -1,20 +1,20 @@
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
 import {
-    Send,
-    CheckCircle2,
-    XCircle,
-    Clock,
-    TrendingUp,
-    RefreshCw,
     ArrowRight,
     BarChart3,
+    CheckCircle2,
+    Clock,
+    RefreshCw,
+    Send,
+    TrendingUp,
+    XCircle,
 } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { getAnalyticsStatsApi } from "../apis/analytics.api"
-import { EmailTableRow } from "../components/EmailTableRow"
 import EmailChart from "../components/EmailChart"
-import EmailTemplateUsageChart from "../components/EmailTemplateUsageChart"
 import { EmailTableHeader } from "../components/EmailTableHeader"
+import { EmailTableRow } from "../components/EmailTableRow"
+import EmailTemplateUsageChart from "../components/EmailTemplateUsageChart"
 import type { AnalyticsStats } from "../types"
 import {
     parseAnalyticsOverviewObject,

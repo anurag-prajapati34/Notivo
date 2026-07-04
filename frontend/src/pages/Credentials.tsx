@@ -1,20 +1,20 @@
-import { useEffect, useState } from "react";
 import {
-    Mail,
-    Key,
-    Copy,
     Check,
+    Copy,
+    Eye,
+    EyeOff,
+    Info,
+    Key,
+    Mail,
     RefreshCw,
     Save,
     Send,
-    Info,
-    Eye,
-    EyeOff,
 } from "lucide-react";
-import { generateApiKeyApi, getApiKeyApi, getEmailCredsApi, setEmailCredsApi } from "../apis/creds.api";
-import type { EmailCreds, SmtpForm } from "../types";
-import { sendTestEmailApi } from "../apis/email.api";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { generateApiKeyApi, getApiKeyApi, getEmailCredsApi, setEmailCredsApi } from "../apis/creds.api";
+import { sendTestEmailApi } from "../apis/email.api";
+import type { EmailCreds, SmtpForm } from "../types";
 
 
 

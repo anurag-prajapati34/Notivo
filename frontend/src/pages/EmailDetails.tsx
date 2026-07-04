@@ -17,9 +17,9 @@ import {
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import type { EmailAttempt, EmailDetail } from "../types"
 import { getEmailDetailApi } from "../apis/email.api"
 import { EmailPreviewModal } from "../components/EmailPreviewModal"
+import type { EmailAttempt, EmailDetail } from "../types"
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -115,7 +115,7 @@ const StatusBadge = ({
     size?: "sm" | "lg"
 }) => {
     const cfg = getStatusConfig(status)
-    const Icon = cfg.icon
+    // const Icon = cfg.icon
 
     return (
         <span
@@ -350,7 +350,7 @@ export const EmailDetails = () => {
     }
 
     const { email, attempts, meta } = data
-    const statusCfg = getStatusConfig(email.emailStatus ?? "")
+    // const statusCfg = getStatusConfig(email.emailStatus ?? "")
     const isFailed = email.emailStatus?.toLowerCase() === "failed"
     const isDelivered = ["delivered", "sent"].includes(
         email.emailStatus?.toLowerCase() ?? ""

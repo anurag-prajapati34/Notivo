@@ -1,11 +1,11 @@
 import {
-    AreaChart,
     Area,
-    XAxis,
-    YAxis,
+    AreaChart,
     CartesianGrid,
+    ResponsiveContainer,
     Tooltip,
-    ResponsiveContainer
+    XAxis,
+    YAxis
 } from 'recharts'
 
 

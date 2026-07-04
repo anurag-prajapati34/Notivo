@@ -2,12 +2,12 @@
 
 import { Mail, RefreshCw, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getEmailsListApi } from "../apis/email.api";
-import { EmailTableRow } from "../components/EmailTableRow";
-import { EmailPreviewModal } from "../components/EmailPreviewModal";
-import type { Email } from "../types";
 import { useNavigate } from "react-router-dom";
+import { getEmailsListApi } from "../apis/email.api";
+import { EmailPreviewModal } from "../components/EmailPreviewModal";
 import { EmailTableHeader } from "../components/EmailTableHeader";
+import { EmailTableRow } from "../components/EmailTableRow";
+import type { Email } from "../types";
 
 
 // ─── Empty state ──────────────────────────────────────────────────────────────

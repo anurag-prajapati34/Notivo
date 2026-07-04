@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react"
-import { Bell, ChevronDown, LogOut, Settings, User, Zap } from "lucide-react"
+import { ChevronDown, LogOut, Settings, Zap } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuthContext } from "../hooks"
 
@@ -136,30 +136,30 @@ export const TopBar = () => {
 // ─── Page indicator ───────────────────────────────────────────────────────────
 // Shows current page name based on URL — subtle, clean
 
-import { useLocation } from "react-router-dom"
+// import { useLocation } from "react-router-dom"
 
-const pageNames: Record<string, string> = {
-    "/dashboard": "Dashboard",
-    "/emails": "Emails",
-    "/templates": "Templates",
-    "/settings": "Settings",
-}
+// const pageNames: Record<string, string> = {
+//     "/dashboard": "Dashboard",
+//     "/emails": "Emails",
+//     "/templates": "Templates",
+//     "/settings": "Settings",
+// }
 
-const PageIndicator = () => {
-    const { pathname } = useLocation()
+// const PageIndicator = () => {
+//     const { pathname } = useLocation()
 
-    // Match exact or startsWith for nested routes like /emails/42
-    const match = Object.entries(pageNames).find(([path]) =>
-        pathname === path || pathname.startsWith(path + "/")
-    )
+//     // Match exact or startsWith for nested routes like /emails/42
+//     const match = Object.entries(pageNames).find(([path]) =>
+//         pathname === path || pathname.startsWith(path + "/")
+//     )
 
-    if (!match) return null
+//     if (!match) return null
 
-    const [, name] = match
+//     const [, name] = match
 
-    return (
-        <span className="text-xs text-gray-500 font-medium">
-            {name}
-        </span>
-    )
-}
+//     return (
+//         <span className="text-xs text-gray-500 font-medium">
+//             {name}
+//         </span>
+//     )
+// }

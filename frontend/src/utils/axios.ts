@@ -1,6 +1,6 @@
 import axios from "axios";
-import { clearUserAuthSession } from "./auth-helpers";
 import type { ApiResponseType } from "../types";
+import { clearUserAuthSession } from "./auth-helpers";
 
 // Configure the Axios instance
 axios.interceptors.response.use(

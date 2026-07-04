@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { login } from "../apis/auth.api";
 import { useAuthContext } from "../hooks";
-import { toast } from "react-toastify";
 
 export const LoginPage = () => {
     const { setIsLoggedIn, isLoggedIn, checkAuth } = useAuthContext();

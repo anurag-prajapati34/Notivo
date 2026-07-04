@@ -19,9 +19,9 @@ import {
     X,
 } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
+import { toast } from "react-toastify"
 import { getEmailTemplatesApi, sendEmailApi } from "../apis/email.api"
 import type { EmailTemplate } from "../types"
-import { toast } from "react-toastify"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -497,10 +497,10 @@ export const SendEmail = () => {
         setSubmitError(null)
 
         try {
-            const scheduleAt =
-                form.mode === "schedule" && form.scheduleDate && form.scheduleTime
-                    ? new Date(`${form.scheduleDate}T${form.scheduleTime}`).toISOString()
-                    : undefined
+            // const scheduleAt =
+            //     form.mode === "schedule" && form.scheduleDate && form.scheduleTime
+            //         ? new Date(`${form.scheduleDate}T${form.scheduleTime}`).toISOString()
+            //         : undefined
 
             // Send to all recipients
             if (form.selectedTemplate.templateId) {
@@ -560,7 +560,7 @@ export const SendEmail = () => {
     }
 
     // ── Min date for schedule (today) ──
-    const todayStr = new Date().toISOString().split("T")[0]
+    // const todayStr = new Date().toISOString().split("T")[0]
 
     // ── Preview recipient (first one or placeholder) ──
     const previewRecipient = form.recipients[0] ?? ""

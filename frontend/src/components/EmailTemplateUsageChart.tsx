@@ -1,10 +1,10 @@
 import {
+    Cell,
+    Legend,
     Pie,
     PieChart,
-    Cell,
-    Tooltip,
-    Legend,
-    ResponsiveContainer
+    ResponsiveContainer,
+    Tooltip
 } from 'recharts'
 
 // Colors for each template slice
@@ -73,7 +73,7 @@ const EmailTemplateUsageChart = ({ data }: Props) => {
 
                 {/* Hover popup */}
                 <Tooltip
-                    formatter={(value: number, name: string) => [value, name]}
+                    formatter={(value: any, name: any) => [value, name]}
                     contentStyle={{
                         backgroundColor: '#111827',
                         border: '1px solid #374151',
