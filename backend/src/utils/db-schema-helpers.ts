@@ -1,6 +1,6 @@
 import { bigint, boolean, foreignKey, timestamp } from "drizzle-orm/mysql-core";
 import { sql } from "drizzle-orm";
-import { users } from "@/database/schema";
+import { users } from "@/database/schema/index.js";
 
 // Common audit fields used across all tables
 // Note: MySQL TIMESTAMP columns store values in UTC internally

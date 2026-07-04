@@ -1,4 +1,4 @@
-import { authenticate, authenticateApiKey } from "@/middleware/auth";
+import { authenticate, authenticateApiKey } from "@/middleware/auth.js";
 import express from "express";
 import {
   getEmailCredsHandler,
@@ -8,12 +8,12 @@ import {
   sendEmailHandler,
   sendTestEmailHandler,
   setEmailCredsHandler,
-} from "./handler";
+} from "./handler.js";
 import {
   validateEmailCredsRequestBody,
   validateSendEmailRequestBody,
   validateSendTestEmailRequestBody,
-} from "./prehandler";
+} from "./prehandler.js";
 
 const route = express.Router();
 

@@ -1,5 +1,8 @@
-import { validateRequestBody } from "@/utils/zod-helpers";
-import { LoginRequestBodySchema, SignupRequestBodySchema } from "./validator";
+import { validateRequestBody } from "@/utils/zod-helpers.js";
+import {
+  LoginRequestBodySchema,
+  SignupRequestBodySchema,
+} from "./validator.js";
 
 export const validateSignupRequestBody = validateRequestBody(
   SignupRequestBodySchema,

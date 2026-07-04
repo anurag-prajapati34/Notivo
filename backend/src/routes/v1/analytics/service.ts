@@ -1,4 +1,4 @@
-import { getAnalyticsStatusQuery } from "./queries";
+import { getAnalyticsStatusQuery } from "./queries.js";
 
 export const getAnalyticsStatsService = (input: { userId: number }) => {
   try {

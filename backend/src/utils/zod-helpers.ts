@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import z from "zod";
-import { logger } from "./logger";
-import { badRequest } from "./response";
+import { logger } from "./logger.js";
+import { badRequest } from "./response.js";
 /**
  * Express middleware factory that validates the incoming request body against a Zod schema.
  * If validation fails, it logs all issues and responds with a `badRequest` (400) containing the first error.

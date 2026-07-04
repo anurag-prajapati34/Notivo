@@ -1,4 +1,4 @@
-import { db } from "@/database/connection";
+import { db } from "@/database/connection.js";
 import {
   Email,
   emailAttempts,
@@ -10,10 +10,9 @@ import {
   NewEmail,
   NewEmailAttempt,
   NewEmailCreds,
-} from "@/database/schema";
-import { TransactionContext } from "@/utils/types";
+} from "@/database/schema/index.js";
+import { TransactionContext } from "@/utils/types.js";
 import { and, desc, eq, inArray } from "drizzle-orm";
-import { create } from "node:domain";
 
 export const insertEmailsQuery = (
   payload: NewEmail[],

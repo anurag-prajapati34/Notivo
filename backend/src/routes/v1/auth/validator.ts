@@ -3,7 +3,7 @@ import {
   mobileSchema,
   passwordSchema,
   stringSchema,
-} from "@/utils/zod-helpers";
+} from "@/utils/zod-helpers.js";
 import z from "zod";
 
 export const SignupRequestBodySchema = z.object({

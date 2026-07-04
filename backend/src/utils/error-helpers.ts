@@ -1,6 +1,6 @@
 import { Response } from "express";
-import { logger } from "./logger";
-import { internalServerError } from "./response";
+import { logger } from "./logger.js";
+import { internalServerError } from "./response.js";
 
 /**
  * Centrally handles controller/handler layer runtime exceptions.

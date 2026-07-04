@@ -8,8 +8,8 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/mysql-core";
-import { emails } from "./emails";
-import { auditFields } from "@/utils/db-schema-helpers";
+import { emails } from "./emails.js";
+import { auditFields } from "@/utils/db-schema-helpers.js";
 
 export const emailAttempts = mysqlTable(
   "email_attempts",

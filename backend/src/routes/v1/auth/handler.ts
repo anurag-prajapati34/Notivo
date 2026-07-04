@@ -1,11 +1,15 @@
-import { handleHandlerError } from "@/utils/error-helpers";
-import { created } from "@/utils/response";
-import { AuthRequest } from "@/utils/types";
+import { handleHandlerError } from "@/utils/error-helpers.js";
+import { created } from "@/utils/response.js";
+import { AuthRequest } from "@/utils/types.js";
 import { Request, Response } from "express";
-import { getEmailCredsQuery } from "../email/queries";
-import { getUserQuery } from "./queries";
-import { generateApiKeyService, loginService, signupService } from "./service";
-import { LoginRequestBodyType, SignupRequestBodyType } from "./validator";
+import { getEmailCredsQuery } from "../email/queries.js";
+import { getUserQuery } from "./queries.js";
+import {
+  generateApiKeyService,
+  loginService,
+  signupService,
+} from "./service.js";
+import { LoginRequestBodyType, SignupRequestBodyType } from "./validator.js";
 
 /**
  * Express controller handler for the user signup route.

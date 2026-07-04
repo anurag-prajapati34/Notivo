@@ -1,7 +1,7 @@
-import { db } from "@/database/connection";
+import { db } from "@/database/connection.js";
 import { MySql2Transaction } from "drizzle-orm/mysql2";
-import { JwtAuthPayload } from "./jwt-helpers";
 import { Request } from "express";
+import { JwtAuthPayload } from "./jwt-helpers.js";
 
 /**
  * @description - User is a type that can be used to represent a user in the system.

@@ -1,9 +1,9 @@
-import { validateRequestBody } from "@/utils/zod-helpers";
+import { validateRequestBody } from "@/utils/zod-helpers.js";
 import {
   EmailCredentialsSchema,
   SendEmailSchema,
   SendTestEmailSchema,
-} from "./validator";
+} from "./validator.js";
 
 export const validateEmailCredsRequestBody = validateRequestBody(
   EmailCredentialsSchema,

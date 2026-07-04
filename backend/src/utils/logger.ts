@@ -1,4 +1,4 @@
-import { config } from "@/config";
+import { config } from "@/config/index.js";
 import { NextFunction, Request, Response } from "express";
 import { createLogger, format, transports } from "winston";
 

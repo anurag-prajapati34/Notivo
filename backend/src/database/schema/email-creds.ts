@@ -1,4 +1,4 @@
-import { auditFields } from "@/utils/db-schema-helpers";
+import { auditFields } from "@/utils/db-schema-helpers.js";
 import {
   bigint,
   boolean,
@@ -9,7 +9,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/mysql-core";
-import { users } from "./users";
+import { users } from "./users.js";
 
 export const emailCreds = mysqlTable(
   "email_creds",

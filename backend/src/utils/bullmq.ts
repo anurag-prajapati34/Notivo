@@ -1,7 +1,7 @@
-import { config } from "@/config";
+import { config } from "@/config/index.js";
 import { Job, Queue, QueueEvents, QueueOptions, Worker } from "bullmq";
 import Redis from "ioredis";
-import { logger } from "./logger";
+import { logger } from "./logger.js";
 
 export { Redis } from "ioredis";
 

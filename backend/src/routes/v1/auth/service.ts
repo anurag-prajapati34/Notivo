@@ -1,4 +1,4 @@
-import { generateJwtAuthToken } from "@/utils/jwt-helpers";
+import { generateJwtAuthToken } from "@/utils/jwt-helpers.js";
 import bcrypt from "bcryptjs";
 import {
   getUserQuery,
@@ -6,9 +6,9 @@ import {
   isUserExistsWithEmailQuery,
   isUserExistsWithMobileQuery,
   updateUserQuery,
-} from "./queries";
-import { LoginRequestBodyType, SignupRequestBodyType } from "./validator";
-import { generateApiKey } from "@/utils/encryption";
+} from "./queries.js";
+import { LoginRequestBodyType, SignupRequestBodyType } from "./validator.js";
+import { generateApiKey } from "@/utils/encryption.js";
 
 /**
  * Business logic service to handle new user registration.

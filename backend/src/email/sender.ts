@@ -1,9 +1,12 @@
-import { config } from "@/config";
-import { updateEmailQuery } from "@/routes/v1/email/queries";
-import { emailStatus } from "@/utils/enum";
-import { logger } from "@/utils/logger";
+import { config } from "@/config/index.js";
+import { logger } from "@/utils/logger.js";
 import nodemailer from "nodemailer";
-import { EmailCreds, EmailJobData, EmailOptions, EmailResult } from "./types";
+import {
+  EmailCreds,
+  EmailJobData,
+  EmailOptions,
+  EmailResult,
+} from "./types.js";
 
 const getEmailConfig = () => {
   const { host, auth, port, secure } = config.email;

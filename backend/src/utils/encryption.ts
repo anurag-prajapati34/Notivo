@@ -1,6 +1,6 @@
-import { config } from "@/config";
-import CryptoJS from "crypto-js";
+import { config } from "@/config/index.js";
 import Crypto from "crypto";
+import CryptoJS from "crypto-js";
 
 /**
  * Encrypts a plain text string using AES encryption and a configured secret key.

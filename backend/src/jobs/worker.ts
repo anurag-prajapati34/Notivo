@@ -1,6 +1,6 @@
-import { logger } from "@/utils/logger";
-import { EMAIL_QUEUE_NAME, getEmailWorker } from "./email-queue";
-import { shutdownWorker } from "@/utils/bullmq";
+import { logger } from "@/utils/logger.js";
+import { EMAIL_QUEUE_NAME, getEmailWorker } from "./email-queue.js";
+import { shutdownWorker } from "@/utils/bullmq.js";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 /**

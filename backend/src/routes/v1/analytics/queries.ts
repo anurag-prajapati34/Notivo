@@ -1,6 +1,6 @@
-import { db } from "@/database/connection";
-import { emails, emailTemplates } from "@/database/schema";
-import { emailStatus } from "@/utils/enum";
+import { db } from "@/database/connection.js";
+import { emails, emailTemplates } from "@/database/schema/index.js";
+import { emailStatus } from "@/utils/enum.js";
 import { count, desc, eq, sql } from "drizzle-orm";
 
 // GET /dashboard/stats

@@ -1,6 +1,6 @@
-import { db } from "@/database/connection";
-import { NewUser, User, users } from "@/database/schema";
-import { TransactionContext } from "@/utils/types";
+import { db } from "@/database/connection.js";
+import { NewUser, User, users } from "@/database/schema/index.js";
+import { TransactionContext } from "@/utils/types.js";
 import { and, eq } from "drizzle-orm";
 
 /**

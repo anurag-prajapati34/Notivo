@@ -1,5 +1,7 @@
-import { addEmailJob } from "@/jobs/email-queue";
-import { emailStatus } from "@/utils/enum";
+import { db } from "@/database/connection.js";
+import { slugs } from "@/database/seed/email-templates.js";
+import { addEmailJob } from "@/jobs/email-queue.js";
+import { emailStatus } from "@/utils/enum.js";
 import {
   getAllEmailsQuery,
   getEmailAttemptsQuery,
@@ -9,11 +11,8 @@ import {
   insertEmailCredsQuery,
   insertEmailsQuery,
   updateEmailCredsQuery,
-} from "./queries";
-import { EmailCredentials, SendEmail, SendTestEmail } from "./validator";
-import { db } from "@/database/connection";
-import { slugs } from "@/database/seed/email-templates";
-import { template } from "@/email/templates/test";
+} from "./queries.js";
+import { EmailCredentials, SendEmail, SendTestEmail } from "./validator.js";
 
 export const setEmailCredsService = async (
   input: EmailCredentials & { userId: number },

@@ -1,4 +1,4 @@
-import { auditFields } from "@/utils/db-schema-helpers";
+import { auditFields } from "@/utils/db-schema-helpers.js";
 import {
   bigint,
   foreignKey,
@@ -8,7 +8,7 @@ import {
   uniqueIndex,
   varchar,
 } from "drizzle-orm/mysql-core";
-import { users } from "./users";
+import { users } from "./users.js";
 
 export const emailTemplates = mysqlTable(
   "email_templates",

@@ -1,13 +1,13 @@
-import { Email, NewEmailAttempt } from "@/database/schema";
-import { EmailJobData, EmailResult, sendUserEmail } from "@/email";
+import { Email, NewEmailAttempt } from "@/database/schema/index.js";
+import { EmailJobData, EmailResult, sendUserEmail } from "@/email/index.js";
 import {
   insertEmailAttemptQuery,
   updateEmailQuery,
-} from "@/routes/v1/email/queries";
-import { addJob, createQueue, createWorker } from "@/utils/bullmq";
-import { getCurrentDate } from "@/utils/date-helpers";
-import { emailStatus } from "@/utils/enum";
-import { logger } from "@/utils/logger";
+} from "@/routes/v1/email/queries.js";
+import { addJob, createQueue, createWorker } from "@/utils/bullmq.js";
+import { getCurrentDate } from "@/utils/date-helpers.js";
+import { emailStatus } from "@/utils/enum.js";
+import { logger } from "@/utils/logger.js";
 import { Job, JobsOptions, Queue, Worker } from "bullmq";
 
 /**

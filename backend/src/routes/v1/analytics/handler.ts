@@ -1,8 +1,8 @@
-import { handleHandlerError } from "@/utils/error-helpers";
-import { AuthRequest } from "@/utils/types";
-import { Request, Response } from "express";
-import { getAnalyticsStatsService } from "./service";
-import { success } from "@/utils/response";
+import { handleHandlerError } from "@/utils/error-helpers.js";
+import { success } from "@/utils/response.js";
+import { AuthRequest } from "@/utils/types.js";
+import { Response } from "express";
+import { getAnalyticsStatsService } from "./service.js";
 
 export const getAnalyticsStatsHandler = async (
   req: AuthRequest,

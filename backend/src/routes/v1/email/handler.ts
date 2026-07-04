@@ -1,18 +1,18 @@
-import { handleHandlerError } from "@/utils/error-helpers";
-import { success } from "@/utils/response";
-import { AuthRequest } from "@/utils/types";
+import { handleHandlerError } from "@/utils/error-helpers.js";
+import { success } from "@/utils/response.js";
+import { AuthRequest } from "@/utils/types.js";
 import { Response } from "express";
 import {
   getAllEmailsQuery,
   getEmailCredsQuery,
   getEmailTemplatesWithVariablesQuery,
-} from "./queries";
+} from "./queries.js";
 import {
   getEmailDetailsService,
   sendEmailService,
   sendTestEmailService,
   setEmailCredsService,
-} from "./service";
+} from "./service.js";
 
 export async function sendEmailHandler(req: AuthRequest, res: Response) {
   try {

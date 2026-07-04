@@ -1,7 +1,7 @@
-import { db } from "@/database/connection";
-import { users } from "@/database/schema";
-import { decodeJwt, JwtAuthPayload } from "@/utils/jwt-helpers";
-import { unauthorized } from "@/utils/response";
+import { db } from "@/database/connection.js";
+import { users } from "@/database/schema/index.js";
+import { decodeJwt, JwtAuthPayload } from "@/utils/jwt-helpers.js";
+import { unauthorized } from "@/utils/response.js";
 import { and, eq } from "drizzle-orm";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
