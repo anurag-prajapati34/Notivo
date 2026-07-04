@@ -105,5 +105,6 @@ startServer().catch((error) => {
 app.use(apiRequestLogger);
 // Register routes
 app.use("/api/v1", v1);
+app.get("/health", (req, res) => res.send("OK"));
 
 export default app;
