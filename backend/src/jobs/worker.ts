@@ -1,8 +1,16 @@
+import express from "express";
 import { logger } from "@/utils/logger.js";
 import { EMAIL_QUEUE_NAME, getEmailWorker } from "./email-queue.js";
 import { shutdownWorker } from "@/utils/bullmq.js";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Render will hit this URL to confirm the container is alive
+app.get("/health", (req, res) => {
+  res.status(200).send("Worker is actively polling queues.");
+});
 /**
  * Starts the background job worker and sets up event handlers
  */
@@ -10,6 +18,11 @@ async function startBackgroundWorker() {
   try {
     await getEmailWorker();
     logger.info("Background job worker started successfully");
+
+    // 2. Start the HTTP health check server
+    app.listen(PORT, () => {
+      logger.info(`✅ Render health check listener active on port ${PORT}`);
+    });
     // Keep the process running
     process.on("SIGINT", async () => {
       logger.info("Shutting down background job worker...");

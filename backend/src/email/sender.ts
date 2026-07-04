@@ -41,10 +41,20 @@ const createTransporter = async (creds: EmailCreds) => {
       user: creds.username,
       pass: creds.passKey,
     },
+    // ⚠️ CRUCIAL FOR CLOUD ENVIRONMENTS:
+    connectionTimeout: 10000, // 10 seconds timeout limit
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
+    dnsTimeout: 5000,
+    // This forces Node to use IPv4 resolution instead of IPv6
+    connectionOptions: {
+      family: 4,
+    },
+
     tls: {
       rejectUnauthorized: true,
     },
-  });
+  } as any);
 
   await transporter.verify();
 
