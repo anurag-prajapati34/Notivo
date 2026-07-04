@@ -12,8 +12,8 @@
     "db:migrate": "npx drizzle-kit migrate",
     "db:seed": "tsx src/database/seed/index.ts",
     "build": "tsc -b",
-    "start:api": "node dist/index.js",
-    "start:worker": "node dist/jobs/worker.js"
+    "start:api": "node --import tsx dist/index.js",
+    "start:worker": "node --import tsx dist/jobs/worker.js"
   },
   "keywords": [],
   "author": "",
