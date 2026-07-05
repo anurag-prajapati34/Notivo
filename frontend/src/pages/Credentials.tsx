@@ -98,7 +98,7 @@ export const Credentials = () => {
         fromName: "",
         fromEmail: "",
         host: "smtp.gmail.com",
-        port: 465,
+        port: 587,
         username: "",
         passKey: "",
     });
@@ -127,8 +127,8 @@ export const Credentials = () => {
         setIsSmtpSaving(true);
         try {
             const creds: EmailCreds = {
-                email: fromEmail, passKey, host: smtpForm.host, port: Number(smtpForm.port || 465),
-                secure: Number(smtpForm.port) === 465, username: smtpForm.username, name: smtpForm.fromName,
+                email: fromEmail, passKey, host: smtpForm.host, port: Number(smtpForm.port || 587),
+                secure: Number(smtpForm.port) === 587, username: smtpForm.username, name: smtpForm.fromName,
             };
 
             const res = await setEmailCredsApi(creds);
@@ -155,8 +155,8 @@ export const Credentials = () => {
                 email: smtpForm.fromEmail,
                 name: smtpForm.fromName,
                 host: smtpForm.host,
-                port: Number(smtpForm.port || 465),
-                secure: Number(smtpForm.port) === 465,
+                port: Number(smtpForm.port || 587),
+                secure: Number(smtpForm.port) === 587,
                 username: smtpForm.username,
                 passKey: smtpForm.passKey
             });
@@ -231,7 +231,7 @@ export const Credentials = () => {
                     fromName: emailCredsData?.name || '',
                     fromEmail: emailCredsData?.email || '',
                     host: emailCredsData?.host || '',
-                    port: Number(emailCredsData?.port || 465),
+                    port: Number(emailCredsData?.port || 587),
                     username: emailCredsData?.username || '',
                     passKey: emailCredsData?.passKey || ''
                 })
@@ -322,7 +322,7 @@ export const Credentials = () => {
                             <FieldLabel>Port</FieldLabel>
                             <Input
                                 name="port"
-                                placeholder="465"
+                                placeholder="587"
                                 value={smtpForm.port.toString()}
                                 onChange={handleSmtpChange}
                             />
