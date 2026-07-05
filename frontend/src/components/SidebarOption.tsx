@@ -21,11 +21,11 @@ export const SidebarOption = ({
         <Link
             to={path}
             className={`
-        group flex items-center gap-3 px-3 py-2 rounded-lg text-sm
+        group flex items-center gap-3 px-3 py-2  text-sm
         transition-all duration-150 relative
         ${isActive
-                    ? "bg-indigo-600 text-white shadow-sm"
-                    : "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
+                    ? "bg-gray-950 text-white shadow-sm"
+                    : "text-gray-400 hover:text-gray-200 hover:bg-gray-600"
                 }
       `}
         >
@@ -43,7 +43,7 @@ export const SidebarOption = ({
 
             {/* Active indicator arrow */}
             {isActive && (
-                <ChevronRight size={13} className="ml-auto text-indigo-300" />
+                <ChevronRight size={13} className="ml-auto text-gray-300" />
             )}
         </Link>
     )

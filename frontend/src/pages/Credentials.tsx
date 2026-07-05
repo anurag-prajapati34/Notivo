@@ -21,7 +21,7 @@ import type { EmailCreds, SmtpForm } from "../types";
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
 const SectionCard = ({ children }: { children: React.ReactNode }) => (
-    <div className="bg-white border border-gray-200 rounded-xl p-6 mb-4">
+    <div className="bg-white border border-gray-400  p-6 mb-4">
         {children}
     </div>
 );
@@ -41,7 +41,7 @@ const SectionHeader = ({
 }) => (
     <div className="mb-5">
         <div className="flex items-center gap-2 mb-1">
-            <div className={`w-7 h-7 rounded-md flex items-center justify-center ${iconBg}`}>
+            <div className={`w-7 h-7  flex items-center justify-center ${iconBg}`}>
                 <span className={iconColor}>{icon}</span>
             </div>
             <h3 className="text-sm font-medium text-gray-900">{title}</h3>
@@ -78,7 +78,7 @@ const Input = ({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-            className="w-full h-9 px-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all"
+            className="w-full h-9 px-3 text-sm bg-gray-50 border border-gray-400  text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all"
         />
         {rightElement && (
             <div className="absolute right-2 top-1/2 -translate-y-1/2">
@@ -263,14 +263,14 @@ export const Credentials = () => {
                 <SectionCard>
                     <SectionHeader
                         icon={<Mail size={14} />}
-                        iconBg="bg-indigo-50"
-                        iconColor="text-indigo-500"
+                        iconBg="bg-gray-50"
+                        iconColor="text-gray-500"
                         title="SMTP configuration"
                         description="Emails are sent using your own SMTP — your sender reputation, your quota."
                     />
 
                     {/* Info banner */}
-                    <div className="flex gap-2.5 bg-blue-50 border border-blue-100 rounded-lg px-3.5 py-2.5 mb-5">
+                    <div className="flex gap-2.5 bg-blue-50 border border-blue-100  px-3.5 py-2.5 mb-5">
                         <Info size={14} className="text-blue-500 shrink-0 mt-0.5" />
                         <p className="text-xs text-blue-700 leading-relaxed">
                             Use an app password, not your account password. For Gmail go to{" "}
@@ -365,7 +365,7 @@ export const Credentials = () => {
                         <button
                             onClick={handleSaveSmtp}
                             disabled={!isSmtpFormValid || isSmtpSaving}
-                            className="h-9 px-4 bg-indigo-600 text-white text-sm font-medium rounded-lg flex items-center gap-1.5 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="h-9 px-4 bg-gray-950 text-white text-sm font-medium  flex items-center gap-1.5 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
                             {isSmtpSaving ? (
                                 <RefreshCw size={13} className="animate-spin" />
@@ -378,7 +378,7 @@ export const Credentials = () => {
                         <button
                             onClick={handleTestEmail}
                             disabled={isTestSending}
-                            className="h-9 px-4 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-200 flex items-center gap-1.5 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="h-9 px-4 bg-white text-gray-700 text-sm font-medium  border border-gray-400 flex items-center gap-1.5 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
                             {isTestSending ? (
                                 <RefreshCw size={13} className="animate-spin" />
@@ -422,12 +422,12 @@ export const Credentials = () => {
 
                         {apiKey ? (
                             <div className="flex gap-2">
-                                <div className="flex-1 h-9 px-3 bg-gray-50 border border-gray-200 rounded-lg flex items-center font-mono text-xs text-gray-500 overflow-hidden">
+                                <div className="flex-1 h-9 px-3 bg-gray-50 border border-gray-400  flex items-center font-mono text-xs text-gray-500 overflow-hidden">
                                     <span className="truncate">{maskedKey}</span>
                                 </div>
                                 <button
                                     onClick={handleCopyApiKey}
-                                    className="h-9 px-3 bg-white border border-gray-200 rounded-lg flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors shrink-0"
+                                    className="h-9 px-3 bg-white border border-gray-400  flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors shrink-0"
                                 >
                                     {isCopied ? (
                                         <>
@@ -444,12 +444,12 @@ export const Credentials = () => {
                             </div>
                         ) : (
                             <div className="flex gap-2">
-                                <div className="flex-1 h-9 px-3 bg-gray-50 border border-gray-200 rounded-lg flex items-center text-xs text-gray-400">
+                                <div className="flex-1 h-9 px-3 bg-gray-50 border border-gray-400  flex items-center text-xs text-gray-400">
                                     No API key generated yet
                                 </div>
                                 <button
                                     onClick={handleGetApiKey}
-                                    className="h-9 px-3 bg-indigo-600 text-white rounded-lg flex items-center gap-1.5 text-xs font-medium hover:bg-indigo-700 transition-colors shrink-0"
+                                    className="h-9 px-3 bg-gray-950 text-white  flex items-center gap-1.5 text-xs font-medium hover:bg-gray-700 transition-colors shrink-0"
                                 >
                                     <Key size={13} />
                                     Generate key
@@ -462,9 +462,9 @@ export const Credentials = () => {
                     {apiKey && (
                         <div className="mb-5">
                             <FieldLabel>Example usage</FieldLabel>
-                            <div className="bg-gray-950 rounded-lg px-4 py-3 font-mono text-xs leading-relaxed">
+                            <div className="bg-gray-950  px-4 py-3 font-mono text-xs leading-relaxed">
                                 <span className="text-gray-500">POST </span>
-                                <span className="text-indigo-400">
+                                <span className="text-gray-400">
                                     https://notivo.app/api/v1/send
                                 </span>
                                 <br />
@@ -533,7 +533,7 @@ export const Credentials = () => {
                             <button
                                 onClick={handleRegenerate}
                                 disabled={!apiKey}
-                                className="h-9 px-4 bg-white text-red-500 text-sm font-medium rounded-lg border border-red-200 flex items-center gap-1.5 hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                                className="h-9 px-4 bg-white text-red-500 text-sm font-medium  border border-red-200 flex items-center gap-1.5 hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                             >
                                 <RefreshCw size={13} />
                                 Regenerate key
@@ -546,7 +546,7 @@ export const Credentials = () => {
                                 <button
                                     onClick={handleRegenerate}
                                     disabled={isRegenerating}
-                                    className="h-8 px-3 bg-red-600 text-white text-xs font-medium rounded-lg flex items-center gap-1.5 hover:bg-red-700 disabled:opacity-50 transition-colors"
+                                    className="h-8 px-3 bg-red-600 text-white text-xs font-medium  flex items-center gap-1.5 hover:bg-red-700 disabled:opacity-50 transition-colors"
                                 >
                                     {isRegenerating ? (
                                         <RefreshCw size={12} className="animate-spin" />
@@ -555,7 +555,7 @@ export const Credentials = () => {
                                 </button>
                                 <button
                                     onClick={() => setShowRegenerateConfirm(false)}
-                                    className="h-8 px-3 bg-white text-gray-600 text-xs font-medium rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+                                    className="h-8 px-3 bg-white text-gray-600 text-xs font-medium  border border-gray-400 hover:bg-gray-50 transition-colors"
                                 >
                                     Cancel
                                 </button>

@@ -102,7 +102,7 @@ export const Emails = () => {
                     </div>
                     <button
                         onClick={fetchEmails}
-                        className="h-9 px-3 bg-white border border-gray-200 rounded-lg flex items-center gap-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                        className="h-9 px-3 bg-white border border-gray-400  flex items-center gap-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
                     >
                         <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
                         Refresh
@@ -119,17 +119,17 @@ export const Emails = () => {
                             placeholder="Search by recipient or subject..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full h-9 pl-8 pr-3 text-sm bg-white border border-gray-200 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all"
+                            className="w-full h-9 pl-8 pr-3 text-sm bg-white border border-gray-400  placeholder-gray-400 text-gray-900 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all"
                         />
                     </div>
 
                     {/* Status filter tabs */}
-                    <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-1">
+                    <div className="flex items-center gap-1 bg-white border border-gray-400  p-1">
                         {filterTabs.map((tab) => (
                             <button
                                 key={tab.key}
                                 onClick={() => setStatusFilter(tab.key)}
-                                className={`h-7 px-3 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${statusFilter === tab.key
+                                className={`h-7 px-3 py-0.5 text-xs font-medium transition-colors flex items-center cursor-pointer gap-1.5 ${statusFilter === tab.key
                                     ? "bg-gray-900 text-white"
                                     : "text-gray-500 hover:text-gray-800"
                                     }`}
@@ -144,7 +144,7 @@ export const Emails = () => {
                 </div>
 
                 {/* ── Table ── */}
-                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div className="bg-white border-x border-b border-gray-400  overflow-hidden">
                     {isLoading ? (
                         <div className="flex items-center justify-center py-20">
                             <RefreshCw size={18} className="animate-spin text-gray-400" />

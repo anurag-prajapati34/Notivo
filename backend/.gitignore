@@ -7,6 +7,6 @@ dist/
 *.log
 
 # dotenv
-.env
+.env*
 #data querying test file
 notivo.session.sql

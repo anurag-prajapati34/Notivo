@@ -51,7 +51,7 @@ export const Signup = () => {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-12 sm:px-6 lg:px-8">
-            <div className="w-full max-w-xl space-y-8 rounded-2xl border border-white/10 bg-slate-900/40 p-8 backdrop-blur-md shadow-2xl">
+            <div className="w-full max-w-xl space-y-8  border border-white/10 bg-slate-900/40 p-8 backdrop-blur-md shadow-2xl">
                 <div>
                     <h2 className="mt-2 text-center text-3xl font-bold tracking-tight text-white">
                         Create an account
@@ -77,7 +77,7 @@ export const Signup = () => {
                                     autoComplete="email"
                                     onChange={handleChange}
                                     placeholder="name@example.com"
-                                    className="block w-full rounded-lg border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm"
+                                    className="block w-full  border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-gray-500 sm:text-sm"
                                 />
                             </div>
                         </div>
@@ -95,7 +95,7 @@ export const Signup = () => {
                                     autoComplete="given-name"
                                     onChange={handleChange}
                                     placeholder="John"
-                                    className="block w-full rounded-lg border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm"
+                                    className="block w-full  border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-gray-500 sm:text-sm"
                                 />
                             </div>
                         </div>
@@ -113,7 +113,7 @@ export const Signup = () => {
                                     autoComplete="family-name"
                                     onChange={handleChange}
                                     placeholder="Doe"
-                                    className="block w-full rounded-lg border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm"
+                                    className="block w-full  border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-gray-500 sm:text-sm"
                                 />
                             </div>
                         </div>
@@ -130,7 +130,7 @@ export const Signup = () => {
                                     required
                                     onChange={handleChange}
                                     placeholder="+1"
-                                    className="block w-full rounded-lg border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm"
+                                    className="block w-full  border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-gray-500 sm:text-sm"
                                 />
                             </div>
                         </div>
@@ -148,7 +148,7 @@ export const Signup = () => {
                                     autoComplete="tel"
                                     onChange={handleChange}
                                     placeholder="1234567890"
-                                    className="block w-full rounded-lg border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm"
+                                    className="block w-full  border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-gray-500 sm:text-sm"
                                 />
                             </div>
                         </div>
@@ -166,7 +166,7 @@ export const Signup = () => {
                                     autoComplete="new-password"
                                     onChange={handleChange}
                                     placeholder="••••••••"
-                                    className="block w-full rounded-lg border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm"
+                                    className="block w-full  border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-gray-500 sm:text-sm"
                                 />
                             </div>
                         </div>
@@ -175,7 +175,7 @@ export const Signup = () => {
                     <div className="pt-2">
                         <button
                             onClick={handleSubmit}
-                            className="flex w-full justify-center rounded-lg bg-indigo-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 active:bg-indigo-700"
+                            className="flex w-full justify-center  bg-gray-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 active:bg-gray-700"
                         >
                             Sign up
                         </button>
@@ -184,7 +184,7 @@ export const Signup = () => {
 
                 <p className="text-center text-sm text-slate-400">
                     Already a member?{' '}
-                    <a href="/login" className="font-semibold text-indigo-400 hover:text-indigo-300 transition">
+                    <a href="/login" className="font-semibold text-gray-400 hover:text-gray-300 transition">
                         Login
                     </a>
                 </p>

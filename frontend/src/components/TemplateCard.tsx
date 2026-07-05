@@ -16,14 +16,14 @@ import type { EmailTemplate, EmailTemplateVariable } from "../types"
 
 const VariablePill = ({ variable }: { variable: EmailTemplateVariable }) => (
     <span
-        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-mono border ${variable.isRequired
-            ? "bg-indigo-50 text-indigo-700 border-indigo-200"
-            : "bg-gray-50 text-gray-600 border-gray-200"
+        className={`inline-flex items-center gap-1 px-2 py-0.5  text-xs font-mono border ${variable.isRequired
+            ? "bg-gray-50 text-gray-700 border-gray-200"
+            : "bg-gray-50 text-gray-600 border-gray-400"
             }`}
     >
         {`{{${variable.variableName}}}`}
         {variable.isRequired && (
-            <span className="text-indigo-400 text-xs leading-none">*</span>
+            <span className="text-gray-400 text-xs leading-none">*</span>
         )}
     </span>
 )
@@ -62,7 +62,7 @@ ${template.variables
 })`
 
     return (
-        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 hover:shadow-sm transition-all group flex flex-col">
+        <div className="bg-white border border-gray-400  overflow-hidden hover:border-gray-300 hover:shadow-sm transition-all group flex flex-col">
 
             {/* Card header */}
             <div className="px-5 pt-5 pb-4 border-b border-gray-100">
@@ -77,7 +77,7 @@ ${template.variables
                             </p>
                         )}
                     </div>
-                    <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-medium">
+                    <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5  bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                         Active
                     </span>
@@ -89,7 +89,7 @@ ${template.variables
                     <code className="text-xs text-gray-500 font-mono">{template.templateId}</code>
                     <button
                         onClick={() => copy(template.templateId, template.templateId)}
-                        className="ml-auto opacity-0 group-hover:opacity-100 h-6 w-6 flex items-center justify-center rounded text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all"
+                        className="ml-auto opacity-0 group-hover:opacity-100 h-6 w-6 flex items-center justify-center  text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all"
                         title="Copy template ID"
                     >
                         {copiedKey === `slug-${template.templateId}` ? (
@@ -132,7 +132,7 @@ ${template.variables
 
             {/* Code snippet toggle */}
             {showSnippet && (
-                <div className="mx-5 mb-3 rounded-lg bg-gray-950 p-3 overflow-x-auto border border-gray-800">
+                <div className="mx-5 mb-3  bg-gray-950 p-3 overflow-x-auto border border-gray-800">
                     <div className="flex items-center justify-between mb-2">
                         <span className="text-xs text-gray-500">Usage snippet</span>
                         <button
@@ -156,16 +156,16 @@ ${template.variables
             <div className="px-5 pb-5 pt-3 flex gap-2 border-t border-gray-50">
                 <button
                     onClick={() => onPreview(template)}
-                    className="flex-1 h-8 flex items-center justify-center gap-1.5 text-xs font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors"
+                    className="flex-1 h-8 flex items-center justify-center gap-1.5 text-xs font-medium text-gray-700 bg-gray-50 border border-gray-400  hover:bg-gray-100 transition-colors"
                 >
                     <Eye size={13} />
                     Preview
                 </button>
                 <button
                     onClick={() => setShowSnippet((p) => !p)}
-                    className={`flex-1 h-8 flex items-center justify-center gap-1.5 text-xs font-medium rounded-lg border transition-colors ${showSnippet
-                        ? "bg-indigo-50 text-indigo-700 border-indigo-200"
-                        : "text-gray-700 bg-gray-50 border-gray-200 hover:bg-gray-100"
+                    className={`flex-1 h-8 flex items-center justify-center gap-1.5 text-xs font-medium  border transition-colors ${showSnippet
+                        ? "bg-gray-50 text-gray-700 border-gray-200"
+                        : "text-gray-700 bg-gray-50 border-gray-400 hover:bg-gray-100"
                         }`}
                 >
                     <Code2 size={13} />

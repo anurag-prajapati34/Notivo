@@ -10,8 +10,8 @@ export function EmailPreviewModal({
     onClose,
 }: Props) {
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-            <div className="flex h-[90vh] w-[900px] flex-col rounded-xl bg-white shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-950">
+            <div className="flex h-[90vh] w-[900px] flex-col  bg-white shadow-xl">
                 <div className="flex items-center justify-between border-b p-4">
                     <div>
                         <h2 className="font-semibold">{email.subject}</h2>
@@ -22,7 +22,7 @@ export function EmailPreviewModal({
 
                     <button
                         onClick={onClose}
-                        className="rounded px-3 py-2 hover:bg-gray-100"
+                        className=" px-3 py-2 hover:bg-gray-100"
                     >
                         ✕
                     </button>

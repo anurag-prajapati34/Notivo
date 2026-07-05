@@ -20,6 +20,7 @@ import {
     parseAnalyticsOverviewObject,
     parseAnalyticsTemplateUsageData,
 } from "../utils/analytics-helpers"
+import { useThemeContext } from "../hooks"
 
 // ─── Stat card config ─────────────────────────────────────────────────────────
 
@@ -80,17 +81,17 @@ const StatCard = ({
     const Icon = cfg.icon
 
     return (
-        <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4 hover:shadow-sm transition-shadow">
+        <div className="bg-white border border-gray-400  p-5 flex flex-col gap-4 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-gray-500">{emailStatus}</span>
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${cfg.iconBg}`}>
+                <div className={`w-8 h-8  flex items-center justify-center ${cfg.iconBg}`}>
                     <Icon size={15} className={cfg.iconColor} />
                 </div>
             </div>
             <div>
                 <p className={`text-3xl font-bold ${cfg.valueColor}`}>{count}</p>
                 <div className="flex items-center gap-1.5 mt-1.5">
-                    <span className={`text-xs font-medium px-1.5 py-0.5 rounded-md ${cfg.percentBg} ${cfg.percentColor}`}>
+                    <span className={`text-xs font-medium px-1.5 py-0.5  ${cfg.percentBg} ${cfg.percentColor}`}>
                         {percentage}%
                     </span>
                     <span className="text-xs text-gray-400">of total</span>
@@ -123,10 +124,10 @@ const SectionHeader = ({
 // ─── Loading skeleton ─────────────────────────────────────────────────────────
 
 const SkeletonCard = () => (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 animate-pulse">
+    <div className="bg-white border border-gray-400  p-5 animate-pulse">
         <div className="flex items-center justify-between mb-4">
             <div className="h-3 w-20 bg-gray-200 rounded" />
-            <div className="w-8 h-8 bg-gray-200 rounded-lg" />
+            <div className="w-8 h-8 bg-gray-200 " />
         </div>
         <div className="h-8 w-16 bg-gray-200 rounded mb-2" />
         <div className="h-3 w-24 bg-gray-100 rounded" />
@@ -139,6 +140,7 @@ export const Dashboard = () => {
     const [analyticsStats, setAnalyticsStats] = useState<AnalyticsStats | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const navigate = useNavigate()
+    const theme = useThemeContext()
 
     const fetchStats = async () => {
         setIsLoading(true)
@@ -183,7 +185,7 @@ export const Dashboard = () => {
                     </div>
                     <button
                         onClick={fetchStats}
-                        className="h-9 px-3 bg-white border border-gray-200 rounded-lg flex items-center gap-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                        className="h-9 px-3 bg-white border border-gray-400  flex items-center gap-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
                     >
                         <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
                         Refresh
@@ -208,20 +210,20 @@ export const Dashboard = () => {
                 <div className="grid grid-cols-3 gap-4 mb-7">
 
                     {/* Area chart — 2/3 width */}
-                    <div className="col-span-2 bg-white border border-gray-200 rounded-xl p-5">
+                    <div className="col-span-2 bg-white border border-gray-400  p-5">
                         <SectionHeader icon={BarChart3} title="Email volume — last 7 days" />
                         <EmailChart data={analyticsStats?.last7Days ?? []} />
                     </div>
 
                     {/* Pie chart — 1/3 width */}
-                    <div className="col-span-1 bg-white border border-gray-200 rounded-xl p-5">
+                    <div className="col-span-1 bg-white border border-gray-400  p-5">
                         <SectionHeader icon={TrendingUp} title="Template usage" />
                         <EmailTemplateUsageChart data={templateUsageData} />
                     </div>
                 </div>
 
                 {/* ── Recent emails ── */}
-                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div className="bg-white border border-gray-400  overflow-hidden">
                     <div className="px-5 py-4 border-b border-gray-100">
                         <SectionHeader
                             icon={Send}
@@ -229,7 +231,7 @@ export const Dashboard = () => {
                             action={
                                 <button
                                     onClick={() => navigate("/emails")}
-                                    className="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
+                                    className="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-700 font-medium transition-colors"
                                 >
                                     View all
                                     <ArrowRight size={12} />

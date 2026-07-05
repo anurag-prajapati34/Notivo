@@ -70,9 +70,9 @@ const Label = ({
 const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
     <input
         {...props}
-        className={`w-full h-9 px-3 text-sm bg-white border border-gray-200 rounded-lg
+        className={`w-full h-9 px-3 text-sm bg-white border border-gray-400 
       text-gray-900 placeholder-gray-400
-      focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
+      focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100
       disabled:bg-gray-50 disabled:text-gray-400
       transition-all ${props.className ?? ""}`}
     />
@@ -86,7 +86,7 @@ const Card = ({
     children: React.ReactNode
     className?: string
 }) => (
-    <div className={`bg-white border border-gray-200 rounded-xl p-6 ${className}`}>
+    <div className={`bg-white border border-gray-400  p-6 ${className}`}>
         {children}
     </div>
 )
@@ -102,8 +102,8 @@ const CardHeader = ({
     subtitle?: string
 }) => (
     <div className="flex items-start gap-3 mb-5">
-        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center shrink-0 mt-0.5">
-            <Icon size={15} className="text-indigo-500" />
+        <div className="w-8 h-8  bg-gray-50 flex items-center justify-center shrink-0 mt-0.5">
+            <Icon size={15} className="text-gray-500" />
         </div>
         <div>
             <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
@@ -140,15 +140,15 @@ const TemplateSelector = ({
             <button
                 type="button"
                 onClick={() => setOpen((p) => !p)}
-                className={`w-full h-10 px-3 flex items-center justify-between text-sm rounded-lg border transition-all
+                className={`w-full h-10 px-3 flex items-center justify-between text-sm  border transition-all
           ${selected
-                        ? "bg-white border-gray-200 text-gray-900"
-                        : "bg-gray-50 border-gray-200 text-gray-400"
+                        ? "bg-white border-gray-400 text-gray-900"
+                        : "bg-gray-50 border-gray-400 text-gray-400"
                     }
-          hover:border-indigo-300 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100`}
+          hover:border-gray-300 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100`}
             >
                 <div className="flex items-center gap-2 min-w-0">
-                    <LayoutTemplate size={14} className={selected ? "text-indigo-500" : "text-gray-400"} />
+                    <LayoutTemplate size={14} className={selected ? "text-gray-500" : "text-gray-400"} />
                     {selected ? (
                         <span className="font-medium truncate">{selected.name}</span>
                     ) : (
@@ -162,7 +162,7 @@ const TemplateSelector = ({
             </button>
 
             {open && (
-                <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg z-20 overflow-hidden">
+                <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-gray-400  shadow-lg z-20 overflow-hidden">
                     <div className="p-1.5">
                         {templates.length === 0 ? (
                             <div className="px-3 py-4 text-center text-xs text-gray-400">
@@ -174,14 +174,14 @@ const TemplateSelector = ({
                                     key={t.templateId}
                                     type="button"
                                     onClick={() => { onSelect(t); setOpen(false) }}
-                                    className={`w-full flex items-start gap-3 px-3 py-2.5 rounded-lg text-left transition-colors
+                                    className={`w-full flex items-start gap-3 px-3 py-2.5  text-left transition-colors
                     ${selected?.templateId === t.templateId
-                                            ? "bg-indigo-50 text-indigo-700"
+                                            ? "bg-gray-50 text-gray-700"
                                             : "hover:bg-gray-50"
                                         }`}
                                 >
-                                    <div className="w-6 h-6 rounded-md bg-indigo-100 flex items-center justify-center shrink-0 mt-0.5">
-                                        <LayoutTemplate size={11} className="text-indigo-500" />
+                                    <div className="w-6 h-6  bg-gray-100 flex items-center justify-center shrink-0 mt-0.5">
+                                        <LayoutTemplate size={11} className="text-gray-500" />
                                     </div>
                                     <div className="min-w-0 flex-1">
                                         <p className="text-sm font-medium text-gray-900 truncate">
@@ -195,7 +195,7 @@ const TemplateSelector = ({
                                         </div>
                                     </div>
                                     {selected?.templateId === t.templateId && (
-                                        <CheckCircle2 size={14} className="text-indigo-500 shrink-0 mt-1" />
+                                        <CheckCircle2 size={14} className="text-gray-500 shrink-0 mt-1" />
                                     )}
                                 </button>
                             ))
@@ -240,9 +240,9 @@ const RecipientsInput = ({
                         onChange={(e) => onInputChange(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder="Enter recipient email and press Enter"
-                        className="w-full h-9 pl-8 pr-3 text-sm bg-white border border-gray-200 rounded-lg
+                        className="w-full h-9 pl-8 pr-3 text-sm bg-white border border-gray-400 
               text-gray-900 placeholder-gray-400
-              focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
+              focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100
               transition-all"
                     />
                 </div>
@@ -250,8 +250,8 @@ const RecipientsInput = ({
                     type="button"
                     onClick={onAdd}
                     disabled={!isValidEmail(input)}
-                    className="h-9 px-3 bg-indigo-600 text-white text-sm rounded-lg flex items-center gap-1.5
-            hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
+                    className="h-9 px-3 bg-gray-600 text-white text-sm  flex items-center gap-1.5
+            hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
                 >
                     <Plus size={14} />
                     Add
@@ -260,14 +260,14 @@ const RecipientsInput = ({
 
             {/* Recipient tags */}
             {recipients.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 p-3 bg-gray-50 border border-gray-200 rounded-lg min-h-[42px]">
+                <div className="flex flex-wrap gap-1.5 p-3 bg-gray-50 border border-gray-400  min-h-[42px]">
                     {recipients.map((email) => (
                         <span
                             key={email}
-                            className="inline-flex items-center gap-1.5 pl-2.5 pr-1.5 py-1 bg-white border border-gray-200 rounded-md text-xs text-gray-700"
+                            className="inline-flex items-center gap-1.5 pl-2.5 pr-1.5 py-1 bg-white border border-gray-400  text-xs text-gray-700"
                         >
-                            <div className="w-4 h-4 rounded-full bg-indigo-100 flex items-center justify-center">
-                                <span className="text-indigo-600 text-xs font-bold leading-none">
+                            <div className="w-4 h-4 rounded-full bg-gray-100 flex items-center justify-center">
+                                <span className="text-gray-600 text-xs font-bold leading-none">
                                     {email[0].toUpperCase()}
                                 </span>
                             </div>
@@ -306,7 +306,7 @@ const VariableFields = ({
 }) => {
     if (!template.variables?.length) {
         return (
-            <div className="flex items-center gap-2 py-3 px-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="flex items-center gap-2 py-3 px-4 bg-gray-50  border border-gray-400">
                 <CheckCircle2 size={14} className="text-emerald-500" />
                 <p className="text-sm text-gray-500">
                     This template has no variables — ready to send.
@@ -324,7 +324,7 @@ const VariableFields = ({
                 return (
                     <div key={name}>
                         <Label required={required}>
-                            <span className="font-mono text-indigo-600">{`{{${name}}}`}</span>
+                            <span className="font-mono text-gray-600">{`{{${name}}}`}</span>
                             <span className="ml-1.5 text-gray-500 font-sans">
                                 {required ? "(required)" : "(optional)"}
                             </span>
@@ -358,7 +358,7 @@ const EmailPreviewPanel = ({
     return (
         <div className="flex flex-col h-full">
             {/* Preview meta */}
-            <div className="px-4 py-3 bg-gray-50 border-b border-gray-200 space-y-1.5">
+            <div className="px-4 py-3 bg-gray-50 border-b border-gray-400 space-y-1.5">
                 <div className="flex items-center gap-2">
                     <span className="text-xs text-gray-400 w-12 shrink-0">To</span>
                     <span className="text-xs text-gray-700 font-medium">
@@ -371,7 +371,7 @@ const EmailPreviewPanel = ({
                 </div>
                 <div className="flex items-center gap-2">
                     <span className="text-xs text-gray-400 w-12 shrink-0">Via</span>
-                    <span className="text-xs font-mono text-indigo-600">{template.slug}</span>
+                    <span className="text-xs font-mono text-gray-600">{template.slug}</span>
                 </div>
             </div>
 
@@ -581,7 +581,7 @@ export const SendEmail = () => {
 
                 {/* ── Success state ── */}
                 {submitStatus === "success" && (
-                    <div className="mb-6 flex items-center gap-3 bg-emerald-50 border border-emerald-200 rounded-xl px-5 py-4">
+                    <div className="mb-6 flex items-center gap-3 bg-emerald-50 border border-emerald-200  px-5 py-4">
                         <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
                         <div>
                             <p className="text-sm font-semibold text-emerald-800">
@@ -598,7 +598,7 @@ export const SendEmail = () => {
 
                 {/* ── Error state ── */}
                 {submitStatus === "error" && submitError && (
-                    <div className="mb-6 flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl px-5 py-4">
+                    <div className="mb-6 flex items-center gap-3 bg-red-50 border border-red-200  px-5 py-4">
                         <AlertCircle size={18} className="text-red-500 shrink-0" />
                         <div>
                             <p className="text-sm font-semibold text-red-800">Failed to send</p>
@@ -627,7 +627,7 @@ export const SendEmail = () => {
                                 subtitle="Choose the email template to send"
                             />
                             {isLoadingTemplates ? (
-                                <div className="h-10 bg-gray-100 rounded-lg animate-pulse" />
+                                <div className="h-10 bg-gray-100  animate-pulse" />
                             ) : (
                                 <TemplateSelector
                                     templates={templates}
@@ -638,9 +638,9 @@ export const SendEmail = () => {
 
                             {/* Selected template info */}
                             {form.selectedTemplate && (
-                                <div className="mt-3 flex items-center gap-3 px-3 py-2.5 bg-indigo-50 border border-indigo-100 rounded-lg">
+                                <div className="mt-3 flex items-center gap-3 px-3 py-2.5 bg-gray-50 border border-gray-100 ">
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-xs text-indigo-700">
+                                        <p className="text-xs text-gray-700">
                                             <span className="font-medium">Subject preview: </span>
                                             {renderTemplate(
                                                 form.selectedTemplate.subject,
@@ -651,7 +651,7 @@ export const SendEmail = () => {
                                     <button
                                         type="button"
                                         onClick={() => setShowPreview((p) => !p)}
-                                        className="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 font-medium shrink-0"
+                                        className="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-800 font-medium shrink-0"
                                     >
                                         {showPreview ? (
                                             <><EyeOff size={12} />Hide</>
@@ -712,10 +712,10 @@ export const SendEmail = () => {
                                         key={m}
                                         type="button"
                                         onClick={() => setForm((p) => ({ ...p, mode: m }))}
-                                        className={`flex-1 h-9 rounded-lg text-sm font-medium flex items-center justify-center gap-2 border transition-all
+                                        className={`flex-1 h-9  text-sm font-medium flex items-center justify-center gap-2 border transition-all
                       ${form.mode === m
-                                                ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
-                                                : "bg-white text-gray-500 border-gray-200 hover:border-gray-300"
+                                                ? "bg-gray-600 text-white border-gray-600 shadow-sm"
+                                                : "bg-white text-gray-500 border-gray-400 hover:border-gray-300"
                                             }`}
                                     >
                                         {m === "now" ? (
@@ -752,7 +752,7 @@ export const SendEmail = () => {
                                         />
                                     </div>
                                     {form.scheduleDate && form.scheduleTime && (
-                                        <div className="col-span-2 flex items-center gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                                        <div className="col-span-2 flex items-center gap-2 px-3 py-2 bg-amber-50 border border-amber-200 ">
                                             <Clock size={12} className="text-amber-500 shrink-0" />
                                             <p className="text-xs text-amber-700">
                                                 Scheduled for{" "}
@@ -790,9 +790,9 @@ export const SendEmail = () => {
                                 type="button"
                                 onClick={handleSubmit}
                                 disabled={!isValid || submitStatus === "loading"}
-                                className="w-full mt-5 h-10 bg-indigo-600 text-white text-sm font-semibold rounded-xl
+                                className="w-full mt-5 h-10 bg-gray-600 text-white text-sm font-semibold 
                   flex items-center justify-center gap-2
-                  hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed
+                  hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed
                   transition-colors shadow-sm"
                             >
                                 {submitStatus === "loading" ? (
@@ -810,7 +810,7 @@ export const SendEmail = () => {
                     <div className="col-span-2">
                         <div className="sticky top-4">
                             {form.selectedTemplate && showPreview ? (
-                                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden h-[calc(100vh-9rem)]">
+                                <div className="bg-white border border-gray-400  overflow-hidden h-[calc(100vh-9rem)]">
                                     <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
                                         <div className="flex items-center gap-2">
                                             <Eye size={13} className="text-gray-400" />
@@ -830,7 +830,7 @@ export const SendEmail = () => {
                                 </div>
                             ) : (
                                 /* Empty preview state */
-                                <div className="bg-white border border-dashed border-gray-300 rounded-xl h-80 flex flex-col items-center justify-center text-center p-6">
+                                <div className="bg-white border border-dashed border-gray-300  h-80 flex flex-col items-center justify-center text-center p-6">
                                     <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-3">
                                         <Eye size={18} className="text-gray-400" />
                                     </div>
@@ -847,7 +847,7 @@ export const SendEmail = () => {
 
                             {/* Right sidebar info */}
                             {form.selectedTemplate && (
-                                <div className="mt-4 bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+                                <div className="mt-4 bg-white border border-gray-400  p-4 space-y-3">
                                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
                                         Summary
                                     </p>
