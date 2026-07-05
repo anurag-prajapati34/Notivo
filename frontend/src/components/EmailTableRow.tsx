@@ -1,13 +1,8 @@
-// ─── pages/Emails.tsx ────────────────────────────────────────────────────────
 
 import { AlertCircle } from "lucide-react";
 import type { Email } from "../types";
 import { convertToIndianDate } from "../utils/date-helpers";
 import { formatTemplateSlug } from "../utils/name-helpers";
-
-
-
-// ─── Status badge ─────────────────────────────────────────────────────────────
 
 const StatusBadge = ({ status }: { status: string }) => {
     const s = status?.toLowerCase();
@@ -30,11 +25,11 @@ const StatusBadge = ({ status }: { status: string }) => {
         processing: "bg-blue-500",
     };
 
-    const cls = styles[s] ?? "bg-gray-50 text-gray-600 border-gray-200";
+    const cls = styles[s] ?? "bg-gray-50 text-gray-600 border-gray-400";
     const dot = dots[s] ?? "bg-gray-400";
 
     return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md border text-xs font-medium ${cls}`}>
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5  border text-xs font-medium ${cls}`}>
             <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
             {status?.toUpperCase()}
         </span>
@@ -42,8 +37,6 @@ const StatusBadge = ({ status }: { status: string }) => {
 };
 
 
-
-// ─── Attempts indicator ───────────────────────────────────────────────────────
 
 const AttemptsIndicator = ({ attempts, status }: { attempts: number | null; status: string }) => {
     const count = attempts ?? 0;
@@ -72,7 +65,7 @@ export const EmailTableRow = ({
     const isFailed = email.emailStatus?.toLowerCase() === "failed";
 
     return (
-        <tr onClick={onClick} className="hover:bg-gray-50 transition-colors group hover:cursor-pointer">
+        <tr onClick={onClick} className="hover:bg-gray-50 transition-colors group hover:cursor-pointer  border-gray-400">
             {/* Recipient */}
             <td className="px-5 py-3.5">
                 <span className="text-sm text-gray-900 font-medium">{email.toEmail}</span>
@@ -87,7 +80,7 @@ export const EmailTableRow = ({
 
             {/* Template */}
             <td className="px-4 py-3.5">
-                <span className="text-xs font-mono bg-gray-100 text-gray-600 px-2 py-1 rounded-md">
+                <span className="text-xs font-mono bg-gray-200 text-gray-600 px-2 py-1">
                     {formatTemplateSlug(email.templateId)}
                 </span>
             </td>
@@ -132,16 +125,6 @@ export const EmailTableRow = ({
                 </span>
             </td>
 
-            {/* View button */}
-            {/* <td className="px-4 py-3.5">
-                <button
-                    onClick={onView}
-                    className="opacity-0 group-hover:opacity-100 h-8 px-3 bg-white border border-gray-200 rounded-lg flex items-center gap-1.5 text-xs text-gray-600 hover:bg-gray-50 transition-all"
-                >
-                    <Eye size={12} />
-                    View
-                </button>
-            </td> */}
         </tr>
     );
 };

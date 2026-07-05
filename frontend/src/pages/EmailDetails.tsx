@@ -119,7 +119,7 @@ const StatusBadge = ({
 
     return (
         <span
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border font-medium
+            className={`inline-flex items-center gap-1.5 px-3 py-1  border font-medium
         ${cfg.bg} ${cfg.border} ${cfg.color}
         ${size === "lg" ? "text-sm px-4 py-1.5" : "text-xs"}`}
         >
@@ -144,9 +144,9 @@ const MetaCard = ({
     subValue?: string
     valueClass?: string
 }) => (
-    <div className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col gap-2">
+    <div className="bg-white border border-gray-400  p-4 flex flex-col gap-2">
         <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
+            <div className="w-7 h-7  bg-gray-100 flex items-center justify-center">
                 <Icon size={14} className="text-gray-500" />
             </div>
             <span className="text-xs font-medium text-gray-500">{label}</span>
@@ -204,7 +204,7 @@ const AttemptTimelineItem = ({
             {/* Attempt content */}
             <div className={`flex-1 pb-8 ${isLast ? "pb-0" : ""}`}>
                 <div
-                    className={`rounded-xl border p-4 ${isSuccess
+                    className={` border p-4 ${isSuccess
                         ? "bg-emerald-50 border-emerald-200"
                         : "bg-red-50 border-red-200"
                         }`}
@@ -225,7 +225,7 @@ const AttemptTimelineItem = ({
                             </span>
                         </div>
                         <span
-                            className={`text-xs font-medium px-2 py-0.5 rounded-md ${isSuccess
+                            className={`text-xs font-medium px-2 py-0.5  ${isSuccess
                                 ? "bg-emerald-100 text-emerald-700"
                                 : "bg-red-100 text-red-700"
                                 }`}
@@ -250,7 +250,7 @@ const AttemptTimelineItem = ({
 
                     {/* Error message if failed */}
                     {!isSuccess && attempt.errorMessage && (
-                        <div className="flex gap-2 bg-red-100 border border-red-200 rounded-lg px-3 py-2.5 mb-3">
+                        <div className="flex gap-2 bg-red-100 border border-red-200  px-3 py-2.5 mb-3">
                             <AlertTriangle
                                 size={13}
                                 className="text-red-500 shrink-0 mt-0.5"
@@ -341,7 +341,7 @@ export const EmailDetails = () => {
                 <p className="text-sm text-gray-500">Email log not found</p>
                 <button
                     onClick={() => navigate("/emails")}
-                    className="mt-4 text-sm text-indigo-600 hover:underline"
+                    className="mt-4 text-sm text-gray-600 hover:underline"
                 >
                     Back to emails
                 </button>
@@ -436,7 +436,7 @@ export const EmailDetails = () => {
 
                     {/* Left — Timeline (2/3 width) */}
                     <div className="col-span-2">
-                        <div className="bg-white border border-gray-200 rounded-xl p-6">
+                        <div className="bg-white border border-gray-400  p-6">
                             <div className="flex items-center gap-2 mb-6">
                                 <RotateCcw size={15} className="text-gray-500" />
                                 <h2 className="text-sm font-semibold text-gray-900">
@@ -471,7 +471,7 @@ export const EmailDetails = () => {
 
                                     {/* Final result banner */}
                                     <div
-                                        className={`mt-4 flex items-center gap-3 rounded-xl border px-4 py-3 ${isDelivered
+                                        className={`mt-4 flex items-center gap-3  border px-4 py-3 ${isDelivered
                                             ? "bg-emerald-50 border-emerald-200"
                                             : isFailed
                                                 ? "bg-red-50 border-red-200"
@@ -525,7 +525,7 @@ export const EmailDetails = () => {
                     <div className="col-span-1 flex flex-col gap-4">
 
                         {/* Email details */}
-                        <div className="bg-white border border-gray-200 rounded-xl p-5">
+                        <div className="bg-white border border-gray-400  p-5">
                             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4">
                                 Email Details
                             </h3>
@@ -543,7 +543,7 @@ export const EmailDetails = () => {
                                 </div>
                                 <div>
                                     <p className="text-xs text-gray-400 mb-0.5">Template</p>
-                                    <span className="text-xs font-mono bg-gray-100 text-gray-600 px-2 py-1 rounded-md">
+                                    <span className="text-xs font-mono bg-gray-100 text-gray-600 px-2 py-1 ">
                                         {email.templateId ?? "—"}
                                     </span>
                                 </div>
@@ -555,7 +555,7 @@ export const EmailDetails = () => {
                         </div>
 
                         {/* Timestamps */}
-                        <div className="bg-white border border-gray-200 rounded-xl p-5">
+                        <div className="bg-white border border-gray-400  p-5">
                             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4">
                                 Timestamps
                             </h3>
@@ -591,7 +591,7 @@ export const EmailDetails = () => {
                         </div>
 
                         {/* Queue info */}
-                        {/* <div className="bg-white border border-gray-200 rounded-xl p-5">
+                        {/* <div className="bg-white border border-gray-400  p-5">
                             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4">
                                 Queue Info
                             </h3>
@@ -624,7 +624,7 @@ export const EmailDetails = () => {
                         {/* Email preview button */}
                         <button
                             onClick={() => setShowEmailPreview(true)}
-                            className="w-full h-9 flex items-center justify-center gap-2 text-sm font-medium text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors"
+                            className="w-full h-9 flex items-center justify-center gap-2 text-sm font-medium text-white bg-gray-600  hover:bg-gray-700 transition-colors"
                         >
                             <Mail size={14} />
                             Preview email body

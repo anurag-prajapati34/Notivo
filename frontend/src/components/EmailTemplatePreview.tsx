@@ -14,14 +14,14 @@ import {
 
 const VariablePill = ({ variable }: { variable: EmailTemplateVariable }) => (
     <span
-        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-mono border ${variable.isRequired
-            ? "bg-indigo-50 text-indigo-700 border-indigo-200"
-            : "bg-gray-50 text-gray-600 border-gray-200"
+        className={`inline-flex items-center gap-1 px-2 py-0.5  text-xs font-mono border ${variable.isRequired
+            ? "bg-gray-50 text-gray-700 border-gray-200"
+            : "bg-gray-50 text-gray-600 border-gray-400"
             }`}
     >
         {`{{${variable.variableName}}}`}
         {variable.isRequired && (
-            <span className="text-indigo-400 text-xs leading-none">*</span>
+            <span className="text-gray-400 text-xs leading-none">*</span>
         )}
     </span>
 )
@@ -41,10 +41,10 @@ export const EmailTemplatePreview = ({
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-gray-950 backdrop-blur-sm"
             onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
         >
-            <div className="flex flex-col w-[720px] h-[85vh] bg-white rounded-xl shadow-2xl overflow-hidden">
+            <div className="flex flex-col w-[720px] h-[85vh] bg-white  shadow-2xl overflow-hidden">
 
                 {/* Modal header */}
                 <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
@@ -60,7 +60,7 @@ export const EmailTemplatePreview = ({
                         </div>
                         <button
                             onClick={onClose}
-                            className="ml-2 w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+                            className="ml-2 w-8 h-8  flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
                         >
                             <X size={16} />
                         </button>

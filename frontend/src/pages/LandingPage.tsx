@@ -60,12 +60,12 @@ const TerminalAnimation = () => {
   }, [])
 
   return (
-    <div className="bg-gray-950 border border-gray-800 rounded-xl overflow-hidden shadow-2xl">
+    <div className="bg-gray-950 border border-gray-800  overflow-hidden shadow-2xl">
       {/* Terminal title bar */}
       <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-800 bg-gray-900">
-        <div className="w-3 h-3 rounded-full bg-red-500/70" />
-        <div className="w-3 h-3 rounded-full bg-amber-500/70" />
-        <div className="w-3 h-3 rounded-full bg-emerald-500/70" />
+        <div className="w-3 h-3 -full bg-red-500/70" />
+        <div className="w-3 h-3 -full bg-amber-500/70" />
+        <div className="w-3 h-3 -full bg-emerald-500/70" />
         <span className="ml-2 text-xs text-gray-500 font-mono">
           notivo — live queue
         </span>
@@ -150,10 +150,10 @@ const res = await fetch("https://notivo.app/api/v1/send", {
   }
 
   return (
-    <div className="relative bg-gray-950 border border-gray-800 rounded-xl overflow-hidden">
+    <div className="relative bg-gray-950 border border-gray-800  overflow-hidden">
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-800 bg-gray-900">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-indigo-500" />
+          <div className="w-2 h-2 -full bg-gray-500" />
           <span className="text-xs text-gray-500 font-mono">send.js</span>
         </div>
         <button
@@ -215,8 +215,8 @@ const FeatureCard = ({
   description: string
   accent: string
 }) => (
-  <div className="group border border-gray-800 rounded-xl p-6 bg-gray-950 hover:border-gray-700 hover:bg-gray-900 transition-all duration-200">
-    <div className={`w-9 h-9 rounded-lg flex items-center justify-center mb-4 ${accent}`}>
+  <div className="group border border-gray-800  p-6 bg-gray-950 hover:border-gray-700 hover:bg-gray-900 transition-all duration-200">
+    <div className={`w-9 h-9  flex items-center justify-center mb-4 ${accent}`}>
       <Icon size={17} className="text-white" />
     </div>
     <h3 className="text-sm font-semibold text-gray-100 mb-2">{title}</h3>
@@ -237,8 +237,8 @@ const Step = ({
 }) => (
   <div className="flex gap-4">
     <div className="shrink-0">
-      <div className="w-8 h-8 rounded-full border border-indigo-500/40 flex items-center justify-center">
-        <span className="text-xs font-bold text-indigo-400">{number}</span>
+      <div className="w-8 h-8 -full border border-gray-500/40 flex items-center justify-center">
+        <span className="text-xs font-bold text-gray-400">{number}</span>
       </div>
     </div>
     <div>
@@ -262,7 +262,7 @@ export const Landing = () => {
 
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center">
+            <div className="w-7 h-7  bg-gray-600 flex items-center justify-center">
               <Zap size={14} className="text-white" />
             </div>
             <span className="text-sm font-bold text-white tracking-tight">
@@ -299,7 +299,7 @@ export const Landing = () => {
             </Link>
             <Link
               to="/signup"
-              className="h-8 px-4 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5"
+              className="h-8 px-4 bg-gray-600 hover:bg-gray-500 text-white text-sm font-medium  transition-colors flex items-center gap-1.5"
             >
               Get started
               <ArrowRight size={13} />
@@ -316,9 +316,9 @@ export const Landing = () => {
             {/* Left — copy */}
             <div>
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-                <span className="text-xs text-indigo-400 font-medium">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 -full border border-gray-500/30 bg-gray-500/10 mb-6">
+                <span className="w-1.5 h-1.5 -full bg-gray-400 animate-pulse" />
+                <span className="text-xs text-gray-400 font-medium">
                   Open beta — free to use
                 </span>
               </div>
@@ -327,7 +327,7 @@ export const Landing = () => {
               <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight mb-5">
                 Email delivery
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-violet-400">
                   that doesn't block
                 </span>
                 <br />
@@ -345,14 +345,14 @@ export const Landing = () => {
               <div className="flex items-center gap-3 flex-wrap">
                 <Link
                   to="/signup"
-                  className="h-10 px-5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-lg transition-colors flex items-center gap-2 shadow-lg shadow-indigo-900/40"
+                  className="h-10 px-5 bg-gray-600 hover:bg-gray-500 text-white text-sm font-semibold  transition-colors flex items-center gap-2 shadow-lg shadow-gray-900/40"
                 >
                   Start for free
                   <ArrowRight size={14} />
                 </Link>
                 <button
                   onClick={() => featuresRef.current?.scrollIntoView({ behavior: "smooth" })}
-                  className="h-10 px-5 bg-transparent border border-gray-700 hover:border-gray-500 text-gray-300 text-sm font-medium rounded-lg transition-colors"
+                  className="h-10 px-5 bg-transparent border border-gray-700 hover:border-gray-500 text-gray-300 text-sm font-medium  transition-colors"
                 >
                   See how it works
                 </button>
@@ -380,7 +380,7 @@ export const Landing = () => {
             {/* Right — terminal */}
             <div className="relative">
               {/* Glow effect */}
-              <div className="absolute -inset-4 bg-indigo-600/10 blur-3xl rounded-full pointer-events-none" />
+              <div className="absolute -inset-4 bg-gray-600/10 blur-3xl -full pointer-events-none" />
               <TerminalAnimation />
             </div>
           </div>
@@ -395,7 +395,7 @@ export const Landing = () => {
             {["Node.js", "BullMQ", "Redis", "MySQL", "Drizzle ORM", "Nodemailer", "TypeScript"].map((tech) => (
               <span
                 key={tech}
-                className="text-xs font-mono text-gray-500 px-2.5 py-1 border border-gray-800 rounded-md bg-gray-900"
+                className="text-xs font-mono text-gray-500 px-2.5 py-1 border border-gray-800  bg-gray-900"
               >
                 {tech}
               </span>
@@ -408,7 +408,7 @@ export const Landing = () => {
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <p className="text-xs font-semibold text-indigo-400 tracking-widest uppercase mb-3">
+            <p className="text-xs font-semibold text-gray-400 tracking-widest uppercase mb-3">
               How it works
             </p>
             <h2 className="text-2xl font-bold text-white">
@@ -440,7 +440,7 @@ export const Landing = () => {
       <section ref={featuresRef} className="py-20 px-6 bg-gray-950/50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <p className="text-xs font-semibold text-indigo-400 tracking-widest uppercase mb-3">
+            <p className="text-xs font-semibold text-gray-400 tracking-widest uppercase mb-3">
               What's built
             </p>
             <h2 className="text-2xl font-bold text-white">
@@ -455,7 +455,7 @@ export const Landing = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <FeatureCard
               icon={Send}
-              accent="bg-indigo-600"
+              accent="bg-gray-600"
               title="Async queue processing"
               description="API adds email jobs to a BullMQ queue backed by Upstash Redis. Response returns immediately — SMTP happens in a background worker."
             />
@@ -500,7 +500,7 @@ export const Landing = () => {
 
             {/* Left — explanation */}
             <div>
-              <p className="text-xs font-semibold text-indigo-400 tracking-widest uppercase mb-4">
+              <p className="text-xs font-semibold text-gray-400 tracking-widest uppercase mb-4">
                 The API
               </p>
               <h2 className="text-2xl font-bold text-white mb-4">
@@ -509,7 +509,7 @@ export const Landing = () => {
                 Everything handled.
               </h2>
               <p className="text-sm text-gray-400 leading-relaxed mb-8">
-                POST to <code className="text-indigo-400 font-mono text-xs bg-indigo-500/10 px-1.5 py-0.5 rounded">/api/v1/send</code> with
+                POST to <code className="text-gray-400 font-mono text-xs bg-gray-500/10 px-1.5 py-0.5 ">/api/v1/send</code> with
                 your template ID and variable values. Notivo validates,
                 renders, queues, delivers, and logs — you get on with building
                 your product.
@@ -523,7 +523,7 @@ export const Landing = () => {
                   "Delivery status available in dashboard instantly",
                 ].map((point) => (
                   <div key={point} className="flex items-start gap-3">
-                    <CheckCircle2 size={14} className="text-indigo-400 shrink-0 mt-0.5" />
+                    <CheckCircle2 size={14} className="text-gray-400 shrink-0 mt-0.5" />
                     <span className="text-sm text-gray-400">{point}</span>
                   </div>
                 ))}
@@ -539,8 +539,8 @@ export const Landing = () => {
       {/* ── CTA section ── */}
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="border border-gray-800 rounded-2xl bg-gradient-to-b from-indigo-950/30 to-gray-950 p-12 text-center">
-            <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center mx-auto mb-6">
+          <div className="border border-gray-800 -2xl bg-gradient-to-b from-gray-950/30 to-gray-950 p-12 text-center">
+            <div className="w-12 h-12  bg-gray-600 flex items-center justify-center mx-auto mb-6">
               <Zap size={22} className="text-white" />
             </div>
             <h2 className="text-2xl font-bold text-white mb-3">
@@ -553,14 +553,14 @@ export const Landing = () => {
             <div className="flex items-center gap-3 justify-center">
               <Link
                 to="/signup"
-                className="h-10 px-6 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-lg transition-colors flex items-center gap-2 shadow-lg shadow-indigo-900/40"
+                className="h-10 px-6 bg-gray-600 hover:bg-gray-500 text-white text-sm font-semibold  transition-colors flex items-center gap-2 shadow-lg shadow-gray-900/40"
               >
                 Create free account
                 <ArrowRight size={14} />
               </Link>
               <Link
                 to="/login"
-                className="h-10 px-5 border border-gray-700 hover:border-gray-500 text-gray-300 text-sm font-medium rounded-lg transition-colors flex items-center"
+                className="h-10 px-5 border border-gray-700 hover:border-gray-500 text-gray-300 text-sm font-medium  transition-colors flex items-center"
               >Sign in
               </Link>
             </div>
@@ -572,7 +572,7 @@ export const Landing = () => {
       <footer className="border-t border-gray-800 py-8 px-6">
         <div className="max-w-6xl mx-auto flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-md bg-indigo-600 flex items-center justify-center">
+            <div className="w-5 h-5  bg-gray-600 flex items-center justify-center">
               <Zap size={10} className="text-white" />
             </div>
             <span className="text-sm font-bold text-white">Notivo</span>

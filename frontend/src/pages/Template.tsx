@@ -80,7 +80,7 @@ export const Template = () => {
                     </div>
                     <button
                         onClick={fetchTemplates}
-                        className="h-9 px-3 bg-white border border-gray-200 rounded-lg flex items-center gap-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                        className="h-9 px-3 bg-white border border-gray-400  flex items-center gap-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
                     >
                         <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
                         Refresh
@@ -95,18 +95,18 @@ export const Template = () => {
                         placeholder="Search templates..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full h-9 pl-8 pr-3 text-sm bg-white border border-gray-200 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all"
+                        className="w-full h-9 pl-8 pr-3 text-sm bg-white border border-gray-400  placeholder-gray-400 text-gray-900 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all"
                     />
                 </div>
 
                 {/* Legend */}
                 <div className="flex items-center gap-4 mb-4">
                     <div className="flex items-center gap-1.5">
-                        <span className="inline-block w-2.5 h-2.5 rounded-sm bg-indigo-100 border border-indigo-200" />
+                        <span className="inline-block w-2.5 h-2.5 rounded-sm bg-gray-100 border border-gray-200" />
                         <span className="text-xs text-gray-500">Required variable</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                        <span className="inline-block w-2.5 h-2.5 rounded-sm bg-gray-100 border border-gray-200" />
+                        <span className="inline-block w-2.5 h-2.5 rounded-sm bg-gray-100 border border-gray-400" />
                         <span className="text-xs text-gray-500">Optional variable</span>
                     </div>
                 </div>
