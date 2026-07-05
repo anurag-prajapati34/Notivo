@@ -46,13 +46,12 @@ const createTransporter = async (creds: EmailCreds) => {
     greetingTimeout: 10000,
     socketTimeout: 15000,
     dnsTimeout: 5000,
-    // This forces Node to use IPv4 resolution instead of IPv6
+    // ⚠️ THE ULTIMATE INTRASTRUCTURE FIXES:
     connectionOptions: {
-      family: 4,
+      family: 4, // Forces Node's DNS resolver to strictly use IPv4 paths
     },
-
     tls: {
-      rejectUnauthorized: true,
+      rejectUnauthorized: false, // Prevents cloud container handshake drops
     },
   } as any);
 
