@@ -13,7 +13,8 @@
     "db:seed": "tsx src/database/seed/index.ts",
     "build": "tsc -b",
     "start:api": "node --import tsx dist/index.js",
-    "start:worker": "node --import tsx dist/jobs/worker.js"
+    "start:worker": "node --import tsx dist/jobs/worker.js",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
