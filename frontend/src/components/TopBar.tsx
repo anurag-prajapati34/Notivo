@@ -1,11 +1,10 @@
 import { ChevronDown, LogOut, Moon, Settings, Zap } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useAuthContext, useThemeContext } from "../hooks"
+import { useAuthContext } from "../hooks"
 
 export const TopBar = () => {
     const { user, logout } = useAuthContext()
-    const { toggleTheme } = useThemeContext()
     const navigate = useNavigate()
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const dropdownRef = useRef<HTMLDivElement>(null)
@@ -117,16 +116,7 @@ export const TopBar = () => {
                                 </button>
                             </div>
 
-                            {/* Theme items */}
-                            <div className="py-1">
-                                <button
-                                    onClick={() => { toggleTheme(); }}
-                                    className="w-full flex items-center gap-2.5 px-4 py-2 text-xs hover:text-white hover:bg-gray-950 transition-colors"
-                                >
-                                    <Moon size={13} />
-                                    Theme
-                                </button>
-                            </div>
+
 
                             <div className="border-t border-gray-800 py-1">
 

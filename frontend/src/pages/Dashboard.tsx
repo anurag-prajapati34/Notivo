@@ -20,7 +20,6 @@ import {
     parseAnalyticsOverviewObject,
     parseAnalyticsTemplateUsageData,
 } from "../utils/analytics-helpers"
-import { useThemeContext } from "../hooks"
 
 // ─── Stat card config ─────────────────────────────────────────────────────────
 
@@ -140,7 +139,6 @@ export const Dashboard = () => {
     const [analyticsStats, setAnalyticsStats] = useState<AnalyticsStats | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const navigate = useNavigate()
-    const theme = useThemeContext()
 
     const fetchStats = async () => {
         setIsLoading(true)
