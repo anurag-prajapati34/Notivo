@@ -152,8 +152,8 @@ export const Credentials = () => {
                 email: smtpForm.fromEmail,
                 name: smtpForm.fromName,
                 host: smtpForm.host,
-                port: smtpForm.port,
-                secure: smtpForm.port === 465,
+                port: Number(smtpForm.port || 465),
+                secure: Number(smtpForm.port) === 465,
                 username: smtpForm.username,
                 passKey: smtpForm.passKey
             });
@@ -228,7 +228,7 @@ export const Credentials = () => {
                     fromName: emailCredsData?.name || '',
                     fromEmail: emailCredsData?.email || '',
                     host: emailCredsData?.host || '',
-                    port: emailCredsData?.port || 465,
+                    port: Number(emailCredsData?.port || 465),
                     username: emailCredsData?.username || '',
                     passKey: emailCredsData?.passKey || ''
                 })
