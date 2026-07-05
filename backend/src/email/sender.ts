@@ -107,6 +107,7 @@ export const sendEmail = async (
         : emailData.to,
     };
   } catch (error: unknown) {
+    logger.error("Send email error", error);
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
 
