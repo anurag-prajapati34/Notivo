@@ -1,4 +1,4 @@
-import { ChevronDown, LogOut, Moon, Settings, Zap } from "lucide-react"
+import { ChevronDown, LogOut, Settings, Zap } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuthContext } from "../hooks"
