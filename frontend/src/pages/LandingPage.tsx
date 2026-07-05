@@ -256,7 +256,7 @@ const Step = ({
 export const Landing = () => {
   const featuresRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate();
-  const { setIsLoggedIn, isLoggedIn, checkAuth, setUser } = useAuthContext();
+  const { setIsLoggedIn, setUser } = useAuthContext();
 
   const handleGuestLogin = async (e: any) => {
     e.preventDefault();
