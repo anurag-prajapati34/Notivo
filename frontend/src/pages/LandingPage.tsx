@@ -13,7 +13,10 @@ import {
   Zap,
 } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
+import { login } from "../apis/auth.api.js"
+import { useAuthContext } from "../hooks"
 
 // ─── Terminal animation ───────────────────────────────────────────────────────
 
@@ -252,7 +255,37 @@ const Step = ({
 
 export const Landing = () => {
   const featuresRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate();
+  const { setIsLoggedIn, isLoggedIn, checkAuth, setUser } = useAuthContext();
 
+  const handleGuestLogin = async (e: any) => {
+    e.preventDefault();
+    try {
+      //get email and password from env
+
+      const email = import.meta.env.VITE_GUEST_EMAIL;
+      const password = import.meta.env.VITE_GUEST_PASSWORD;
+      if (!email || !password) {
+        toast.info('Guest login is disabled');
+      }
+      const result = await login({
+        email,
+        password
+      });
+      // console.log("result---", result)
+      if (result.success) {
+        setIsLoggedIn(true);
+        const { token, ...user } = result.data
+        setUser(user as any);
+        toast.success('Logged in successfully');
+        navigate('/')
+      } else {
+        toast.error(result.message ?? 'Failed to login');
+      }
+    } catch (err) {
+      toast.error('Failed to login');
+    }
+  }
   return (
     <div className="min-h-screen bg-[#080810] text-gray-100">
 
@@ -297,6 +330,13 @@ export const Landing = () => {
             >
               Sign in
             </Link>
+            <button
+              className="h-8 px-4 border border-gray-600 hover:border-gray-500 text-white text-sm font-medium  transition-colors flex items-center gap-1.5 hover:cursor-pointer"
+              onClick={handleGuestLogin}
+            >
+              Explore as guest
+              <ArrowRight size={13} />
+            </button>
             <Link
               to="/signup"
               className="h-8 px-4 bg-gray-600 hover:bg-gray-500 text-white text-sm font-medium  transition-colors flex items-center gap-1.5"

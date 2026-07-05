@@ -2,6 +2,7 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  userType?: string | null;
 }
 export interface Login {
   email: string;

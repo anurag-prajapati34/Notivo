@@ -112,6 +112,7 @@ export const loginService = async (input: LoginRequestBodyType) => {
     middleName: user.middleName,
     lastName: user.lastName,
     token: token,
+    userType: user.userType,
   };
 };
 
