@@ -126,7 +126,10 @@ export const Credentials = () => {
 
         setIsSmtpSaving(true);
         try {
-            const creds: EmailCreds = { email: fromEmail, passKey, host: smtpForm.host, port: smtpForm.port, username: smtpForm.username, name: smtpForm.fromName, secure: smtpForm.port === 465 };
+            const creds: EmailCreds = {
+                email: fromEmail, passKey, host: smtpForm.host, port: Number(smtpForm.port || 465),
+                secure: Number(smtpForm.port) === 465, username: smtpForm.username, name: smtpForm.fromName,
+            };
 
             const res = await setEmailCredsApi(creds);
             if (res?.success) {
