@@ -12,9 +12,23 @@ import {
 } from "./prehandler";
 const route = express.Router();
 
+/**
+ * Create a new user
+ */
 route.post("/signup", validateSignupRequestBody, signupHandler);
+
+/*
+ * Login a user
+ */
 route.post("/login", validateLoginRequestBody, loginHandler);
 
+/**
+ * Get API Key of a user
+ */
 route.get("/api-key", authenticate, getApiKeyHandler);
+
+/**
+ * Generate New API Key
+ */
 route.post("/generate-api-key", authenticate, generateApiKeyHandler);
 export default route;

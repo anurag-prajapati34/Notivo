@@ -1,7 +1,7 @@
 import { db } from "@/database/connection.js";
-import { emails, emailTemplates } from "@/database/schema/index.js";
-import { emailStatus } from "@/utils/enum.js";
-import { count, desc, eq, sql } from "drizzle-orm";
+import { emails, emailTemplates, users } from "@/database/schema/index.js";
+import { emailStatus, userTypes } from "@/utils/enum.js";
+import { and, count, desc, eq, sql } from "drizzle-orm";
 
 // GET /dashboard/stats
 export const getAnalyticsStatusQuery = async (input: { userId: number }) => {
@@ -87,4 +87,29 @@ export const getAnalyticsStatusQuery = async (input: { userId: number }) => {
     templateUsage,
     recentEmails,
   };
+};
+
+export const getGuestUserQuery = async () => {
+  const result = await db
+    .select({
+      userId: users.userId,
+    })
+    .from(users)
+    .where(and(eq(users.status, true), eq(users.userType, userTypes.GUEST)))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : null;
+};
+
+export const doesUserHaveEmailQuery = async (input: { userId: number }) => {
+  const result = await db
+    .select({
+      emailId: emails.emailId,
+    })
+    .from(emails)
+    .where(eq(emails.userId, input.userId))
+    .limit(1)
+    .execute();
+
+  return result.length > 0;
 };

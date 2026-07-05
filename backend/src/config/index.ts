@@ -56,6 +56,9 @@ const configSchema = z.object({
       z.number().positive(),
     ]),
   }),
+  frontend: z.object({
+    url: z.string(),
+  }),
 });
 
 const config = configSchema.parse({
@@ -88,6 +91,9 @@ const config = configSchema.parse({
   jwt: {
     secret: process.env.JWT_SECRET_KEY,
     expiresIn: process.env.JWT_EXPIRES_IN,
+  },
+  frontend: {
+    url: process.env.FRONTEND_URL,
   },
 });
 
