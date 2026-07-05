@@ -17,7 +17,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://notivo-q59p1jej0-anurag-prajapatis-projects.vercel.app",
-      "http://notivo-q59p1jej0-anurag-prajapatis-projects.vercel.app/",
+      "https://notivo-gilt.vercel.app",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
