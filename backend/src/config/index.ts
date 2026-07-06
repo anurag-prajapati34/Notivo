@@ -4,6 +4,8 @@ dotenv.config();
 const configSchema = z.object({
   nodeEnv: z.enum(["development", "production", "test"]).default("development"),
   PORT: z.string().transform(Number),
+  url: z.string(),
+  healthPingInterval: z.string().transform(Number),
   DB: z.object({
     HOST: z.string(),
     USER: z.string(),
@@ -64,6 +66,8 @@ const configSchema = z.object({
 const config = configSchema.parse({
   nodeEnv: process.env.NODE_ENV,
   PORT: process.env.PORT,
+  url: process.env.SERVER_URL,
+  healthPingInterval: process.env.HEALTH_PING_INTERVAL,
   DB: {
     HOST: process.env.DB_HOST,
     USER: process.env.DB_USERNAME,
