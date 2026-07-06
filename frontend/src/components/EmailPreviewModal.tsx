@@ -10,8 +10,8 @@ export function EmailPreviewModal({
     onClose,
 }: Props) {
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-950">
-            <div className="flex h-[90vh] w-[900px] flex-col  bg-white shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-950 bg-opacity-80">
+            <div className="flex h-[90vh] w-[95%] md:w-[900px] flex-col  bg-white shadow-xl">
                 <div className="flex items-center justify-between border-b p-4">
                     <div>
                         <h2 className="font-semibold">{email.subject}</h2>

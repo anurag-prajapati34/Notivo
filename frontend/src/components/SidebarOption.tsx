@@ -6,10 +6,12 @@ export const SidebarOption = ({
     path,
     name,
     icon: Icon,
+    onClick,
 }: {
     path: string
     name: string
     icon: React.ElementType
+    onClick?: () => void
 }) => {
     const { pathname } = useLocation()
 
@@ -20,6 +22,7 @@ export const SidebarOption = ({
     return (
         <Link
             to={path}
+            onClick={onClick}
             className={`
         group flex items-center gap-3 px-3 py-2  text-sm
         transition-all duration-150 relative

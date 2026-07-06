@@ -285,7 +285,7 @@ export const Credentials = () => {
                     </div>
 
                     {/* Row 1 — From name + From email */}
-                    <div className="grid grid-cols-2 gap-3 mb-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                         <div>
                             <FieldLabel>From name</FieldLabel>
                             <Input
@@ -308,8 +308,8 @@ export const Credentials = () => {
                     </div>
 
                     {/* Row 2 — SMTP host + port */}
-                    <div className="grid grid-cols-3 gap-3 mb-3">
-                        <div className="col-span-2">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                        <div className="col-span-1 md:col-span-2">
                             <FieldLabel>SMTP host</FieldLabel>
                             <Input
                                 name="host"
@@ -318,7 +318,7 @@ export const Credentials = () => {
                                 onChange={handleSmtpChange}
                             />
                         </div>
-                        <div>
+                        <div className="col-span-1">
                             <FieldLabel>Port</FieldLabel>
                             <Input
                                 name="port"

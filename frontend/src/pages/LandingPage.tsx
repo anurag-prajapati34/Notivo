@@ -331,7 +331,7 @@ export const Landing = () => {
               Sign in
             </Link>
             <button
-              className="h-8 px-4 border border-gray-600 hover:border-gray-500 text-white text-sm font-medium  transition-colors flex items-center gap-1.5 hover:cursor-pointer"
+              className="h-8 px-4 border border-gray-600 hover:border-gray-500 text-white text-sm font-medium  transition-colors hidden sm:flex items-center gap-1.5 hover:cursor-pointer"
               onClick={handleGuestLogin}
             >
               Explore as guest
@@ -399,17 +399,17 @@ export const Landing = () => {
               </div>
 
               {/* Social proof / stats */}
-              <div className="flex items-center gap-6 mt-10 pt-8 border-t border-gray-800">
+              <div className="flex flex-wrap items-center gap-6 mt-10 pt-8 border-t border-gray-800">
                 <div>
                   <p className="text-xl font-bold text-white">3</p>
                   <p className="text-xs text-gray-500">retry attempts</p>
                 </div>
-                <div className="w-px h-8 bg-gray-800" />
+                <div className="hidden sm:block w-px h-8 bg-gray-800" />
                 <div>
                   <p className="text-xl font-bold text-white">&lt;5ms</p>
                   <p className="text-xs text-gray-500">API response time</p>
                 </div>
-                <div className="w-px h-8 bg-gray-800" />
+                <div className="hidden sm:block w-px h-8 bg-gray-800" />
                 <div>
                   <p className="text-xl font-bold text-white">100%</p>
                   <p className="text-xs text-gray-500">delivery logged</p>
@@ -579,7 +579,7 @@ export const Landing = () => {
       {/* ── CTA section ── */}
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="border border-gray-800 -2xl bg-gradient-to-b from-gray-950/30 to-gray-950 p-12 text-center">
+          <div className="border border-gray-800 -2xl bg-gradient-to-b from-gray-950/30 to-gray-950 p-6 sm:p-12 text-center">
             <div className="w-12 h-12  bg-gray-600 flex items-center justify-center mx-auto mb-6">
               <Zap size={22} className="text-white" />
             </div>
@@ -590,17 +590,17 @@ export const Landing = () => {
               Create an account, connect your SMTP, pick a template. Your first
               email is queued in under a minute.
             </p>
-            <div className="flex items-center gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row items-center gap-3 justify-center">
               <Link
                 to="/signup"
-                className="h-10 px-6 bg-gray-600 hover:bg-gray-500 text-white text-sm font-semibold  transition-colors flex items-center gap-2 shadow-lg shadow-gray-900/40"
+                className="w-full sm:w-auto h-10 px-6 bg-gray-600 hover:bg-gray-500 text-white text-sm font-semibold  transition-colors flex items-center justify-center gap-2 shadow-lg shadow-gray-900/40"
               >
                 Create free account
                 <ArrowRight size={14} />
               </Link>
               <Link
                 to="/login"
-                className="h-10 px-5 border border-gray-700 hover:border-gray-500 text-gray-300 text-sm font-medium  transition-colors flex items-center"
+                className="w-full sm:w-auto h-10 px-5 border border-gray-700 hover:border-gray-500 text-gray-300 text-sm font-medium  transition-colors flex items-center justify-center"
               >Sign in
               </Link>
             </div>

@@ -1,9 +1,9 @@
-import { ChevronDown, LogOut, Settings, Zap } from "lucide-react"
+import { ChevronDown, LogOut, Menu, Settings, Zap } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuthContext } from "../hooks"
 
-export const TopBar = () => {
+export const TopBar = ({ onMenuClick }: { onMenuClick?: () => void }) => {
     const { user, logout } = useAuthContext()
     const navigate = useNavigate()
     const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -33,17 +33,23 @@ export const TopBar = () => {
     return (
         <header className="fixed top-0 left-0 right-0 z-50 h-12  border-b border-gray-400  flex items-center justify-between px-4  text-white">
 
-            {/* Left — Logo */}
-            <div onClick={() => navigate('/intro')} className="flex items-center gap-2 w-56 hover:cursor-pointer">
-                <div className="w-6 h-6  bg-gray-950 flex items-center justify-center shrink-0">
-                    <Zap size={13} className="text-white" />
+            {/* Left — Hamburger + Logo */}
+            <div className="flex items-center gap-2 w-auto md:w-56">
+                <button
+                    onClick={onMenuClick}
+                    className="p-1 -ml-1 text-gray-950 hover:bg-gray-100 hover:text-gray-950 rounded md:hidden hover:cursor-pointer transition-colors"
+                    aria-label="Toggle menu"
+                >
+                    <Menu size={18} />
+                </button>
+                <div onClick={() => navigate('/intro')} className="flex items-center gap-2 hover:cursor-pointer">
+                    <div className="w-6 h-6  bg-gray-950 flex items-center justify-center shrink-0">
+                        <Zap size={13} className="text-white" />
+                    </div>
+                    <span className="text-sm font-semibold text-gray-950 tracking-tight">
+                        Notivo
+                    </span>
                 </div>
-                <span className="text-sm font-semibold text-gray-950 tracking-tight">
-                    Notivo
-                </span>
-                {/* <span className="ml-1 text-xs px-1.5 py-0.5 rounded bg-gray-950 border border-gray-800 font-medium">
-                    beta
-                </span> */}
             </div>
 
             {/* Center — Current page breadcrumb */}
@@ -52,7 +58,7 @@ export const TopBar = () => {
             </div> */}
 
             {/* Right — Actions + User */}
-            <div className="flex items-center gap-2 w-56 justify-end">
+            <div className="flex items-center gap-2 w-auto md:w-56 justify-end">
 
                 {/* Docs link */}
                 {/* <a

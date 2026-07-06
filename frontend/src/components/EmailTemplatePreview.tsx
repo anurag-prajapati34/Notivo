@@ -44,16 +44,16 @@ export const EmailTemplatePreview = ({
             className="fixed inset-0 z-50 flex items-center justify-center bg-gray-950 backdrop-blur-sm"
             onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
         >
-            <div className="flex flex-col w-[720px] h-[85vh] bg-white  shadow-2xl overflow-hidden">
+            <div className="flex flex-col w-[95%] md:w-[720px] h-[85vh] bg-white  shadow-2xl overflow-hidden">
 
                 {/* Modal header */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between px-5 py-4 border-b border-gray-100 gap-3">
                     <div>
                         <h2 className="text-sm font-semibold text-gray-900">{template.name}</h2>
                         <p className="text-xs text-gray-500 font-mono mt-0.5">{template.slug}</p>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <div className="flex flex-wrap gap-1.5 max-w-xs">
+                    <div className="flex items-center gap-2 justify-between sm:justify-end">
+                        <div className="flex flex-wrap gap-1.5 max-w-[200px] sm:max-w-xs">
                             {template.variables.map((v) => (
                                 <VariablePill key={v.variableName} variable={v} />
                             ))}

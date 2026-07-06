@@ -614,10 +614,10 @@ export const SendEmail = () => {
                 )}
 
                 {/* ── Two column layout ── */}
-                <div className="grid grid-cols-5 gap-5">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
 
                     {/* Left — Form (3/5) */}
-                    <div className="col-span-3 space-y-4">
+                    <div className="col-span-1 lg:col-span-3 space-y-4">
 
                         {/* Template selection */}
                         <Card>
@@ -807,10 +807,10 @@ export const SendEmail = () => {
                     </div>
 
                     {/* Right — Preview (2/5) */}
-                    <div className="col-span-2">
-                        <div className="sticky top-4">
+                    <div className="col-span-1 lg:col-span-2">
+                        <div className="lg:sticky lg:top-4">
                             {form.selectedTemplate && showPreview ? (
-                                <div className="bg-white border border-gray-400  overflow-hidden h-[calc(100vh-9rem)]">
+                                <div className="bg-white border border-gray-400  overflow-hidden h-96 lg:h-[calc(100vh-9rem)]">
                                     <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
                                         <div className="flex items-center gap-2">
                                             <Eye size={13} className="text-gray-400" />

@@ -191,7 +191,7 @@ export const Dashboard = () => {
                 </div>
 
                 {/* ── Stat cards ── */}
-                <div className="grid grid-cols-4 gap-4 mb-7">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
                     {isLoading
                         ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
                         : overviewItems.map((item) => (
@@ -205,16 +205,16 @@ export const Dashboard = () => {
                 </div>
 
                 {/* ── Charts row ── */}
-                <div className="grid grid-cols-3 gap-4 mb-7">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-7">
 
                     {/* Area chart — 2/3 width */}
-                    <div className="col-span-2 bg-white border border-gray-400  p-5">
+                    <div className="col-span-1 lg:col-span-2 bg-white border border-gray-400  p-5">
                         <SectionHeader icon={BarChart3} title="Email volume — last 7 days" />
                         <EmailChart data={analyticsStats?.last7Days ?? []} />
                     </div>
 
                     {/* Pie chart — 1/3 width */}
-                    <div className="col-span-1 bg-white border border-gray-400  p-5">
+                    <div className="col-span-1 lg:col-span-1 bg-white border border-gray-400  p-5">
                         <SectionHeader icon={TrendingUp} title="Template usage" />
                         <EmailTemplateUsageChart data={templateUsageData} />
                     </div>
@@ -251,19 +251,21 @@ export const Dashboard = () => {
                             </p>
                         </div>
                     ) : (
-                        <table className="w-full">
-                            <EmailTableHeader />
-                            <tbody className="divide-y divide-gray-50">
-                                {analyticsStats.recentEmails.map((email, index) => (
-                                    <EmailTableRow
-                                        key={email.emailId ?? index}
-                                        email={email}
-                                        onView={() => { }}
-                                        onClick={() => navigate(`/emails/${email.emailId}`)}
-                                    />
-                                ))}
-                            </tbody>
-                        </table>
+                        <div className="overflow-x-auto w-full">
+                            <table className="w-full">
+                                <EmailTableHeader />
+                                <tbody className="divide-y divide-gray-50">
+                                    {analyticsStats.recentEmails.map((email, index) => (
+                                        <EmailTableRow
+                                            key={email.emailId ?? index}
+                                            email={email}
+                                            onView={() => { }}
+                                            onClick={() => navigate(`/emails/${email.emailId}`)}
+                                        />
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     )}
                 </div>
 

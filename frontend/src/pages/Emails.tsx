@@ -110,9 +110,9 @@ export const Emails = () => {
                 </div>
 
                 {/* ── Filters row ── */}
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex flex-col md:flex-row md:items-center gap-3 mb-4">
                     {/* Search */}
-                    <div className="relative flex-1 max-w-xs">
+                    <div className="relative w-full md:flex-1 md:max-w-xs">
                         <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                         <input
                             type="text"
@@ -124,12 +124,12 @@ export const Emails = () => {
                     </div>
 
                     {/* Status filter tabs */}
-                    <div className="flex items-center gap-1 bg-white border border-gray-400  p-1">
+                    <div className="flex flex-wrap items-center gap-1 bg-white border border-gray-400  p-1 w-full md:w-auto overflow-x-auto">
                         {filterTabs.map((tab) => (
                             <button
                                 key={tab.key}
                                 onClick={() => setStatusFilter(tab.key)}
-                                className={`h-7 px-3 py-0.5 text-xs font-medium transition-colors flex items-center cursor-pointer gap-1.5 ${statusFilter === tab.key
+                                className={`h-7 px-3 py-0.5 text-xs font-medium transition-colors flex items-center cursor-pointer gap-1.5 whitespace-nowrap ${statusFilter === tab.key
                                     ? "bg-gray-900 text-white"
                                     : "text-gray-500 hover:text-gray-800"
                                     }`}
@@ -152,19 +152,21 @@ export const Emails = () => {
                     ) : filtered.length === 0 ? (
                         <EmptyState filtered={searchQuery !== "" || statusFilter !== "all"} />
                     ) : (
-                        <table className="w-full">
-                            <EmailTableHeader />
-                            <tbody className="divide-y divide-gray-50">
-                                {filtered.map((email, index) => (
-                                    <EmailTableRow
-                                        key={email.emailId ?? index}
-                                        email={email}
-                                        onView={() => setSelectedEmail(email)}
-                                        onClick={() => navigate(`/emails/${email.emailId}`)}
-                                    />
-                                ))}
-                            </tbody>
-                        </table>
+                        <div className="overflow-x-auto w-full">
+                            <table className="w-full">
+                                <EmailTableHeader />
+                                <tbody className="divide-y divide-gray-50">
+                                    {filtered.map((email, index) => (
+                                        <EmailTableRow
+                                            key={email.emailId ?? index}
+                                            email={email}
+                                            onView={() => setSelectedEmail(email)}
+                                            onClick={() => navigate(`/emails/${email.emailId}`)}
+                                        />
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     )}
                 </div>
 

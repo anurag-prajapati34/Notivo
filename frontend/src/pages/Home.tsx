@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Sidebar } from "../components/Sidebar";
 import { TopBar } from "../components/TopBar";
@@ -7,6 +7,8 @@ import { useAuthContext } from "../hooks";
 export const Home = () => {
     const { isLoggedIn, checkAuth } = useAuthContext()
     const navigate = useNavigate();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    
     checkAuth();
     useEffect(() => {
         if (!isLoggedIn) {
@@ -17,10 +19,10 @@ export const Home = () => {
     }, [])
     return (
         <div className="h-screen overflow-hidden">
-            <TopBar />
+            <TopBar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
 
             <div className="flex pt-12 h-full">
-                <Sidebar />
+                <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
                 <main className=" flex-1 overflow-y-auto p-4 ">
                     <Outlet />
