@@ -8,6 +8,7 @@ import { logger } from "@/utils/logger.js";
 import "dotenv/config.js";
 import { eq, inArray } from "drizzle-orm";
 import { db } from "../connection.js";
+import { getCurrentIndianDate, dayjs } from "@/utils/date-helpers.js";
 
 const FRONTEND_URL = config.frontend.url;
 
@@ -103,10 +104,13 @@ const validateAndReplaceVariables = (
 // ─── Time helpers ─────────────────────────────────────────────────────────────
 
 const daysAgo = (days: number, hours = 10): Date => {
-  const d = new Date();
-  d.setDate(d.getDate() - days);
-  d.setHours(hours, 0, 0, 0);
-  return d;
+  return getCurrentIndianDate()
+    .subtract(days, "day")
+    .hour(hours)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .toDate();
 };
 
 // ─── Seed plan ────────────────────────────────────────────────────────────────
@@ -591,9 +595,9 @@ export const seedDemoData = async (input: {
         const createdAt = daysAgo(plan.daysAgo, plan.hours);
         const deliveredAt =
           plan.finalStatus === emailStatus.DELIVERED
-            ? new Date(
-                createdAt.getTime() + 8000 * Math.max(plan.totalAttempts, 1),
-              )
+            ? dayjs(createdAt)
+                .add(8 * Math.max(plan.totalAttempts, 1), "second")
+                .toDate()
             : null;
 
         const lastError =
@@ -627,9 +631,9 @@ export const seedDemoData = async (input: {
             isLastAttempt && plan.finalStatus === emailStatus.DELIVERED;
 
           // Each attempt is ~35 seconds apart (matches backoff: 30s base)
-          const attemptedAt = new Date(
-            createdAt.getTime() + (attemptNum - 1) * 35000,
-          );
+          const attemptedAt = dayjs(createdAt)
+            .add((attemptNum - 1) * 35, "second")
+            .toDate();
 
           await db.insert(emailAttempts).values({
             emailId,

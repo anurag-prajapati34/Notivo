@@ -4,13 +4,16 @@ import { emailAttempts } from "@/database/schema/email-attempts.js";
 import { logger } from "@/utils/logger.js";
 import { eq, asc } from "drizzle-orm";
 import { seedPlan } from "./demo-email-data.js";
+import { getCurrentIndianDate, dayjs } from "@/utils/date-helpers.js";
 
-// Re-use your exact time-calculation helper relative to the current execution run
 const computeNewDate = (daysAgo: number, hours: number): Date => {
-  const d = new Date();
-  d.setDate(d.getDate() - daysAgo);
-  d.setHours(hours, 0, 0, 0);
-  return d;
+  return getCurrentIndianDate()
+    .subtract(daysAgo, "day")
+    .hour(hours)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .toDate();
 };
 
 /**
@@ -61,9 +64,9 @@ export const refreshDemoDataDates = async (input: { demoUserId: number }) => {
       // Calculate a realistic delivery timestamp if the email was successfully processed
       const newDeliveredAt =
         email.emailStatus === "DELIVERED"
-          ? new Date(
-              newCreatedAt.getTime() + 8000 * Math.max(email.attempts || 1, 1),
-            )
+          ? dayjs(newCreatedAt)
+              .add(8 * Math.max(email.attempts || 1, 1), "second")
+              .toDate()
           : null;
 
       // 3. Update the main email entry record
@@ -88,9 +91,9 @@ export const refreshDemoDataDates = async (input: { demoUserId: number }) => {
 
       for (const attempt of attemptsList) {
         // Space out each attempt by 35 seconds to simulate an exponential backoff sequence
-        const newAttemptedAt = new Date(
-          newCreatedAt.getTime() + (attempt.attemptNumber - 1) * 35000,
-        );
+        const newAttemptedAt = dayjs(newCreatedAt)
+          .add((attempt.attemptNumber - 1) * 35, "second")
+          .toDate();
 
         await db
           .update(emailAttempts)

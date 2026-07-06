@@ -1,3 +1,4 @@
+import { getCurrentIndianDate } from "./date-helpers.js";
 import { logger } from "./logger.js";
 
 /**
@@ -16,13 +17,9 @@ export async function startScheduledSelfPinging(url: string) {
   );
 
   setInterval(async () => {
-    const now = new Date();
-    const currentHour = now.getHours();
-    const timestamp = now.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
+    const now = getCurrentIndianDate();
+    const currentHour = now.hour();
+    const timestamp = now.format("HH:mm:ss");
 
     // ⏰ Restrict active processing pings strictly between 9:00 AM and 9:00 PM
     if (currentHour >= startHour && currentHour < endHour) {

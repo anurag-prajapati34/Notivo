@@ -2,6 +2,7 @@ import { db } from "@/database/connection.js";
 import { slugs } from "@/database/seed/email-templates.js";
 import { addEmailJob } from "@/jobs/email-queue.js";
 import { emailStatus } from "@/utils/enum.js";
+import { getCurrentIndianDate, dayjs } from "@/utils/date-helpers.js";
 import {
   getAllEmailsQuery,
   getEmailAttemptsQuery,
@@ -186,7 +187,7 @@ export const sendTestEmailService = async (
       },
       {
         variableName: "timestamp",
-        variableValue: new Date().toString(),
+        variableValue: getCurrentIndianDate().format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ"),
       },
     ];
     const templateVariables = await getEmailTemplateVariablesQuery({
@@ -266,8 +267,8 @@ export const getEmailDetailsService = async (input: {
     // Calculate delivery time if delivered
     const deliveryTimeMs =
       email.deliveredAt && email.createdAt
-        ? new Date(email.deliveredAt).getTime() -
-          new Date(email.createdAt).getTime()
+        ? dayjs(email.deliveredAt).valueOf() -
+          dayjs(email.createdAt).valueOf()
         : null;
 
     return {
