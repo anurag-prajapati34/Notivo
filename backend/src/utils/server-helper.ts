@@ -1,5 +1,41 @@
+import {
+  doesUserHaveEmailQuery,
+  getGuestUserQuery,
+} from "@/routes/v1/analytics/queries.js";
 import { getCurrentIndianDate } from "./date-helpers.js";
 import { logger } from "./logger.js";
+import { refreshDemoDataDates } from "@/database/seed/refresh-demo-data-dates.js";
+import { seedDemoData } from "@/database/seed/demo-email-data.js";
+
+/**
+ * Seed demo data for guest users
+ * @returns
+ */
+export async function handleDemoDataSeed() {
+  const demoUser = await getGuestUserQuery();
+  if (!demoUser) {
+    logger.error("Demo user not found");
+    return null;
+  }
+  const hasEmail = await doesUserHaveEmailQuery({ userId: demoUser.userId });
+  let result = null;
+  if (hasEmail) {
+    logger.info(
+      "Demo deata is already seeded, now refreshing dates for to match todays date",
+    );
+    result = await refreshDemoDataDates({
+      demoUserId: demoUser.userId,
+    });
+  } else {
+    logger.info("Seeding demo data for demo user");
+    result = await seedDemoData({
+      userId: demoUser.userId,
+      demoUserId: demoUser.userId,
+    });
+  }
+
+  return result;
+}
 
 /**
  * Smart self-ping scheduler designed to keep Render Free Tier containers awake
@@ -12,6 +48,10 @@ export async function startScheduledSelfPinging(url: string) {
 
   const startHour = 11;
   const endHour = 19;
+  let totalPings = 0;
+  let successfulPings = 0;
+  let failedPings = 0;
+
   logger.info(
     `📡 [Engine Wakeup] Scheduled self-ping daemon active. Target window: ${startHour}:00 - ${endHour}:00. Ping server time for every ${minutes} minutes. Endpoint: ${url}`,
   );
@@ -24,17 +64,30 @@ export async function startScheduledSelfPinging(url: string) {
     // ⏰ Restrict active processing pings strictly between 9:00 AM and 9:00 PM
     if (currentHour >= startHour && currentHour < endHour) {
       try {
+        totalPings++;
         const startTime = performance.now();
         const response = await fetch(url);
         const duration = (performance.now() - startTime).toFixed(0);
 
         if (response.ok) {
+          successfulPings++;
           logger.info(
-            `📡 [Ping Success] [${timestamp}] Inbound heartbeat received by ${url} | Status: ${response.status} | Latency: ${duration}ms`,
+            `📡 [Ping Success:${successfulPings}/${totalPings}] [${timestamp}] Inbound heartbeat received by ${url} | Status: ${response.status} | Latency: ${duration}ms`,
           );
         } else {
+          failedPings++;
           logger.warn(
-            `⚠️ [Ping Warning] [${timestamp}] Destination reached but returned non-200 status | URL: ${url} | Status: ${response.status}`,
+            `⚠️ [Ping Warning]:${failedPings}/${totalPings} [${timestamp}] Destination reached but returned non-200 status | URL: ${url} | Status: ${response.status}`,
+          );
+        }
+
+        if (currentHour === startHour && totalPings === 1) {
+          logger.info(
+            `🌱[SEED][${timestamp}] Starting demo data seeding process`,
+          );
+          const result = await handleDemoDataSeed();
+          logger.info(
+            `🌱[SEED][${timestamp}] Demo data seeding process completed. Result: ${JSON.stringify(result)}`,
           );
         }
       } catch (error: unknown) {
