@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { generateApiKeyApi, getApiKeyApi, getEmailCredsApi, setEmailCredsApi } from "../apis/creds.api";
 import { sendTestEmailApi } from "../apis/email.api";
 import type { EmailCreds, SmtpForm } from "../types";
+import { emailProviders } from "../utils/enum";
 
 
 
@@ -127,8 +128,11 @@ export const Credentials = () => {
         setIsSmtpSaving(true);
         try {
             const creds: EmailCreds = {
-                email: fromEmail, passKey, host: smtpForm.host, port: Number(smtpForm.port || 587),
-                secure: Number(smtpForm.port) === 587, username: smtpForm.username, name: smtpForm.fromName,
+                provider: emailProviders.SMTP,
+                creds: {
+                    email: fromEmail, passKey, host: smtpForm.host, port: Number(smtpForm.port || 587),
+                    secure: Number(smtpForm.port) === 587, username: smtpForm.username, name: smtpForm.fromName,
+                }
             };
 
             const res = await setEmailCredsApi(creds);
@@ -152,13 +156,16 @@ export const Credentials = () => {
         try {
 
             const response = await sendTestEmailApi({
-                email: smtpForm.fromEmail,
-                name: smtpForm.fromName,
-                host: smtpForm.host,
-                port: Number(smtpForm.port || 587),
-                secure: Number(smtpForm.port) === 587,
-                username: smtpForm.username,
-                passKey: smtpForm.passKey
+                provider: emailProviders.SMTP,
+                creds: {
+                    email: smtpForm.fromEmail,
+                    name: smtpForm.fromName,
+                    host: smtpForm.host,
+                    port: Number(smtpForm.port || 587),
+                    secure: Number(smtpForm.port) === 587,
+                    username: smtpForm.username,
+                    passKey: smtpForm.passKey
+                }
             });
             if (response?.success) {
                 toast.success('Test email sent successfully');
@@ -228,12 +235,12 @@ export const Credentials = () => {
             }
             if (emailCredsData) {
                 setSmtpForm({
-                    fromName: emailCredsData?.name || '',
-                    fromEmail: emailCredsData?.email || '',
-                    host: emailCredsData?.host || '',
-                    port: Number(emailCredsData?.port || 587),
-                    username: emailCredsData?.username || '',
-                    passKey: emailCredsData?.passKey || ''
+                    fromName: (emailCredsData?.creds as any)?.name || '',
+                    fromEmail: (emailCredsData?.creds as any)?.email || '',
+                    host: (emailCredsData?.creds as any)?.host || '',
+                    port: Number((emailCredsData?.creds as any)?.port || 587),
+                    username: (emailCredsData?.creds as any)?.username || '',
+                    passKey: (emailCredsData?.creds as any)?.passKey || ''
                 })
             }
 

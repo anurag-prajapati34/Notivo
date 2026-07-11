@@ -1,7 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import { useAuthContext } from './hooks'
-import { Credentials } from './pages/Credentials'
 import { Dashboard } from './pages/Dashboard'
 import { EmailDetails } from './pages/EmailDetails'
 import { Emails } from './pages/Emails'
@@ -9,9 +8,9 @@ import { Home } from './pages/Home'
 import { Landing } from './pages/LandingPage'
 import Login from './pages/Login'
 import { SendEmail } from './pages/SendEmail'
+import { SendGridCredentials } from './pages/SendGridCredentials'
 import Signup from './pages/Signup'
 import { Template } from './pages/Template'
-import { SendGridCredentials } from './pages/SendGridCredentials'
 
 // A small wrapper to guard protected dashboard pages
 const ProtectedLayout = () => {
