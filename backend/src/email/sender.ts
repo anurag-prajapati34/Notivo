@@ -43,13 +43,8 @@ const createTransporter = async (creds: EmailCreds) => {
 
   const transporter = nodemailer.createTransport({
     host: creds.host,
-    port: smtpPort,
-
-    // ⚠️ THE PORT-TLS BALANCE RULE:
-    // Port 465 requires secure: true (Implicit TLS).
-    // Port 587 requires secure: false (Explicit STARTTLS).
-    // This auto-evaluates to true only if port 465 is used, preventing handshake hangs.
-    secure: smtpPort === 465,
+    port: 587,
+    secure: false,
 
     auth: {
       user: creds.username,
