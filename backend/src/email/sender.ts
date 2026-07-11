@@ -32,29 +32,48 @@ const getEmailConfig = () => {
  * await transporter.sendMail(mailOptions)
  * ```
  */
+/**
+ * Creates and configures a production-ready Nodemailer transporter.
+ * Forces IPv4 network routing to prevent cloud container ENETUNREACH errors.
+ * * @param {EmailCreds} creds - Standard credentials object payload
+ * @returns {Promise<nodemailer.Transporter>} Configured transport engine
+ */
 const createTransporter = async (creds: EmailCreds) => {
+  const smtpPort = Number(creds.port); // Force clean integer casting to prevent string append bugs
+
   const transporter = nodemailer.createTransport({
     host: creds.host,
-    port: creds.port,
-    secure: creds.secure,
+    port: smtpPort,
+
+    // ⚠️ THE PORT-TLS BALANCE RULE:
+    // Port 465 requires secure: true (Implicit TLS).
+    // Port 587 requires secure: false (Explicit STARTTLS).
+    // This auto-evaluates to true only if port 465 is used, preventing handshake hangs.
+    secure: smtpPort === 465,
+
     auth: {
       user: creds.username,
-      pass: creds.passKey,
+      pass: creds.passKey, // Ensure your 16-character App Password has no spaces
     },
-    // ⚠️ CRUCIAL FOR CLOUD ENVIRONMENTS:
-    connectionTimeout: 10000, // 10 seconds timeout limit
-    greetingTimeout: 10000,
-    socketTimeout: 15000,
+
+    // ⏳ AGGRESSIVE NETWORK TIMEOUT SAFEGUARDS:
+    connectionTimeout: 15000, // 15 seconds connection attempt window
+    greetingTimeout: 15000, // 15 seconds SMTP greeting threshold
+    socketTimeout: 20000, // 20 seconds idle activity threshold
     dnsTimeout: 5000,
-    // ⚠️ THE ULTIMATE INTRASTRUCTURE FIXES:
+
+    // ⚠️ CRUCIAL INFRASTRUCTURE INNER BYPASS WRAPPER:
     connectionOptions: {
-      family: 4, // Forces Node's DNS resolver to strictly use IPv4 paths
+      family: 4, // Directs Node's DNS resolver to strictly prioritize IPv4 routes (Bypasses IPv6)
     },
+
     tls: {
-      rejectUnauthorized: false, // Prevents cloud container handshake drops
+      rejectUnauthorized: false, // Prevents cloud container handshake drops due to self-signed certs
+      ciphers: "SSLv3", // Force legacy/modern translation compatibility with Gmail relays
     },
   } as any);
 
+  // Verifies the SMTP handshake completely before returning the transport instance
   await transporter.verify();
 
   return transporter;
