@@ -7,7 +7,7 @@ import { config } from "@/config/index.js";
 import { startScheduledSelfPinging } from "@/utils/server-helper.js";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 
 // Render will hit this URL to confirm the container is alive
 app.get("/health", (req, res) => {

@@ -19,6 +19,7 @@ export const emails = mysqlTable(
       .autoincrement(),
     userId: bigint("user_id", { mode: "number" }),
     templateId: varchar("template_id", { length: 100 }),
+    provider: varchar("provider", { length: 100 }),
 
     toEmail: varchar("to_email", { length: 255 }),
     subject: varchar("subject", { length: 500 }),
@@ -39,6 +40,7 @@ export const emails = mysqlTable(
     index("idx_email_status").on(table.emailStatus),
     index("idx_emails_user_id").on(table.userId),
     index("idx_emails_created_at").on(table.createdAt),
+    index("idx_email_provider").on(table.provider),
     foreignKey({
       columns: [table.userId],
       foreignColumns: [users.userId],

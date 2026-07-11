@@ -26,10 +26,10 @@ const terminalLines = [
   { delay: 1200, text: "✓ 200 OK — job queued in 2ms", color: "text-emerald-400", prefix: " " },
   { delay: 2000, text: "", color: "", prefix: " " },
   { delay: 2100, text: "[worker] picked up job #1841", color: "text-gray-500", prefix: "#" },
-  { delay: 2700, text: "[worker] attempt 1 — connecting SMTP…", color: "text-gray-500", prefix: "#" },
+  { delay: 2700, text: "[worker] attempt 1 — sending email…", color: "text-gray-500", prefix: "#" },
   { delay: 3400, text: "[worker] attempt 1 failed — timeout", color: "text-red-400", prefix: "#" },
   { delay: 4000, text: "[worker] retrying in 30s (backoff ×1)", color: "text-amber-400", prefix: "#" },
-  { delay: 4700, text: "[worker] attempt 2 — connecting SMTP…", color: "text-gray-500", prefix: "#" },
+  { delay: 4700, text: "[worker] attempt 2 — sending email…", color: "text-gray-500", prefix: "#" },
   { delay: 5400, text: "[worker] attempt 2 success", color: "text-emerald-400", prefix: "#" },
   { delay: 6000, text: "✓ delivered at 08:31:08 UTC", color: "text-emerald-300", prefix: " " },
 ]
@@ -459,8 +459,8 @@ export const Landing = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
             <Step
               number="1"
-              title="Connect your SMTP"
-              description="Configure your SMTP Credentials. Notivo uses your credentials so emails come from your domain."
+              title="Setup email config"
+              description="Configure your email credentials. Notivo uses your settings so emails come from your domain."
             />
             <Step
               number="2"
@@ -526,8 +526,8 @@ export const Landing = () => {
             <FeatureCard
               icon={Shield}
               accent="bg-rose-600"
-              title="Encrypted SMTP storage"
-              description="SMTP passwords are stored AES-256 encrypted using a key from environment variables. Never stored as plain text."
+              title="Encrypted credentials storage"
+              description="Email credentials are stored AES-256 encrypted using a key from environment variables. Never stored as plain text."
             />
           </div>
         </div>
@@ -559,7 +559,7 @@ export const Landing = () => {
                 {[
                   "API key authentication via Authorization header",
                   "Variable validation before the job is queued",
-                  "Immediate response — no waiting for SMTP",
+                  "Immediate response — no waiting for email delivery",
                   "Delivery status available in dashboard instantly",
                 ].map((point) => (
                   <div key={point} className="flex items-start gap-3">
@@ -587,7 +587,7 @@ export const Landing = () => {
               Start sending in 5 minutes
             </h2>
             <p className="text-sm text-gray-400 mb-8 max-w-md mx-auto">
-              Create an account, connect your SMTP, pick a template. Your first
+              Create an account, setup email config, pick a template. Your first
               email is queued in under a minute.
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-3 justify-center">

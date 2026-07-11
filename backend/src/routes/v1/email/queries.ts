@@ -2,14 +2,13 @@ import { db } from "@/database/connection.js";
 import {
   Email,
   emailAttempts,
-  EmailCreds,
-  emailCreds,
   emails,
   emailTemplates,
   emailTemplateVariables,
   NewEmail,
   NewEmailAttempt,
-  NewEmailCreds,
+  sendgridEmailCreds,
+  smtpEmailCreds,
 } from "@/database/schema/index.js";
 import { TransactionContext } from "@/utils/types.js";
 import { and, desc, eq, inArray } from "drizzle-orm";
@@ -29,50 +28,29 @@ export const updateEmailQuery = async (
   return await trx.update(emails).set(input).where(eq(emails.emailId, emailId));
 };
 
-export const insertEmailCredsQuery = async (input: NewEmailCreds) => {
-  return await db.insert(emailCreds).values(input);
-};
-
-export const updateEmailCredsQuery = async (
-  emailCredsId: number,
-  input: Partial<EmailCreds>,
-) => {
-  return await db
-    .update(emailCreds)
-    .set(input)
-    .where(eq(emailCreds.emailCredsId, emailCredsId));
-};
-
-export const getEmailCredsQuery = async (input: {
-  emailCredsId?: number;
-  userId?: number;
-  email?: string;
-}) => {
-  const whereConditions = [eq(emailCreds.status, true)];
+export const getSmtpEmailCredsQuery = async (input: { userId?: number }) => {
+  const whereConditions = [eq(smtpEmailCreds.status, true)];
 
   if (input.userId) {
-    whereConditions.push(eq(emailCreds.userId, input.userId));
+    whereConditions.push(eq(smtpEmailCreds.userId, input.userId));
   }
-  if (input.email) {
-    whereConditions.push(eq(emailCreds.email, input.email));
-  }
-  if (input.emailCredsId) {
-    whereConditions.push(eq(emailCreds.emailCredsId, input.emailCredsId));
-  }
-
   return await db
-    .select({
-      emailCredsId: emailCreds.emailCredsId,
-      userId: emailCreds.userId,
-      username: emailCreds.username,
-      passKey: emailCreds.passKey,
-      email: emailCreds.email,
-      name: emailCreds.name,
-      host: emailCreds.host,
-      port: emailCreds.port,
-      secure: emailCreds.secure,
-    })
-    .from(emailCreds)
+    .select()
+    .from(smtpEmailCreds)
+    .where(and(...whereConditions));
+};
+
+export const getSendgridEmailCredsQuery = async (input: {
+  userId?: number;
+}) => {
+  const whereConditions = [eq(sendgridEmailCreds.status, true)];
+
+  if (input.userId) {
+    whereConditions.push(eq(sendgridEmailCreds.userId, input.userId));
+  }
+  return await db
+    .select()
+    .from(sendgridEmailCreds)
     .where(and(...whereConditions));
 };
 
@@ -170,6 +148,7 @@ export const getAllEmailsQuery = async (input: {
       deliveredAt: emails.deliveredAt,
       createdAt: emails.createdAt,
       emailId: emails.emailId,
+      provider: emails.provider,
     })
     .from(emails)
     .where(and(...whereConditions))

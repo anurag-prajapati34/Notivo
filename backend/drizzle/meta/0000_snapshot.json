@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "cdcbc2da-207a-4d64-adc8-4ccbff8a36ba",
+  "id": "5422c453-11a1-4956-9d94-79a6bd6e4ac2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "users": {
@@ -13,6 +13,13 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": true
+        },
+        "user_type": {
+          "name": "user_type",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "first_name": {
           "name": "first_name",
@@ -70,29 +77,58 @@
           "notNull": false,
           "autoincrement": false
         },
-        "status": {
-          "name": "status",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": true
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "(now())"
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "(now())"
+          "onUpdate": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deleted_by": {
+          "name": "deleted_by",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
         }
       },
       "indexes": {
@@ -107,6 +143,13 @@
           "name": "users_mobile_idx",
           "columns": [
             "mobile"
+          ],
+          "isUnique": false
+        },
+        "users_user_type_idx": {
+          "name": "users_user_type_idx",
+          "columns": [
+            "user_type"
           ],
           "isUnique": false
         }
@@ -142,6 +185,13 @@
         },
         "template_id": {
           "name": "template_id",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "provider": {
+          "name": "provider",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false,
@@ -279,6 +329,13 @@
             "created_at"
           ],
           "isUnique": false
+        },
+        "idx_email_provider": {
+          "name": "idx_email_provider",
+          "columns": [
+            "provider"
+          ],
+          "isUnique": false
         }
       },
       "foreignKeys": {
@@ -307,11 +364,11 @@
       "uniqueConstraints": {},
       "checkConstraint": {}
     },
-    "email_creds": {
-      "name": "email_creds",
+    "smtp_email_creds": {
+      "name": "smtp_email_creds",
       "columns": {
-        "email_creds_id": {
-          "name": "email_creds_id",
+        "smtp_email_creds_id": {
+          "name": "smtp_email_creds_id",
           "type": "bigint",
           "primaryKey": false,
           "notNull": true,
@@ -429,8 +486,8 @@
         }
       },
       "indexes": {
-        "idx_email_creds_email": {
-          "name": "idx_email_creds_email",
+        "idx_smtp_email_creds_email": {
+          "name": "idx_smtp_email_creds_email",
           "columns": [
             "email"
           ],
@@ -438,9 +495,9 @@
         }
       },
       "foreignKeys": {
-        "fk_email_creds_users": {
-          "name": "fk_email_creds_users",
-          "tableFrom": "email_creds",
+        "fk_smtp_email_creds_users": {
+          "name": "fk_smtp_email_creds_users",
+          "tableFrom": "smtp_email_creds",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
@@ -453,10 +510,129 @@
         }
       },
       "compositePrimaryKeys": {
-        "email_creds_email_creds_id": {
-          "name": "email_creds_email_creds_id",
+        "smtp_email_creds_smtp_email_creds_id": {
+          "name": "smtp_email_creds_smtp_email_creds_id",
           "columns": [
-            "email_creds_id"
+            "smtp_email_creds_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "sendgrid_email_creds": {
+      "name": "sendgrid_email_creds",
+      "columns": {
+        "sendgrid_email_creds_id": {
+          "name": "sendgrid_email_creds_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "api_key": {
+          "name": "api_key",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "from": {
+          "name": "from",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "onUpdate": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deleted_by": {
+          "name": "deleted_by",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "fk_sendgrid_email_creds_users": {
+          "name": "fk_sendgrid_email_creds_users",
+          "tableFrom": "sendgrid_email_creds",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "sendgrid_email_creds_sendgrid_email_creds_id": {
+          "name": "sendgrid_email_creds_sendgrid_email_creds_id",
+          "columns": [
+            "sendgrid_email_creds_id"
           ]
         }
       },

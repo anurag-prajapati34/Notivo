@@ -2,7 +2,6 @@ import { handleHandlerError } from "@/utils/error-helpers.js";
 import { created } from "@/utils/response.js";
 import { AuthRequest } from "@/utils/types.js";
 import { Request, Response } from "express";
-import { getEmailCredsQuery } from "../email/queries.js";
 import { getUserQuery } from "./queries.js";
 import {
   generateApiKeyService,
@@ -10,6 +9,8 @@ import {
   signupService,
 } from "./service.js";
 import { LoginRequestBodyType, SignupRequestBodyType } from "./validator.js";
+import { getEmailCredsService } from "../email/service.js";
+import { emailProviders } from "@/utils/enum.js";
 
 /**
  * Express controller handler for the user signup route.
@@ -46,7 +47,10 @@ export const generateApiKeyHandler = async (
   try {
     const userId = req.user?.userId!;
     if (!userId) throw new Error("User not found");
-    const [emailCreds] = await getEmailCredsQuery({ userId });
+    const emailCreds = await getEmailCredsService({
+      userId,
+      provider: emailProviders.SENDGRID,
+    });
     if (!emailCreds) throw new Error("Email credentials not found");
     const result = await generateApiKeyService(userId);
     return created(res, result, "User created successfully");

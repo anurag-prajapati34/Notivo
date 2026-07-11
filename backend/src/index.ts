@@ -9,7 +9,7 @@ import { apiRequestLogger, logger } from "./utils/logger.js";
 import { startScheduledSelfPinging } from "./utils/server-helper.js";
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3004;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

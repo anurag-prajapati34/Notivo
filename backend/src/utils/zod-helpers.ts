@@ -48,6 +48,7 @@ export const validateRequestQuery =
   <T>(schema: z.ZodSchema<T>) =>
   (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log(req.query);
       const { data, success, error } = schema.safeParse(req.query);
       if (!success) {
         const issues = error.issues;
@@ -57,7 +58,13 @@ export const validateRequestQuery =
         const path = firstError.path[0].toString();
         return badRequest(res, `${path}: ${message}`);
       }
-      (req.query as any) = data;
+      // Overwrite the query property getter on the req instance:
+      Object.defineProperty(req, "query", {
+        value: data,
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
       next();
     } catch (error) {
       next(error);

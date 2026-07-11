@@ -11,6 +11,7 @@ import Login from './pages/Login'
 import { SendEmail } from './pages/SendEmail'
 import Signup from './pages/Signup'
 import { Template } from './pages/Template'
+import { SendGridCredentials } from './pages/SendGridCredentials'
 
 // A small wrapper to guard protected dashboard pages
 const ProtectedLayout = () => {
@@ -42,7 +43,7 @@ function App() {
           <Route path="emails" element={<Emails />} />
           <Route path="emails/:id" element={<EmailDetails />} />
           <Route path="send-email" element={<SendEmail />} />
-          <Route path="settings" element={<Credentials />} />
+          <Route path="settings" element={<SendGridCredentials />} />
         </Route>
 
         {/* Fallback Catch-All */}

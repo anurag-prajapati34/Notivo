@@ -1,17 +1,19 @@
 import { db } from "@/database/connection.js";
+import { sendgridEmailCreds, smtpEmailCreds } from "@/database/schema/index.js";
 import { slugs } from "@/database/seed/email-templates.js";
+import { EmailJobData } from "@/email/index.js";
 import { addEmailJob } from "@/jobs/email-queue.js";
-import { emailStatus } from "@/utils/enum.js";
-import { getCurrentIndianDate, dayjs } from "@/utils/date-helpers.js";
+import { dayjs, getCurrentIndianDate } from "@/utils/date-helpers.js";
+import { emailProviders, emailStatus } from "@/utils/enum.js";
+import { eq } from "drizzle-orm";
 import {
   getAllEmailsQuery,
   getEmailAttemptsQuery,
-  getEmailCredsQuery,
   getEmailTemplatesQuery,
   getEmailTemplateVariablesQuery,
-  insertEmailCredsQuery,
+  getSendgridEmailCredsQuery,
+  getSmtpEmailCredsQuery,
   insertEmailsQuery,
-  updateEmailCredsQuery,
 } from "./queries.js";
 import { EmailCredentials, SendEmail, SendTestEmail } from "./validator.js";
 
@@ -19,17 +21,71 @@ export const setEmailCredsService = async (
   input: EmailCredentials & { userId: number },
 ) => {
   try {
-    const [emailCreds] = await getEmailCredsQuery({
-      // email: input.email,
-      userId: input.userId,
-    });
+    if (input.provider === emailProviders.SMTP) {
+      const [existingSmtp] = await db
+        .select()
+        .from(smtpEmailCreds)
+        .where(eq(smtpEmailCreds.userId, input.userId));
 
-    if (emailCreds) {
-      await updateEmailCredsQuery(emailCreds.emailCredsId, {
-        ...input,
-      });
-    } else {
-      await insertEmailCredsQuery(input);
+      const dbPayload = {
+        userId: input.userId,
+        email: input.creds.email,
+        passKey: input.creds.passKey,
+        name: input.creds.name,
+        username: input.creds.username,
+        host: input.creds.host,
+        port: input.creds.port,
+        secure: input.creds.secure,
+        status: true,
+      };
+
+      if (existingSmtp) {
+        await db
+          .update(smtpEmailCreds)
+          .set(dbPayload)
+          .where(
+            eq(smtpEmailCreds.smtpEmailCredsId, existingSmtp.smtpEmailCredsId),
+          );
+      } else {
+        await db.insert(smtpEmailCreds).values(dbPayload);
+      }
+
+      await db
+        .update(sendgridEmailCreds)
+        .set({ status: false })
+        .where(eq(sendgridEmailCreds.userId, input.userId));
+    } else if (input.provider === emailProviders.SENDGRID) {
+      const [existingSendgrid] = await db
+        .select()
+        .from(sendgridEmailCreds)
+        .where(eq(sendgridEmailCreds.userId, input.userId));
+
+      const dbPayload = {
+        userId: input.userId,
+        apiKey: input.creds.apiKey,
+        email: input.creds.email,
+        name: input.creds.name,
+        status: true,
+      };
+
+      if (existingSendgrid) {
+        await db
+          .update(sendgridEmailCreds)
+          .set(dbPayload)
+          .where(
+            eq(
+              sendgridEmailCreds.sendgridEmailCredsId,
+              existingSendgrid.sendgridEmailCredsId,
+            ),
+          );
+      } else {
+        await db.insert(sendgridEmailCreds).values(dbPayload);
+      }
+
+      await db
+        .update(smtpEmailCreds)
+        .set({ status: false })
+        .where(eq(smtpEmailCreds.userId, input.userId));
     }
   } catch (error) {
     throw error;
@@ -98,17 +154,35 @@ const validateAndReplaceVariables = (
     subject: updatedSubject,
   };
 };
+
+export const getEmailCredsService = async (input: {
+  userId: number;
+  provider: string;
+}) => {
+  console.log("input----", input);
+  const [emailCreds] =
+    input.provider === emailProviders.SMTP
+      ? await getSmtpEmailCredsQuery({ userId: input.userId })
+      : await getSendgridEmailCredsQuery({ userId: input.userId });
+  if (!emailCreds) return null;
+  return { creds: emailCreds, provider: input.provider };
+};
 export const sendEmailService = async (
   input: SendEmail & { userId: number },
 ) => {
   try {
     const { templateId } = input;
 
-    const [emailCreds] = await getEmailCredsQuery({ userId: input.userId });
+    // get email creds
+    const emailCreds = await getEmailCredsService({
+      userId: input.userId,
+      provider: input.provider,
+    });
 
     if (!emailCreds) {
       throw new Error("Email credentials not found");
     }
+    // get template
     const [template] = await getEmailTemplatesQuery({
       templateIds: [templateId],
     });
@@ -116,10 +190,13 @@ export const sendEmailService = async (
     if (!template) {
       throw new Error("Template not found");
     }
+
+    // get variables
     const variables = await getEmailTemplateVariablesQuery({
       templateIds: [templateId],
     });
 
+    // validate
     const { html, subject } = validateAndReplaceVariables(
       template.html,
       template.subject,
@@ -138,6 +215,7 @@ export const sendEmailService = async (
               body: html,
               emailStatus: emailStatus.PENDING,
               userId: input.userId,
+              provider: emailCreds.provider,
             },
           ],
           trx,
@@ -148,7 +226,8 @@ export const sendEmailService = async (
         if (!emailId)
           throw new Error("Something went wrong while inserting email");
         await addEmailJob({
-          emailCreds,
+          provider: emailCreds.provider,
+          creds: emailCreds.creds,
           emailData: {
             emailId,
             templateId: template.templateId,
@@ -156,7 +235,7 @@ export const sendEmailService = async (
             subject: subject,
             html,
           },
-        });
+        } as EmailJobData);
       }
     });
   } catch (error) {
@@ -176,10 +255,19 @@ export const sendTestEmailService = async (
       throw new Error("Template not found");
     }
 
+    const recipient =
+      input.provider === emailProviders.SMTP
+        ? input.creds.email
+        : input.creds.email;
+    const senderName =
+      input.provider === emailProviders.SMTP
+        ? input.creds.name
+        : input.creds.name || "User";
+
     const variables = [
       {
         variableName: "name",
-        variableValue: input.name,
+        variableValue: senderName,
       },
       {
         variableName: "platformName",
@@ -187,7 +275,9 @@ export const sendTestEmailService = async (
       },
       {
         variableName: "timestamp",
-        variableValue: getCurrentIndianDate().format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ"),
+        variableValue: getCurrentIndianDate().format(
+          "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ",
+        ),
       },
     ];
     const templateVariables = await getEmailTemplateVariablesQuery({
@@ -202,16 +292,17 @@ export const sendTestEmailService = async (
     );
 
     await db.transaction(async (trx) => {
-      for (const recipient of [input.email]) {
+      for (const toEmail of [recipient]) {
         const insertResult = await insertEmailsQuery(
           [
             {
-              toEmail: recipient,
+              toEmail: toEmail,
               templateId: testTemplate.templateId,
               subject: subject,
               body: html,
               emailStatus: emailStatus.PENDING,
               userId: input.userId,
+              provider: input.provider,
             },
           ],
           trx,
@@ -221,24 +312,40 @@ export const sendTestEmailService = async (
 
         if (!emailId)
           throw new Error("Something went wrong while inserting email");
-        await addEmailJob({
-          emailCreds: {
-            email: input.email,
-            passKey: input.passKey,
-            name: input.name,
-            host: input.host,
-            port: input.port,
-            secure: input.secure,
-            username: input.username,
-          },
-          emailData: {
-            emailId,
-            templateId: testTemplate.templateId,
-            to: recipient,
-            subject: subject,
-            html,
-          },
-        });
+
+        const emailData = {
+          emailId,
+          templateId: testTemplate.templateId,
+          to: toEmail,
+          subject: subject,
+          html,
+        };
+
+        if (input.provider === emailProviders.SMTP) {
+          await addEmailJob({
+            provider: emailProviders.SMTP,
+            creds: {
+              email: input.creds.email,
+              passKey: input.creds.passKey,
+              name: input.creds.name,
+              host: input.creds.host,
+              port: input.creds.port,
+              secure: input.creds.secure,
+              username: input.creds.username,
+            },
+            emailData,
+          });
+        } else {
+          await addEmailJob({
+            provider: emailProviders.SENDGRID,
+            creds: {
+              apiKey: input.creds.apiKey,
+              email: input.creds.email,
+              name: input.creds.name,
+            },
+            emailData,
+          });
+        }
       }
     });
   } catch (error) {
@@ -267,8 +374,7 @@ export const getEmailDetailsService = async (input: {
     // Calculate delivery time if delivered
     const deliveryTimeMs =
       email.deliveredAt && email.createdAt
-        ? dayjs(email.deliveredAt).valueOf() -
-          dayjs(email.createdAt).valueOf()
+        ? dayjs(email.deliveredAt).valueOf() - dayjs(email.createdAt).valueOf()
         : null;
 
     return {

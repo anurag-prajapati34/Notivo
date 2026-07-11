@@ -11,6 +11,7 @@ import {
 } from "./handler.js";
 import {
   validateEmailCredsRequestBody,
+  validateGetEmailCredsQuery,
   validateSendEmailRequestBody,
   validateSendTestEmailRequestBody,
 } from "./prehandler.js";
@@ -24,18 +25,28 @@ route.post(
   validateSendEmailRequestBody,
   sendEmailHandler,
 );
+
+//Set email creds
 route.post(
   "/creds",
   authenticate,
   validateEmailCredsRequestBody,
   setEmailCredsHandler,
 );
-route.get("/creds", authenticate, getEmailCredsHandler);
 
+//Get email creds
+route.get(
+  "/creds",
+  authenticate,
+  validateGetEmailCredsQuery,
+  getEmailCredsHandler,
+);
+//Get email templates
 route.get("/templates", authenticate, getEmailTemplatesHandler);
-
+//Get email list
 route.get("/list", authenticate, getEmailsListHandler);
 
+//Send test email
 route.post(
   "/test",
   authenticate,
@@ -43,6 +54,7 @@ route.post(
   sendTestEmailHandler,
 );
 
+//Get email details
 route.get("/details/:emailId", authenticate, getEmailDetailsHandler);
 
 export default route;

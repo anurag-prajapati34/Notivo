@@ -9,7 +9,7 @@
     "dev": "nodemon --exec tsx src/index.ts",
     "dev:worker": "nodemon --exec tsx src/jobs/worker.ts",
     "db:generate": "npx drizzle-kit generate",
-    "db:migrate": "npx drizzle-kit migrate",
+    "db:migrate": "tsx src/database/migrate.ts",
     "db:seed": "tsx src/database/seed/index.ts",
     "build": "tsc -b",
     "start:api": "node --import tsx dist/index.js",
@@ -20,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
     "bcryptjs": "^3.0.3",
     "bullmq": "^5.77.2",
     "cors": "^2.8.6",

@@ -5,16 +5,14 @@ import {
   foreignKey,
   index,
   mysqlTable,
-  text,
-  timestamp,
   varchar,
 } from "drizzle-orm/mysql-core";
 import { users } from "./users.js";
 
-export const emailCreds = mysqlTable(
-  "email_creds",
+export const smtpEmailCreds = mysqlTable(
+  "smtp_email_creds",
   {
-    emailCredsId: bigint("email_creds_id", { mode: "number" })
+    smtpEmailCredsId: bigint("smtp_email_creds_id", { mode: "number" })
       .primaryKey()
       .autoincrement(),
     userId: bigint("user_id", { mode: "number" }),
@@ -28,14 +26,14 @@ export const emailCreds = mysqlTable(
     ...auditFields,
   },
   (table) => [
-    index("idx_email_creds_email").on(table.email),
+    index("idx_smtp_email_creds_email").on(table.email),
     foreignKey({
       columns: [table.userId],
       foreignColumns: [users.userId],
-      name: "fk_email_creds_users",
+      name: "fk_smtp_email_creds_users",
     }),
   ],
 );
 
-export type EmailCreds = typeof emailCreds.$inferSelect;
-export type NewEmailCreds = typeof emailCreds.$inferInsert;
+export type SmtpEmailCreds = typeof smtpEmailCreds.$inferSelect;
+export type NewSmtpEmailCreds = typeof smtpEmailCreds.$inferInsert;

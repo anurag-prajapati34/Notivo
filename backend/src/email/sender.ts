@@ -1,50 +1,27 @@
-import { config } from "@/config/index.js";
+import { emailProviders } from "@/utils/enum.js";
 import { logger } from "@/utils/logger.js";
+import sgMail from "@sendgrid/mail";
 import nodemailer from "nodemailer";
 import {
-  EmailCreds,
   EmailJobData,
-  EmailOptions,
   EmailResult,
+  SendGridJobEnvelope,
+  SmtpJobEnvelope,
 } from "./types.js";
 
-const getEmailConfig = () => {
-  const { host, auth, port, secure } = config.email;
-  if (!host || !auth || !port) {
-    throw new Error("Email configuration is missing");
-  }
-  return { host, auth, from: config.email.from, port, secure };
-};
-
-/**
- * Create nodemailer transporter
- *
- * @description
- * Creates and configures a nodemailer transporter using the application's
- * email configuration. Handles both authenticated and non-authenticated SMTP.
- *
- * @returns Configured nodemailer transporter
- * @throws Error if email configuration is invalid
- *
- * @example
- * ```typescript
- * const transporter = await createTransporter()
- * await transporter.sendMail(mailOptions)
- * ```
- */
 /**
  * Creates and configures a production-ready Nodemailer transporter.
  * Forces IPv4 network routing to prevent cloud container ENETUNREACH errors.
- * * @param {EmailCreds} creds - Standard credentials object payload
+ * * @param {SmtpJobEnvelope["creds"]} creds - Standard credentials object payload
  * @returns {Promise<nodemailer.Transporter>} Configured transport engine
  */
-const createTransporter = async (creds: EmailCreds) => {
+const createTransporter = async (creds: SmtpJobEnvelope["creds"]) => {
   const smtpPort = Number(creds.port); // Force clean integer casting to prevent string append bugs
 
   const transporter = nodemailer.createTransport({
     host: creds.host,
-    port: 587,
-    secure: false,
+    port: smtpPort,
+    secure: creds.secure,
 
     auth: {
       user: creds.username,
@@ -75,35 +52,20 @@ const createTransporter = async (creds: EmailCreds) => {
 };
 
 /**
- * Send a single email
- *
- * @description
- * Sends an email using the configured SMTP settings. Supports both HTML
- * and text email formats with proper error handling.
- *
- * @param options - Email sending options including recipient, subject, and content
- * @returns Promise resolving to EmailResult with success status and details
- *
- * @example
- * ```typescript
- * const result = await sendEmail({
- *   to: 'user@example.com',
- *   subject: 'Welcome to Strata',
- *   html: '<h1>Welcome!</h1>',
- *   text: 'Welcome!'
- * })
- * ```
+ * Send a single email using SMTP transporter
  */
 export const sendEmail = async (
-  options: EmailOptions,
+  options: SmtpJobEnvelope,
 ): Promise<EmailResult> => {
-  const { emailCreds, emailData } = options;
+  const { creds, emailData } = options;
   try {
-    const transporter = await createTransporter(emailCreds);
-    // const emailConfig = await getEmailConfig();
+    const transporter = await createTransporter(creds);
 
     const mailOptions = {
-      from: emailCreds.email,
+      from: {
+        name: creds.name,
+        address: creds.email,
+      },
       to: emailData.to,
       subject: emailData.subject,
       html: emailData.html,
@@ -125,7 +87,7 @@ export const sendEmail = async (
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
 
-    logger.error("Failed to send email", {
+    logger.error("Failed to send email via SMTP", {
       error: errorMessage,
       to: emailData.to,
       subject: emailData.subject,
@@ -141,13 +103,62 @@ export const sendEmail = async (
   }
 };
 
-export const sendUserEmail = async (jobData: EmailJobData) => {
-  const { emailCreds, emailData } = jobData;
-  // const template=await getEmailTemplate(jobData.templateId);
-  const result = await sendEmail({
-    emailCreds,
-    emailData,
-  });
+/**
+ * Send an email using SendGrid
+ */
+export const sendEmailUsingSendGrid = async (
+  options: SendGridJobEnvelope,
+): Promise<EmailResult> => {
+  const { creds, emailData } = options;
 
-  return result;
+  try {
+    const SEND_GRID_API_KEY = creds.apiKey;
+    if (!SEND_GRID_API_KEY) {
+      throw new Error("SendGrid API key is missing");
+    }
+    sgMail.setApiKey(SEND_GRID_API_KEY);
+
+    await sgMail.send({
+      from: creds.email,
+      to: emailData.to,
+      subject: emailData.subject,
+      html: emailData.html,
+    });
+
+    return {
+      success: true,
+      messageId: "",
+      recipient: Array.isArray(emailData.to)
+        ? emailData.to.join(", ")
+        : emailData.to,
+    };
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    return {
+      success: false,
+      error: errorMessage,
+      recipient: Array.isArray(emailData.to)
+        ? emailData.to.join(", ")
+        : emailData.to,
+    };
+  }
+};
+
+/**
+ * Entry point for background workers. Routes job to correct delivery driver based on provider type.
+ */
+export const sendUserEmail = async (
+  jobData: EmailJobData,
+): Promise<EmailResult> => {
+  switch (jobData.provider) {
+    case emailProviders.SMTP:
+      return await sendEmail(jobData);
+    case emailProviders.SENDGRID:
+      return await sendEmailUsingSendGrid(jobData);
+    default:
+      throw new Error(
+        `Unsupported email provider type: ${(jobData as any).provider}`,
+      );
+  }
 };

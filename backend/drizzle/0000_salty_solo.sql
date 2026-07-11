@@ -1,5 +1,6 @@
 CREATE TABLE `users` (
 	`user_id` bigint AUTO_INCREMENT NOT NULL,
+	`user_type` varchar(100),
 	`first_name` varchar(100),
 	`middle_name` varchar(100),
 	`last_name` varchar(100),
@@ -8,9 +9,13 @@ CREATE TABLE `users` (
 	`email` varchar(255),
 	`password` varchar(500),
 	`api_key` varchar(500),
-	`status` boolean DEFAULT true,
-	`created_at` timestamp DEFAULT (now()),
-	`updated_at` timestamp DEFAULT (now()),
+	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`created_by` bigint,
+	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`updated_by` bigint,
+	`deleted_at` timestamp,
+	`deleted_by` bigint,
+	`status` boolean NOT NULL DEFAULT true,
 	CONSTRAINT `users_user_id` PRIMARY KEY(`user_id`)
 );
 --> statement-breakpoint
@@ -18,6 +23,7 @@ CREATE TABLE `emails` (
 	`email_id` bigint AUTO_INCREMENT NOT NULL,
 	`user_id` bigint,
 	`template_id` varchar(100),
+	`provider` varchar(100),
 	`to_email` varchar(255),
 	`subject` varchar(500),
 	`body` text,
@@ -35,8 +41,8 @@ CREATE TABLE `emails` (
 	CONSTRAINT `emails_email_id` PRIMARY KEY(`email_id`)
 );
 --> statement-breakpoint
-CREATE TABLE `email_creds` (
-	`email_creds_id` bigint AUTO_INCREMENT NOT NULL,
+CREATE TABLE `smtp_email_creds` (
+	`smtp_email_creds_id` bigint AUTO_INCREMENT NOT NULL,
 	`user_id` bigint,
 	`username` varchar(255) NOT NULL,
 	`pass_key` varchar(255) NOT NULL,
@@ -52,7 +58,23 @@ CREATE TABLE `email_creds` (
 	`deleted_at` timestamp,
 	`deleted_by` bigint,
 	`status` boolean NOT NULL DEFAULT true,
-	CONSTRAINT `email_creds_email_creds_id` PRIMARY KEY(`email_creds_id`)
+	CONSTRAINT `smtp_email_creds_smtp_email_creds_id` PRIMARY KEY(`smtp_email_creds_id`)
+);
+--> statement-breakpoint
+CREATE TABLE `sendgrid_email_creds` (
+	`sendgrid_email_creds_id` bigint AUTO_INCREMENT NOT NULL,
+	`user_id` bigint,
+	`api_key` varchar(255) NOT NULL,
+	`from` varchar(255) NOT NULL,
+	`name` varchar(255) NOT NULL,
+	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`created_by` bigint,
+	`updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`updated_by` bigint,
+	`deleted_at` timestamp,
+	`deleted_by` bigint,
+	`status` boolean NOT NULL DEFAULT true,
+	CONSTRAINT `sendgrid_email_creds_sendgrid_email_creds_id` PRIMARY KEY(`sendgrid_email_creds_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `email_templates` (
@@ -110,17 +132,20 @@ CREATE TABLE `email_attempts` (
 );
 --> statement-breakpoint
 ALTER TABLE `emails` ADD CONSTRAINT `fk_emails_users` FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
-ALTER TABLE `email_creds` ADD CONSTRAINT `fk_email_creds_users` FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `smtp_email_creds` ADD CONSTRAINT `fk_smtp_email_creds_users` FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `sendgrid_email_creds` ADD CONSTRAINT `fk_sendgrid_email_creds_users` FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `email_templates` ADD CONSTRAINT `fk_email_templates_users` FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `email_template_variables` ADD CONSTRAINT `fk_email_template_variables_template` FOREIGN KEY (`template_id`) REFERENCES `email_templates`(`template_id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `email_attempts` ADD CONSTRAINT `fk_attempts_emails` FOREIGN KEY (`email_id`) REFERENCES `emails`(`email_id`) ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 CREATE INDEX `users_email_idx` ON `users` (`email`);--> statement-breakpoint
 CREATE INDEX `users_mobile_idx` ON `users` (`mobile`);--> statement-breakpoint
+CREATE INDEX `users_user_type_idx` ON `users` (`user_type`);--> statement-breakpoint
 CREATE INDEX `idx_emails_to_email` ON `emails` (`to_email`);--> statement-breakpoint
 CREATE INDEX `idx_email_status` ON `emails` (`email_status`);--> statement-breakpoint
 CREATE INDEX `idx_emails_user_id` ON `emails` (`user_id`);--> statement-breakpoint
 CREATE INDEX `idx_emails_created_at` ON `emails` (`created_at`);--> statement-breakpoint
-CREATE INDEX `idx_email_creds_email` ON `email_creds` (`email`);--> statement-breakpoint
+CREATE INDEX `idx_email_provider` ON `emails` (`provider`);--> statement-breakpoint
+CREATE INDEX `idx_smtp_email_creds_email` ON `smtp_email_creds` (`email`);--> statement-breakpoint
 CREATE INDEX `idx_email_templates_slug` ON `email_templates` (`slug`);--> statement-breakpoint
 CREATE INDEX `idx_email_template_variables_template` ON `email_template_variables` (`template_id`);--> statement-breakpoint
 CREATE INDEX `idx_attempts_email_id` ON `email_attempts` (`email_id`);

@@ -4,15 +4,16 @@ import { AuthRequest } from "@/utils/types.js";
 import { Response } from "express";
 import {
   getAllEmailsQuery,
-  getEmailCredsQuery,
   getEmailTemplatesWithVariablesQuery,
 } from "./queries.js";
 import {
+  getEmailCredsService,
   getEmailDetailsService,
   sendEmailService,
   sendTestEmailService,
   setEmailCredsService,
 } from "./service.js";
+import { GetEmailCredsQuery } from "./validator.js";
 
 export async function sendEmailHandler(req: AuthRequest, res: Response) {
   try {
@@ -71,10 +72,19 @@ export const getEmailsListHandler = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const getEmailCredsHandler = async (req: AuthRequest, res: Response) => {
+export const getEmailCredsHandler = async (
+  req: AuthRequest & { query: GetEmailCredsQuery },
+  res: Response,
+) => {
   try {
+    console.log("req.query---", req.query);
     const userId: number = req.user?.userId!;
-    const [result] = await getEmailCredsQuery({ userId: userId });
+    const result = await getEmailCredsService({
+      userId: userId,
+      provider: req.query.provider,
+    });
+
+    console.log("result-----", result);
     return success(res, result, "Email credentials fetched successfully");
   } catch (error) {
     handleHandlerError(res, error);

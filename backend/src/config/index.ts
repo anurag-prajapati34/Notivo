@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const configSchema = z.object({
   nodeEnv: z.enum(["development", "production", "test"]).default("development"),
-  PORT: z.string().transform(Number),
+  PORT: z.string().transform(Number).optional(),
   url: z.string(),
   workerUrl: z.string(),
   healthPingInterval: z.string().transform(Number),

@@ -1,3 +1,5 @@
+import type { emailProviders } from "../utils/enum";
+
 export interface User {
   firstName: string;
   lastName: string;
@@ -25,16 +27,6 @@ export interface ApiResponseType<T> {
   data: T;
   message: string;
   success: boolean;
-}
-
-export interface EmailCreds {
-  email: string;
-  passKey: string;
-  username: string;
-  name: string;
-  host: string;
-  port: number;
-  secure?: boolean;
 }
 
 export interface EmailTemplateVariable {
@@ -127,3 +119,32 @@ export interface SendEmail {
     variableValue: string;
   }[];
 }
+
+// SMTP Provider
+type Smtp = typeof emailProviders.SMTP;
+export interface SmtpJobEnvelope {
+  provider: Smtp;
+  creds: {
+    host: string;
+    port: number;
+    username: string;
+    passKey: string;
+    secure: boolean;
+    name: string;
+    email: string;
+  };
+}
+
+//SendGrid Provider
+type SendGrid = typeof emailProviders.SENDGRID;
+export interface SendGridJobEnvelope {
+  provider: SendGrid;
+  creds: {
+    apiKey: string;
+    email: string;
+    name: string;
+  };
+}
+
+//Uniform job envelope
+export type EmailCreds = SmtpJobEnvelope | SendGridJobEnvelope;

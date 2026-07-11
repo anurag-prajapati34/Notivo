@@ -27,7 +27,7 @@ export const defaultJobOptions = {
  * Default worker options for all workers
  */
 export const defaultWorkerOptions = {
-  connection: redisConnection,
+  connection: redisConnection as any,
   concurrency: 5, // Process up to 5 jobs concurrently
 };
 
@@ -45,7 +45,7 @@ export function createQueue<T = any, R = any>(
   queueOptions?: QueueOptions,
 ): Queue<T, R> {
   const queue = new Queue<T, R>(queueName, {
-    connection: redisConnection,
+    connection: redisConnection as any,
     ...queueOptions,
     defaultJobOptions: {
       ...defaultJobOptions,
@@ -54,7 +54,7 @@ export function createQueue<T = any, R = any>(
   });
 
   logger.info(`BullMQ queue created: ${queueName}`);
-  return queue;
+  return queue as any;
 }
 
 /**
@@ -108,7 +108,7 @@ export async function shutdownWorker<T = any, R = any>(
  */
 export function createQueueEvents(queueName: string): QueueEvents {
   const queueEvents = new QueueEvents(queueName, {
-    connection: redisConnection,
+    connection: redisConnection as any,
   });
 
   logger.info(`BullMQ queue events created: ${queueName}`);
