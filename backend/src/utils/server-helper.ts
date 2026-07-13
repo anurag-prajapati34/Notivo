@@ -46,8 +46,8 @@ export async function startScheduledSelfPinging(url: string) {
   const minutes = Number(process.env.healthPingInterval || "12");
   const INTERVAL_MINUTES = minutes * 60 * 1000; // Keeps container warm before the 15-minute sleep deadline
 
-  const startHour = 11;
-  const endHour = 19;
+  const startHour = 11; //11: am
+  const endHour = 22; //10: pm
   let totalPings = 0;
   let successfulPings = 0;
   let failedPings = 0;
