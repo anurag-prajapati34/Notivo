@@ -247,8 +247,15 @@ export const sendTestEmailService = async (
   input: SendTestEmail & { userId: number },
 ) => {
   try {
+    let slug;
+    if (input.provider === emailProviders.SMTP) {
+      slug = slugs.smtpTestEmail;
+    } else if (input.provider === emailProviders.SENDGRID) {
+      slug = slugs.sendgridTestEmail;
+    }
+    if (!slug) return;
     const [testTemplate] = await getEmailTemplatesQuery({
-      slugs: [slugs.smtpTestEmail],
+      slugs: [slug],
     });
 
     if (!testTemplate) {

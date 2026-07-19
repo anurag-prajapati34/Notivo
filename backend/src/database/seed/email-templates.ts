@@ -8,6 +8,7 @@ export const slugs = {
   welcomeEmail: "welcome-email",
   passwordReset: "password-reset",
   smtpTestEmail: "smtp-test-email",
+  sendgridTestEmail: "sendgrid-test-email",
 };
 export const emailTemplateSeeds = [
   {
@@ -84,6 +85,36 @@ export const emailTemplateSeeds = [
 
     <p style="color:#666;font-size:12px;">
       This email was automatically generated to verify your SMTP credentials.
+      No action is required.
+    </p>
+  `,
+    variables: ["name", "platformName", "timestamp"],
+  },
+  {
+    name: "Sendgrid Test Email",
+    slug: slugs.sendgridTestEmail,
+    subject: "Sendgrid Test Email from {{platformName}}",
+    html: `
+    <h2>Sendgrid Test Successful ✅</h2>
+
+    <p>Hello {{name}},</p>
+
+    <p>
+      This is a test email from <strong>{{platformName}}</strong>.
+    </p>
+
+    <p>
+      If you received this email, your Sendgrid configuration is working correctly.
+    </p>
+
+    <p>
+      Sent at: <strong>{{timestamp}}</strong>
+    </p>
+
+    <hr />
+
+    <p style="color:#666;font-size:12px;">
+      This email was automatically generated to verify your Sendgrid credentials.
       No action is required.
     </p>
   `,
