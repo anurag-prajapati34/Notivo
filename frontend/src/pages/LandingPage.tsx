@@ -326,12 +326,12 @@ export const Landing = () => {
           <div className="flex items-center gap-2">
             <Link
               to="/login"
-              className="text-sm text-gray-400 hover:text-gray-200 transition-colors px-3 py-1.5"
+              className="text-sm text-gray-400 hover:text-gray-200 transition-colors px-2 sm:px-3 py-1.5"
             >
               Sign in
             </Link>
             <button
-              className="h-8 px-4 border border-gray-600 hover:border-gray-500 text-white text-sm font-medium  transition-colors hidden sm:flex items-center gap-1.5 hover:cursor-pointer"
+              className="h-8 px-3 sm:px-4 border border-gray-600 hover:border-gray-500 text-white text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 hover:cursor-pointer"
               onClick={handleGuestLogin}
             >
               Explore as guest
@@ -339,7 +339,7 @@ export const Landing = () => {
             </button>
             <Link
               to="/signup"
-              className="h-8 px-4 bg-gray-600 hover:bg-gray-500 text-white text-sm font-medium  transition-colors flex items-center gap-1.5"
+              className="h-8 px-4 bg-gray-600 hover:bg-gray-500 text-white text-sm font-medium transition-colors hidden sm:flex items-center gap-1.5"
             >
               Get started
               <ArrowRight size={13} />
