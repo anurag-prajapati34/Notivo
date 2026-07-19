@@ -21,7 +21,9 @@ import {
 import { useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify"
 import { getEmailTemplatesApi, sendEmailApi } from "../apis/email.api"
+import { useAuthContext } from "../hooks"
 import type { EmailTemplate } from "../types"
+import { handleEmailSentViaGuestAccount } from "../utils/email-helpers"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -395,6 +397,7 @@ export const SendEmail = () => {
     const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle")
     const [submitError, setSubmitError] = useState<string | null>(null)
     const [sentCount, setSentCount] = useState(0)
+    const { user } = useAuthContext()
 
     const [form, setForm] = useState<FormState>({
         recipients: [],
@@ -504,9 +507,17 @@ export const SendEmail = () => {
 
             // Send to all recipients
             if (form.selectedTemplate.templateId) {
-
                 try {
 
+                    const canSend = await handleEmailSentViaGuestAccount(
+                        user
+                    )
+
+                    if (!canSend.canSend) {
+                        setSubmitStatus("idle")
+                        toast.error(canSend.message);
+                        return
+                    }
 
                     const parsedVariables = Object.entries(form.variables).map(
                         ([variableName, variableValue]) => ({
@@ -573,7 +584,12 @@ export const SendEmail = () => {
 
                 {/* Page header */}
                 <div className="mb-7">
-                    <h1 className="text-lg font-semibold text-gray-900">Send Email</h1>
+                    <div className="flex items-baseline gap-2 flex-wrap">
+                        <h1 className="text-lg font-semibold text-gray-900">Send Email</h1>
+                        <span className="text-xs text-gray-500 font-normal">
+                            (Can't find the email? Check your Spam or Junk folder.)
+                        </span>
+                    </div>
                     <p className="text-sm text-gray-500 mt-0.5">
                         Compose and send emails directly from the platform — no API call needed.
                     </p>

@@ -37,7 +37,9 @@ export const TemplateCard = ({
     const { copiedKey, copy } = useCopy()
     const [showSnippet, setShowSnippet] = useState(false)
 
-    const snippet = `await fetch("https://notivo.app/api/v1/send", {
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api/v1"
+
+    const snippet = `await fetch("${apiBaseUrl}/send", {
   method: "POST",
   headers: {
     "Authorization": "Bearer YOUR_API_KEY",

@@ -475,7 +475,7 @@ export const Credentials = () => {
                             <div className="bg-gray-950  px-4 py-3 font-mono text-xs leading-relaxed">
                                 <span className="text-gray-500">POST </span>
                                 <span className="text-gray-400">
-                                    https://notivo.app/api/v1/send
+                                    {`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api/v1"}/send`}
                                 </span>
                                 <br />
                                 <span className="text-gray-500">Authorization: </span>

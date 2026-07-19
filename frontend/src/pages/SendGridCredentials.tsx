@@ -19,8 +19,10 @@ import {
     getEmailCredsApi,
     setEmailCredsApi
 } from "../apis/creds.api";
-import { emailProviders } from "../utils/enum";
 import { sendTestEmailApi } from "../apis/email.api";
+import { useAuthContext } from "../hooks";
+import { handleEmailSentViaGuestAccount } from "../utils/email-helpers";
+import { emailProviders } from "../utils/enum";
 
 // ─── Sub-components (same as existing Credentials page) ──────────────────────
 
@@ -54,9 +56,16 @@ const SectionHeader = ({
     </div>
 );
 
-const FieldLabel = ({ children }: { children: React.ReactNode }) => (
+const FieldLabel = ({
+    children,
+    required,
+}: {
+    children: React.ReactNode;
+    required?: boolean;
+}) => (
     <label className="block text-xs font-medium text-gray-600 mb-1.5">
         {children}
+        {required && <span className="text-red-500 ml-0.5">*</span>}
     </label>
 );
 
@@ -67,6 +76,8 @@ const Input = ({
     name,
     onChange,
     rightElement,
+    error,
+    disabled,
 }: {
     type?: string;
     placeholder?: string;
@@ -74,6 +85,8 @@ const Input = ({
     name?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     rightElement?: React.ReactNode;
+    error?: boolean | string;
+    disabled?: boolean;
 }) => (
     <div className="relative">
         <input
@@ -82,12 +95,19 @@ const Input = ({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-            className="w-full h-9 px-3 text-sm bg-gray-50 border border-gray-400 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all"
+            disabled={disabled}
+            className={`w-full h-9 px-3 text-sm bg-gray-50 border text-gray-900 placeholder-gray-400 focus:outline-none transition-all disabled:opacity-60 disabled:cursor-not-allowed ${error
+                ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-100 bg-red-50/10"
+                : "border-gray-400 focus:border-gray-400 focus:ring-2 focus:ring-gray-100"
+                }`}
         />
         {rightElement && (
             <div className="absolute right-2 top-1/2 -translate-y-1/2">
                 {rightElement}
             </div>
+        )}
+        {typeof error === "string" && error && (
+            <p className="text-xs text-red-500 mt-1">{error}</p>
         )}
     </div>
 );
@@ -102,12 +122,23 @@ interface SendGridForm {
     sendGridApiKey: string
 }
 
+interface FormErrors {
+    fromName?: string
+    fromEmail?: string
+    sendGridApiKey?: string
+}
+
 export const SendGridCredentials = () => {
+    const { user } = useAuthContext()
+    const isGuest = user?.userType?.toLowerCase() === "guest"
+
     const [form, setForm] = useState<SendGridForm>({
         fromName: "",
         fromEmail: "",
         sendGridApiKey: "",
     })
+
+    const [errors, setErrors] = useState<FormErrors>({})
 
     // UI states
     const [showApiKey, setShowApiKey] = useState(false)
@@ -148,12 +179,39 @@ export const SendGridCredentials = () => {
     // ── Handlers ──
 
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (isGuest) return
         const { name, value } = e.target
         setForm((prev) => ({ ...prev, [name]: value }))
+        if (errors[name as keyof FormErrors]) {
+            setErrors((prev) => ({ ...prev, [name]: undefined }))
+        }
+    }
+
+    const validateForm = () => {
+        const newErrors: FormErrors = {}
+        if (!form.fromName.trim()) {
+            newErrors.fromName = "From name is required"
+        }
+        if (!form.fromEmail.trim()) {
+            newErrors.fromEmail = "From email is required"
+        }
+        if (!form.sendGridApiKey.trim()) {
+            newErrors.sendGridApiKey = "SendGrid API key is required"
+        }
+        setErrors(newErrors)
+        return Object.keys(newErrors).length === 0
     }
 
     const handleSave = async () => {
-        if (!form.fromEmail.trim() || !form.sendGridApiKey.trim()) return
+        if (isGuest) {
+            toast.error("Guest users are not allowed to save credentials")
+            return
+        }
+
+        if (!validateForm()) {
+            toast.error("Please fill in all mandatory fields")
+            return
+        }
 
         setIsSaving(true)
         try {
@@ -182,8 +240,17 @@ export const SendGridCredentials = () => {
     }
 
     const handleTestEmail = async () => {
-        if (!form.fromEmail.trim() || !form.sendGridApiKey.trim()) {
-            toast.error("Save your credentials before sending a test email")
+        if (!validateForm()) {
+            toast.error("Please fill in all mandatory fields before sending a test email")
+            return
+        }
+
+        const canSend = await handleEmailSentViaGuestAccount(
+            user
+        )
+
+        if (!canSend.canSend) {
+            toast.error(canSend.message);
             return
         }
 
@@ -212,13 +279,17 @@ export const SendGridCredentials = () => {
     }
 
     const handleCopyNotivApiKey = async () => {
-        if (!notivApiKey) return
+        if (!notivApiKey || isGuest) return
         await navigator.clipboard.writeText(notivApiKey)
         setIsCopied(true)
         setTimeout(() => setIsCopied(false), 2000)
     }
 
     const handleGenerateApiKey = async () => {
+        if (isGuest) {
+            toast.error("Guest users are not allowed to generate API keys")
+            return
+        }
         try {
             const result = await generateApiKeyApi()
             if (result?.data?.apiKey) {
@@ -231,6 +302,10 @@ export const SendGridCredentials = () => {
     }
 
     const handleRegenerate = async () => {
+        if (isGuest) {
+            toast.error("Guest users are not allowed to regenerate API keys")
+            return
+        }
         if (!showRegenerateConfirm) {
             setShowRegenerateConfirm(true)
             return
@@ -261,16 +336,24 @@ export const SendGridCredentials = () => {
         ? `${form.sendGridApiKey.slice(0, 6)}${"•".repeat(20)}${form.sendGridApiKey.slice(-4)}`
         : ""
 
-    const isFormValid =
-        form.fromEmail.trim().length > 0 && form.sendGridApiKey.trim().length > 0
-
     return (
         <main>
             <div className="max-w-2xl">
                 {/* Page header */}
                 <div className="mb-6">
-                    <h1 className="text-lg font-medium text-gray-900">Settings</h1>
-                    <p className="text-sm text-gray-500 mt-0.5">
+                    <div className="flex items-baseline gap-2 flex-wrap">
+                        <h1 className="text-lg font-semibold text-gray-900">
+                            Settings
+                        </h1>
+
+                        {isGuest && (
+                            <span className="text-xs text-gray-500">
+                                (Guest users can't modify credentials.)
+                            </span>
+                        )}
+                    </div>
+
+                    <p className="mt-0.5 text-sm text-gray-500">
                         Manage your SendGrid credentials and API access.
                     </p>
                 </div>
@@ -311,40 +394,48 @@ export const SendGridCredentials = () => {
                     {/* Row 1 — From name + From email */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                         <div>
-                            <FieldLabel>From name</FieldLabel>
+                            <FieldLabel required>From name</FieldLabel>
                             <Input
                                 name="fromName"
                                 placeholder="Notivo"
                                 value={form.fromName}
                                 onChange={handleFormChange}
+                                error={errors.fromName}
+                                disabled={isGuest}
                             />
                         </div>
                         <div>
-                            <FieldLabel>From email</FieldLabel>
+                            <FieldLabel required>From email</FieldLabel>
                             <Input
                                 name="fromEmail"
                                 type="email"
                                 placeholder="hello@yourdomain.com"
                                 value={form.fromEmail}
                                 onChange={handleFormChange}
+                                error={errors.fromEmail}
+                                disabled={isGuest}
                             />
                         </div>
                     </div>
 
                     {/* Row 2 — SendGrid API Key */}
                     <div className="mb-5">
-                        <FieldLabel>SendGrid API key</FieldLabel>
+                        <FieldLabel required>SendGrid API key</FieldLabel>
                         <Input
                             name="sendGridApiKey"
                             type={showApiKey ? "text" : "password"}
                             placeholder="SG.xxxxxxxxxxxxxxxxxxxx"
                             value={form.sendGridApiKey}
                             onChange={handleFormChange}
+                            error={errors.sendGridApiKey}
+                            disabled={isGuest}
                             rightElement={
                                 <button
                                     type="button"
-                                    onClick={() => setShowApiKey((p) => !p)}
-                                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                                    disabled={isGuest}
+                                    onClick={() => !isGuest && setShowApiKey((p) => !p)}
+                                    className="text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                    title={isGuest ? "Guest users cannot view API keys" : undefined}
                                 >
                                     {showApiKey ? <EyeOff size={14} /> : <Eye size={14} />}
                                 </button>
@@ -363,8 +454,9 @@ export const SendGridCredentials = () => {
                     <div className="flex items-center gap-2">
                         <button
                             onClick={handleSave}
-                            disabled={!isFormValid || isSaving}
+                            disabled={isSaving || isGuest}
                             className="h-9 px-4 bg-gray-950 text-white text-sm font-medium flex items-center gap-1.5 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            title={isGuest ? "Guest users cannot save credentials" : undefined}
                         >
                             {isSaving ? (
                                 <RefreshCw size={13} className="animate-spin" />
@@ -376,7 +468,7 @@ export const SendGridCredentials = () => {
 
                         <button
                             onClick={handleTestEmail}
-                            disabled={isTestSending || !isFormValid}
+                            disabled={isTestSending}
                             className="h-9 px-4 bg-white text-gray-700 text-sm font-medium border border-gray-400 flex items-center gap-1.5 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
                             {isTestSending ? (
@@ -425,7 +517,9 @@ export const SendGridCredentials = () => {
                                 </div>
                                 <button
                                     onClick={handleCopyNotivApiKey}
-                                    className="h-9 px-3 bg-white border border-gray-400 flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors shrink-0"
+                                    disabled={isGuest}
+                                    className="h-9 px-3 bg-white border border-gray-400 flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0"
+                                    title={isGuest ? "Guest users cannot copy API keys" : undefined}
                                 >
                                     {isCopied ? (
                                         <>
@@ -447,7 +541,9 @@ export const SendGridCredentials = () => {
                                 </div>
                                 <button
                                     onClick={handleGenerateApiKey}
-                                    className="h-9 px-3 bg-gray-950 text-white flex items-center gap-1.5 text-xs font-medium hover:bg-gray-700 transition-colors shrink-0"
+                                    disabled={isGuest}
+                                    className="h-9 px-3 bg-gray-950 text-white flex items-center gap-1.5 text-xs font-medium hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0"
+                                    title={isGuest ? "Guest users cannot generate API keys" : undefined}
                                 >
                                     <Key size={13} />
                                     Generate key
@@ -463,7 +559,7 @@ export const SendGridCredentials = () => {
                             <div className="bg-gray-950 px-4 py-3 font-mono text-xs leading-relaxed">
                                 <span className="text-gray-500">POST </span>
                                 <span className="text-gray-400">
-                                    https://notivo.app/api/v1/send
+                                    {`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api/v1"}/send`}
                                 </span>
                                 <br />
                                 <span className="text-gray-500">Authorization: </span>
@@ -511,8 +607,9 @@ export const SendGridCredentials = () => {
                         {!showRegenerateConfirm ? (
                             <button
                                 onClick={handleRegenerate}
-                                disabled={!notivApiKey}
+                                disabled={!notivApiKey || isGuest}
                                 className="h-9 px-4 bg-white text-red-500 text-sm font-medium border border-red-200 flex items-center gap-1.5 hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                                title={isGuest ? "Guest users cannot regenerate API keys" : undefined}
                             >
                                 <RefreshCw size={13} />
                                 Regenerate key
@@ -524,8 +621,9 @@ export const SendGridCredentials = () => {
                                 </span>
                                 <button
                                     onClick={handleRegenerate}
-                                    disabled={isRegenerating}
-                                    className="h-8 px-3 bg-red-600 text-white text-xs font-medium flex items-center gap-1.5 hover:bg-red-700 disabled:opacity-50 transition-colors"
+                                    disabled={isRegenerating || isGuest}
+                                    className="h-8 px-3 bg-red-600 text-white text-xs font-medium flex items-center gap-1.5 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    title={isGuest ? "Guest users cannot regenerate API keys" : undefined}
                                 >
                                     {isRegenerating && (
                                         <RefreshCw size={12} className="animate-spin" />
