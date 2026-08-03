@@ -22,17 +22,9 @@ export async function sendEmailHandler(req: AuthRequest, res: Response) {
       ...req.body,
       userId,
     });
-    return res.status(200).json({
-      success: true,
-      message: "Email sent successfully",
-      data: null,
-    });
+    return success(res, null, "Email sent successfully");
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      data: null,
-    });
+    handleHandlerError(res, error);
   }
 }
 

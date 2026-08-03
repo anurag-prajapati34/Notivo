@@ -72,21 +72,21 @@ export const EmailTableRow = ({
             </td>
 
             {/* Subject */}
-            <td className="px-4 py-3.5 max-w-[220px] hidden sm:table-cell">
+            <td className="px-3 py-3.5 max-w-[220px] hidden sm:table-cell">
                 <span className="text-sm text-gray-700 truncate block" title={email.subject ?? ""}>
                     {email.subject ?? "—"}
                 </span>
             </td>
 
             {/* Template */}
-            <td className="px-4 py-3.5 hidden md:table-cell">
+            <td className="px-3 py-3.5 hidden md:table-cell">
                 <span className="text-xs font-mono bg-gray-200 text-gray-600 px-2 py-1">
                     {formatTemplateSlug(email.templateId)}
                 </span>
             </td>
 
             {/* Status */}
-            <td className="px-4 py-3.5">
+            <td className="px-3 py-3.5">
                 <div className="flex flex-col gap-1">
                     <StatusBadge status={email.emailStatus ?? "unknown"} />
                     {isFailed && email.lastErrorMessage && (
@@ -104,7 +104,7 @@ export const EmailTableRow = ({
             </td>
 
             {/* Attempts */}
-            <td className="px-4 py-3.5 hidden lg:table-cell">
+            <td className="px-3 py-3.5 hidden lg:table-cell">
                 <AttemptsIndicator
                     attempts={email.attempts}
                     status={email.emailStatus ?? ""}
@@ -112,18 +112,27 @@ export const EmailTableRow = ({
             </td>
 
             {/* Sent at */}
-            <td className="px-4 py-3.5 hidden sm:table-cell">
+            <td className="px-3 py-3.5 hidden sm:table-cell">
                 <span className="text-xs text-gray-600">
                     {convertToIndianDate(email.createdAt)}
                 </span>
             </td>
 
+            {/* Scheduled at */}
+            <td className="px-3 py-3.5 hidden xl:table-cell">
+                <span className="text-xs text-gray-600">
+                    {email.scheduledAt ? convertToIndianDate(email.scheduledAt) : '-'}
+                </span>
+            </td>
+
             {/* Delivered at */}
-            <td className="px-4 py-3.5 hidden xl:table-cell">
+            <td className="px-3 py-3.5 hidden xl:table-cell">
                 <span className="text-xs text-gray-600">
                     {email.deliveredAt ? convertToIndianDate(email.deliveredAt) : '-'}
                 </span>
             </td>
+
+
 
         </tr>
     );

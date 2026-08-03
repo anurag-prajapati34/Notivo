@@ -5,6 +5,7 @@ import { EmailJobData } from "@/email/index.js";
 import { addEmailJob } from "@/jobs/email-queue.js";
 import { dayjs, getCurrentIndianDate } from "@/utils/date-helpers.js";
 import { emailProviders, emailStatus } from "@/utils/enum.js";
+import { CustomError } from "@/utils/error-helpers.js";
 import { eq } from "drizzle-orm";
 import {
   getAllEmailsQuery,
@@ -117,7 +118,7 @@ const validateAndReplaceVariables = (
         !inputVariables.find((v) => v.variableName === variable.variableName),
     )
   ) {
-    throw new Error("All required variables are not provided");
+    throw new CustomError("All required variables are not provided", 400);
   }
 
   let updatedHtml = html;
@@ -129,7 +130,7 @@ const validateAndReplaceVariables = (
       (v) => v.variableName === variable.variableName,
     )?.variableValue;
     if (!variableValue)
-      throw new Error("All required variables are not provided");
+      throw new CustomError("All required variables are not provided", 400);
     updatedHtml = updatedHtml.replace(
       `{{${variable.variableName}}}`,
       variableValue,
@@ -142,7 +143,7 @@ const validateAndReplaceVariables = (
       (v) => v.variableName === variable.variableName,
     )?.variableValue;
     if (!variableValue)
-      throw new Error("All required variables are not provided");
+      throw new CustomError("All required variables are not provided", 400);
     updatedSubject = updatedSubject.replace(
       `{{${variable.variableName}}}`,
       variableValue,
@@ -159,7 +160,6 @@ export const getEmailCredsService = async (input: {
   userId: number;
   provider: string;
 }) => {
-  console.log("input----", input);
   const [emailCreds] =
     input.provider === emailProviders.SMTP
       ? await getSmtpEmailCredsQuery({ userId: input.userId })
@@ -171,7 +171,7 @@ export const sendEmailService = async (
   input: SendEmail & { userId: number },
 ) => {
   try {
-    const { templateId } = input;
+    const { templateId, scheduleAt } = input;
 
     // get email creds
     const emailCreds = await getEmailCredsService({
@@ -180,7 +180,7 @@ export const sendEmailService = async (
     });
 
     if (!emailCreds) {
-      throw new Error("Email credentials not found");
+      throw new CustomError("Email credentials not found", 400);
     }
     // get template
     const [template] = await getEmailTemplatesQuery({
@@ -188,7 +188,7 @@ export const sendEmailService = async (
     });
 
     if (!template) {
-      throw new Error("Template not found");
+      throw new CustomError("Template not found", 400);
     }
 
     // get variables
@@ -204,6 +204,8 @@ export const sendEmailService = async (
       variables,
     );
 
+    const delayMs = scheduleAt ? scheduleAt.getTime() - Date.now() : 0;
+
     await db.transaction(async (trx) => {
       for (const recipient of input.recipients) {
         const insertResult = await insertEmailsQuery(
@@ -216,6 +218,7 @@ export const sendEmailService = async (
               emailStatus: emailStatus.PENDING,
               userId: input.userId,
               provider: emailCreds.provider,
+              scheduledAt: scheduleAt,
             },
           ],
           trx,
@@ -224,18 +227,27 @@ export const sendEmailService = async (
           (await insertResult.length) > 0 ? insertResult[0]?.insertId : null;
 
         if (!emailId)
-          throw new Error("Something went wrong while inserting email");
-        await addEmailJob({
-          provider: emailCreds.provider,
-          creds: emailCreds.creds,
-          emailData: {
-            emailId,
-            templateId: template.templateId,
-            to: recipient,
-            subject: subject,
-            html,
+          throw new CustomError(
+            "Something went wrong while inserting email",
+            400,
+          );
+        await addEmailJob(
+          {
+            provider: emailCreds.provider,
+            creds: emailCreds.creds,
+            emailData: {
+              emailId,
+              templateId: template.templateId,
+              to: recipient,
+              subject: subject,
+              html,
+            },
+          } as EmailJobData,
+          "email-queue",
+          {
+            delay: delayMs,
           },
-        } as EmailJobData);
+        );
       }
     });
   } catch (error) {
@@ -259,7 +271,7 @@ export const sendTestEmailService = async (
     });
 
     if (!testTemplate) {
-      throw new Error("Template not found");
+      throw new CustomError("Template not found", 400);
     }
 
     const recipient =
@@ -318,7 +330,10 @@ export const sendTestEmailService = async (
           (await insertResult.length) > 0 ? insertResult[0]?.insertId : null;
 
         if (!emailId)
-          throw new Error("Something went wrong while inserting email");
+          throw new CustomError(
+            "Something went wrong while inserting email",
+            400,
+          );
 
         const emailData = {
           emailId,

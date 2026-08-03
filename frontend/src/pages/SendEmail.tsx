@@ -500,10 +500,10 @@ export const SendEmail = () => {
         setSubmitError(null)
 
         try {
-            // const scheduleAt =
-            //     form.mode === "schedule" && form.scheduleDate && form.scheduleTime
-            //         ? new Date(`${form.scheduleDate}T${form.scheduleTime}`).toISOString()
-            //         : undefined
+            const scheduleAt =
+                form.mode === "schedule" && form.scheduleDate && form.scheduleTime
+                    ? new Date(`${form.scheduleDate}T${form.scheduleTime}`).toISOString()
+                    : undefined
 
             // Send to all recipients
             if (form.selectedTemplate.templateId) {
@@ -529,7 +529,7 @@ export const SendEmail = () => {
                         templateId: form.selectedTemplate.templateId,
                         variables: parsedVariables,
                         recipients: form.recipients,
-                        // scheduleAt,
+                        scheduleAt,
                     })
 
                     if (res?.success) {
@@ -571,7 +571,7 @@ export const SendEmail = () => {
     }
 
     // ── Min date for schedule (today) ──
-    // const todayStr = new Date().toISOString().split("T")[0]
+    const todayStr = new Date().toISOString().split("T")[0]
 
     // ── Preview recipient (first one or placeholder) ──
     const previewRecipient = form.recipients[0] ?? ""
@@ -722,8 +722,8 @@ export const SendEmail = () => {
                             />
 
                             {/* Mode toggle */}
-                            {/* <div className="flex gap-2 mb-4">
-                                {(["now"] as SendMode[]).map((m) => (
+                            <div className="flex gap-2 mb-4">
+                                {(["now", "schedule"] as SendMode[]).map((m) => (
                                     <button
                                         key={m}
                                         type="button"
@@ -741,10 +741,10 @@ export const SendEmail = () => {
                                         )}
                                     </button>
                                 ))}
-                            </div> */}
+                            </div>
 
                             {/* Schedule picker */}
-                            {/* {form.mode === "schedule" && (
+                            {form.mode === "schedule" && (
                                 <div className="grid grid-cols-2 gap-3 pt-1">
                                     <div>
                                         <Label required>Date</Label>
@@ -784,7 +784,7 @@ export const SendEmail = () => {
                                         </div>
                                     )}
                                 </div>
-                            )} */}
+                            )}
 
                             {/* Validation summary */}
                             {!isValid && form.recipients.length > 0 && (

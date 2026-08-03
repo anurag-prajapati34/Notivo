@@ -59,6 +59,7 @@ export interface Email {
   deliveredAt: string | null;
   createdAt: string;
   emailId: number;
+  scheduledAt: string | null;
 }
 
 export interface AnalyticsStats {
@@ -114,6 +115,7 @@ export interface EmailDetail {
 export interface SendEmail {
   templateId: string;
   recipients: string[];
+  scheduleAt?: Date | string;
   variables: {
     variableName: string;
     variableValue: string;

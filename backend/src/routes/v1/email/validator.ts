@@ -1,10 +1,11 @@
+import { isFutureTime } from "@/utils/date-helpers.js";
+import { emailProviders } from "@/utils/enum.js";
 import {
   emailSchema,
   numberSchema,
   stringSchema,
 } from "@/utils/zod-helpers.js";
 import z from "zod";
-import { emailProviders } from "@/utils/enum.js";
 
 export const SmptCredsSchema = z.object({
   email: emailSchema("Email"),
@@ -35,19 +36,33 @@ export const EmailCredentialsSchema = z.discriminatedUnion("provider", [
 ]);
 export type EmailCredentials = z.infer<typeof EmailCredentialsSchema>;
 
-export const SendEmailSchema = z.object({
-  provider: z
-    .enum([emailProviders.SMTP, emailProviders.SENDGRID])
-    .default(emailProviders.SENDGRID),
-  templateId: stringSchema("Template Id", 1),
-  recipients: z.array(emailSchema("Email")).min(1),
-  variables: z.array(
-    z.object({
-      variableName: z.string(),
-      variableValue: z.string(),
-    }),
-  ),
-});
+export const SendEmailSchema = z
+  .object({
+    provider: z
+      .enum([emailProviders.SMTP, emailProviders.SENDGRID])
+      .default(emailProviders.SENDGRID),
+    templateId: stringSchema("Template Id", 1),
+    recipients: z.array(emailSchema("Email")).min(1),
+    scheduleAt: z.coerce.date().optional(),
+    variables: z.array(
+      z.object({
+        variableName: z.string(),
+        variableValue: z.string(),
+      }),
+    ),
+  })
+  .refine(
+    (data) => {
+      if (data.scheduleAt) {
+        return isFutureTime(data.scheduleAt);
+      }
+      return true;
+    },
+    {
+      path: ["scheduleAt"],
+      message: "Schedule At must be a future time",
+    },
+  );
 export type SendEmail = z.infer<typeof SendEmailSchema>;
 
 export type SendGridCreds = z.infer<typeof SendGridCredsSchema>;

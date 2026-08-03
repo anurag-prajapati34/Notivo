@@ -17,4 +17,8 @@ export const getCurrentDate = () => {
   return getCurrentIndianDate().toDate();
 };
 
+export const isFutureTime = (date: dayjs.ConfigType) => {
+  return getIndianDate(date).isAfter(getCurrentIndianDate(), "milliseconds");
+};
+
 export { dayjs };

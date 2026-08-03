@@ -32,7 +32,7 @@ export const emails = mysqlTable(
     // bullJobId: varchar("bull_job_id", { length: 255 }),
 
     deliveredAt: timestamp("delivered_at"),
-
+    scheduledAt: timestamp("scheduled_at"),
     ...auditFields,
   },
   (table) => [

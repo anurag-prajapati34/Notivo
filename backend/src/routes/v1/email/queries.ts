@@ -149,6 +149,7 @@ export const getAllEmailsQuery = async (input: {
       createdAt: emails.createdAt,
       emailId: emails.emailId,
       provider: emails.provider,
+      scheduledAt: emails.scheduledAt,
     })
     .from(emails)
     .where(and(...whereConditions))
