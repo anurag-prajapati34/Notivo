@@ -72,7 +72,7 @@ export const signupService = async (input: SignupRequestBodyType) => {
 /**
  * Business logic service to handle user login.
  * Checks if the user exists, validates the password, and generates a JWT token.
- * * @param {LoginRequestBodyType} input - The validated user login payload.
+ * * @param {{ email: string; password: string }} input - The validated user login payload.
  * @param {string} [input.email] - Optional email address of the user.
  * @param {string} [input.mobile] - Optional mobile number of the user.
  * @param {string} input.password - The plain text password to be validated.
@@ -80,9 +80,12 @@ export const signupService = async (input: SignupRequestBodyType) => {
  * * @throws {Error} Throws an error if the user is not found.
  * @throws {Error} Throws an error if the password is invalid.
  */
-export const loginService = async (input: LoginRequestBodyType) => {
-  const { email, mobile, password } = input;
-  const user = await getUserQuery({ email, mobile });
+export const loginService = async (input: {
+  email: string;
+  password: string;
+}) => {
+  const { email, password } = input;
+  const user = await getUserQuery({ email });
 
   if (!user) {
     throw new CustomError("User not found", 404);

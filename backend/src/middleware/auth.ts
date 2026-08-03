@@ -3,7 +3,7 @@ import { users } from "@/database/schema/index.js";
 import { decodeJwt, JwtAuthPayload } from "@/utils/jwt-helpers.js";
 import { unauthorized } from "@/utils/response.js";
 import { and, eq } from "drizzle-orm";
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 /**

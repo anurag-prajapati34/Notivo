@@ -15,9 +15,15 @@ export const signup = async (input: Signup) => {
 };
 
 export const login = async (input: Login) => {
+  //send in basic auth headers not in body
   const response = (await makePostRequest(
     endpoints.login,
-    input,
+    {},
+    {
+      headers: {
+        Authorization: `Basic ${btoa(`${input.email}:${input.password}`)}`,
+      },
+    },
   )) as ApiResponseType<LoginResponseType>;
 
   localStorage.setItem(getAuthTokenKey(), response.data.token);

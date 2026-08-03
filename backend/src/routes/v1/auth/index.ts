@@ -20,7 +20,7 @@ route.post("/signup", validateSignupRequestBody, signupHandler);
 /*
  * Login a user
  */
-route.post("/login", validateLoginRequestBody, loginHandler);
+route.post("/login", loginHandler);
 
 /**
  * Get API Key of a user
