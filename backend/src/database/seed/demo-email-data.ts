@@ -3,19 +3,16 @@ import { emailAttempts } from "@/database/schema/email-attempts.js";
 import { emailTemplateVariables } from "@/database/schema/email-template-variables.js";
 import { emailTemplates } from "@/database/schema/email-templates.js";
 import { emails } from "@/database/schema/emails.js";
+import { dayjs, getCurrentIndianDate } from "@/utils/date-helpers.js";
 import { emailStatus } from "@/utils/enum.js";
 import { logger } from "@/utils/logger.js";
 import "dotenv/config.js";
 import { eq, inArray } from "drizzle-orm";
 import { db } from "../connection.js";
-import { getCurrentIndianDate, dayjs } from "@/utils/date-helpers.js";
 
 const FRONTEND_URL = config.frontend.url;
 
 // ─── Realistic variable values per variable name ──────────────────────────────
-// Covers every variable your seeded templates use.
-// Add more here if your templates have different variable names.
-
 const variableSampleValues: Record<string, string[]> = {
   name: [
     "Rahul Sharma",
@@ -44,7 +41,6 @@ const variableSampleValues: Record<string, string[]> = {
     `${FRONTEND_URL}/verify?token=abc123`,
     `${FRONTEND_URL}/verify?token=def456`,
   ],
-  // fallback — for any unknown variable
   _default: ["Demo Value", "Test Value", "Sample Value"],
 };
 
@@ -57,7 +53,6 @@ const getVariableValue = (variableName: string): string => {
 };
 
 // ─── validateAndReplaceVariables — same logic as production ───────────────────
-
 const validateAndReplaceVariables = (
   html: string,
   subject: string,
@@ -102,9 +97,10 @@ const validateAndReplaceVariables = (
 };
 
 // ─── Time helpers ─────────────────────────────────────────────────────────────
-
+// Updated: Start from midnight of today and subtract N days to avoid shifting errors
 const daysAgo = (days: number, hours = 10): Date => {
   return getCurrentIndianDate()
+    .startOf("day")
     .subtract(days, "day")
     .hour(hours)
     .minute(0)
@@ -114,9 +110,7 @@ const daysAgo = (days: number, hours = 10): Date => {
 };
 
 // ─── Seed plan ────────────────────────────────────────────────────────────────
-// Spread emails across 7 days with increasing volume (growing trend on chart)
-// Mix of statuses — enough failures for retry timeline to be impressive
-
+// Spread emails across 7 days continuously (Day 6 down to Day 0) with smooth growing volume
 export const seedPlan: {
   recipientIndex: number;
   daysAgo: number;
@@ -124,46 +118,30 @@ export const seedPlan: {
   finalStatus: string;
   totalAttempts: number;
 }[] = [
-  // Day 7 — 2 emails (low start)
+  // Day 6 — 4 emails
   {
     recipientIndex: 0,
-    daysAgo: 7,
+    daysAgo: 6,
     hours: 9,
     finalStatus: emailStatus.DELIVERED,
     totalAttempts: 1,
   },
   {
     recipientIndex: 1,
-    daysAgo: 7,
-    hours: 14,
+    daysAgo: 6,
+    hours: 12,
     finalStatus: emailStatus.DELIVERED,
     totalAttempts: 1,
   },
-
-  // Day 6 — 4 emails
   {
     recipientIndex: 2,
     daysAgo: 6,
-    hours: 10,
+    hours: 15,
     finalStatus: emailStatus.FAILED,
     totalAttempts: 3,
   },
   {
-    recipientIndex: 0,
-    daysAgo: 6,
-    hours: 13,
-    finalStatus: emailStatus.DELIVERED,
-    totalAttempts: 2,
-  },
-  {
     recipientIndex: 3,
-    daysAgo: 6,
-    hours: 15,
-    finalStatus: emailStatus.DELIVERED,
-    totalAttempts: 1,
-  },
-  {
-    recipientIndex: 1,
     daysAgo: 6,
     hours: 18,
     finalStatus: emailStatus.DELIVERED,
@@ -316,7 +294,7 @@ export const seedPlan: {
     totalAttempts: 1,
   },
 
-  // Day 2 — 10 emails
+  // Day 2 — 9 emails
   {
     recipientIndex: 0,
     daysAgo: 2,
@@ -362,33 +340,105 @@ export const seedPlan: {
   {
     recipientIndex: 4,
     daysAgo: 2,
-    hours: 14,
+    hours: 15,
     finalStatus: emailStatus.DELIVERED,
     totalAttempts: 1,
   },
   {
     recipientIndex: 1,
     daysAgo: 2,
-    hours: 16,
+    hours: 17,
     finalStatus: emailStatus.DELIVERED,
     totalAttempts: 3,
   },
   {
     recipientIndex: 3,
     daysAgo: 2,
-    hours: 18,
+    hours: 19,
+    finalStatus: emailStatus.DELIVERED,
+    totalAttempts: 1,
+  },
+
+  // Day 1 (Yesterday) — 11 emails [FIXED: Added missing day]
+  {
+    recipientIndex: 0,
+    daysAgo: 1,
+    hours: 8,
     finalStatus: emailStatus.DELIVERED,
     totalAttempts: 1,
   },
   {
     recipientIndex: 2,
-    daysAgo: 2,
-    hours: 19,
+    daysAgo: 1,
+    hours: 9,
+    finalStatus: emailStatus.DELIVERED,
+    totalAttempts: 1,
+  },
+  {
+    recipientIndex: 1,
+    daysAgo: 1,
+    hours: 10,
+    finalStatus: emailStatus.FAILED,
+    totalAttempts: 3,
+  },
+  {
+    recipientIndex: 4,
+    daysAgo: 1,
+    hours: 11,
     finalStatus: emailStatus.DELIVERED,
     totalAttempts: 2,
   },
+  {
+    recipientIndex: 3,
+    daysAgo: 1,
+    hours: 12,
+    finalStatus: emailStatus.DELIVERED,
+    totalAttempts: 1,
+  },
+  {
+    recipientIndex: 0,
+    daysAgo: 1,
+    hours: 14,
+    finalStatus: emailStatus.DELIVERED,
+    totalAttempts: 1,
+  },
+  {
+    recipientIndex: 2,
+    daysAgo: 1,
+    hours: 15,
+    finalStatus: emailStatus.DELIVERED,
+    totalAttempts: 1,
+  },
+  {
+    recipientIndex: 1,
+    daysAgo: 1,
+    hours: 16,
+    finalStatus: emailStatus.DELIVERED,
+    totalAttempts: 2,
+  },
+  {
+    recipientIndex: 4,
+    daysAgo: 1,
+    hours: 17,
+    finalStatus: emailStatus.DELIVERED,
+    totalAttempts: 1,
+  },
+  {
+    recipientIndex: 3,
+    daysAgo: 1,
+    hours: 18,
+    finalStatus: emailStatus.FAILED,
+    totalAttempts: 2,
+  },
+  {
+    recipientIndex: 0,
+    daysAgo: 1,
+    hours: 19,
+    finalStatus: emailStatus.DELIVERED,
+    totalAttempts: 1,
+  },
 
-  // Today — 12 emails (peak)
+  // Day 0 (Today) — 12 emails (peak)
   {
     recipientIndex: 0,
     daysAgo: 0,
@@ -492,14 +542,12 @@ const smtpErrors = [
 ];
 
 // ─── Main seeder ──────────────────────────────────────────────────────────────
-
 export const seedDemoData = async (input: {
   demoUserId: number;
   userId: number;
 }) => {
   try {
     const DEMO_USER_ID = input.demoUserId;
-    // const CREATER_USER_ID = input.userId;
     logger.info("Starting demo data seed...");
 
     // Step 1 — fetch all templates belonging to demo user
@@ -571,11 +619,9 @@ export const seedDemoData = async (input: {
 
     for (const plan of seedPlan) {
       try {
-        // Pick a random template
         const template = pick(templates);
         const templateVars = variablesByTemplateId[template.templateId] ?? [];
 
-        // Build input variables with realistic values for each required variable
         const inputVariables = templateVars
           .filter((v) => v.isRequired)
           .map((v) => ({
@@ -583,7 +629,6 @@ export const seedDemoData = async (input: {
             variableValue: getVariableValue(v.variableName),
           }));
 
-        // Replace variables — exact same function as production
         const { html, subject } = validateAndReplaceVariables(
           template.html,
           template.subject,
@@ -603,13 +648,12 @@ export const seedDemoData = async (input: {
         const lastError =
           plan.finalStatus === emailStatus.FAILED ? pick(smtpErrors) : null;
 
-        // Insert email record
         const [insertResult] = await db.insert(emails).values({
           userId: DEMO_USER_ID,
           templateId: template.templateId,
           toEmail: recipient,
-          subject, // rendered subject — variables replaced
-          body: html, // rendered HTML — variables replaced
+          subject,
+          body: html,
           emailStatus: plan.finalStatus,
           attempts: plan.totalAttempts,
           lastErrorMessage: lastError,
@@ -630,7 +674,6 @@ export const seedDemoData = async (input: {
           const isSuccess =
             isLastAttempt && plan.finalStatus === emailStatus.DELIVERED;
 
-          // Each attempt is ~35 seconds apart (matches backoff: 30s base)
           const attemptedAt = dayjs(createdAt)
             .add((attemptNum - 1) * 35, "second")
             .toDate();
