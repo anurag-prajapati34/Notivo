@@ -19,7 +19,7 @@ app.use(
       "http://localhost:5173",
       "https://notivo-q59p1jej0-anurag-prajapatis-projects.vercel.app",
       "https://notivo-gilt.vercel.app",
-      "https://notivo.anuragdev.com/",
+      "https://notivo.anuragdev.com",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
