@@ -9,8 +9,8 @@ import {
   LayoutTemplate,
   RefreshCw,
   Send,
-  Shield,
-  Zap,
+  Users,
+  Zap
 } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
@@ -523,11 +523,18 @@ export const Landing = () => {
               title="Scheduled delivery"
               description="Pass a scheduleAt timestamp — BullMQ's delayed job feature holds the job and fires it at exactly the right time."
             />
-            <FeatureCard
+            {/* <FeatureCard
               icon={Shield}
               accent="bg-rose-600"
               title="Encrypted credentials storage"
               description="Email credentials are stored AES-256 encrypted using a key from environment variables. Never stored as plain text."
+            /> */}
+
+            <FeatureCard
+              icon={Users}
+              accent="bg-teal-600"
+              title="Multi-recipient delivery"
+              description="Send to multiple recipients in one API call — each queued as an independent job with its own delivery tracking and retry lifecycle."
             />
           </div>
         </div>
