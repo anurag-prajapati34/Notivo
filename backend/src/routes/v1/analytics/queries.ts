@@ -74,6 +74,7 @@ export const getAnalyticsStatusQuery = async (input: { userId: number }) => {
           deliveredAt: emails.deliveredAt,
           createdAt: emails.createdAt,
           emailId: emails.emailId,
+          scheduledAt: emails.scheduledAt,
         })
         .from(emails)
         .innerJoin(
