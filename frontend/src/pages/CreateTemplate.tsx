@@ -16,6 +16,7 @@ import {
   getEmailTemplateByIdApi,
   updateTemplateApi,
 } from "../apis/email.api";
+import { useAuthContext } from "../hooks";
 import {
   BLANK_TEMPLATE,
   OTP_TEMPLATE,
@@ -36,6 +37,9 @@ export const CreateTemplate = () => {
   const { templateId } = useParams<{ templateId: string }>();
   const isEditMode = Boolean(templateId);
   const navigate = useNavigate();
+
+  const { user } = useAuthContext();
+  const isGuest = user?.userType?.toLowerCase() === "guest";
 
   const [form, setForm] = useState<TemplateForm>({
     name: "",
@@ -108,6 +112,7 @@ export const CreateTemplate = () => {
 
   // Handle template name change with auto-slug generation
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isGuest) return;
     const name = e.target.value;
     setForm((prev) => {
       const newForm = { ...prev, name };
@@ -123,6 +128,7 @@ export const CreateTemplate = () => {
 
   // Handle slug change
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isGuest) return;
     setForm((prev) => ({ ...prev, slug: e.target.value }));
     setSlugManuallyEdited(true);
   };
@@ -130,6 +136,11 @@ export const CreateTemplate = () => {
   // Form submission handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isGuest) {
+      toast.error("Guest users are not allowed to create or edit templates");
+      return;
+    }
 
     if (!form.name.trim()) {
       toast.error("Template name is required");
@@ -196,6 +207,12 @@ export const CreateTemplate = () => {
   // Delete template handler
   const handleDelete = async () => {
     if (!templateId) return;
+
+    if (isGuest) {
+      toast.error("Guest users are not allowed to delete templates");
+      return;
+    }
+
     setIsDeleting(true);
     try {
       await deleteTemplateApi(templateId);
@@ -251,9 +268,16 @@ export const CreateTemplate = () => {
 
       {/* Page Title & Subtitle */}
       <div className="mb-6">
-        <h1 className="text-lg font-medium text-gray-900">
-          {isEditMode ? "Edit Template" : "Create Template"}
-        </h1>
+        <div className="flex items-baseline gap-2 flex-wrap">
+          <h1 className="text-lg font-medium text-gray-900">
+            {isEditMode ? "Edit Template" : "Create Template"}
+          </h1>
+          {isGuest && (
+            <span className="text-xs text-gray-500">
+              (Guest users cannot create, edit, or delete templates.)
+            </span>
+          )}
+        </div>
         <p className="text-sm text-gray-500 mt-0.5">
           {isEditMode
             ? "Update your existing email template details and content"
@@ -304,10 +328,11 @@ export const CreateTemplate = () => {
                   <input
                     type="text"
                     required
+                    disabled={isGuest}
                     placeholder="e.g. Welcome Email"
                     value={form.name}
                     onChange={handleNameChange}
-                    className="w-full h-9 px-3 text-sm bg-gray-50 border border-gray-400  text-gray-900 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all"
+                    className="w-full h-9 px-3 text-sm bg-gray-50 border border-gray-400 text-gray-900 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                   />
                 </div>
 
@@ -319,10 +344,11 @@ export const CreateTemplate = () => {
                   <input
                     type="text"
                     required
+                    disabled={isGuest}
                     placeholder="e.g. welcome-email"
                     value={form.slug}
                     onChange={handleSlugChange}
-                    className={`w-full h-9 px-3 text-sm bg-gray-50 border  text-gray-900 focus:outline-none transition-all ${isSlugInvalid
+                    className={`w-full h-9 px-3 text-sm bg-gray-50 border text-gray-900 focus:outline-none transition-all disabled:opacity-60 disabled:cursor-not-allowed ${isSlugInvalid
                       ? "border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100"
                       : "border-gray-400 focus:border-gray-400 focus:ring-2 focus:ring-gray-100"
                       }`}
@@ -341,7 +367,7 @@ export const CreateTemplate = () => {
 
                   {/* Amber Warning in Edit Mode */}
                   {isEditMode && initialSlug && form.slug !== initialSlug && (
-                    <div className="mt-2.5 p-3 bg-amber-50 border border-amber-200  flex items-start gap-2 text-xs text-amber-800">
+                    <div className="mt-2.5 p-3 bg-amber-50 border border-amber-200 flex items-start gap-2 text-xs text-amber-800">
                       <AlertTriangle size={15} className="shrink-0 text-amber-600 mt-0.5" />
                       <span>
                         Changing the template ID will break existing API calls using the old ID
@@ -357,12 +383,13 @@ export const CreateTemplate = () => {
                   </label>
                   <textarea
                     rows={2}
+                    disabled={isGuest}
                     placeholder="Brief description of when this email template is sent..."
                     value={form.description}
                     onChange={(e) =>
-                      setForm((prev) => ({ ...prev, description: e.target.value }))
+                      !isGuest && setForm((prev) => ({ ...prev, description: e.target.value }))
                     }
-                    className="w-full px-3 py-2 text-sm bg-gray-50 border border-gray-400  text-gray-900 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all resize-none"
+                    className="w-full px-3 py-2 text-sm bg-gray-50 border border-gray-400 text-gray-900 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all resize-none disabled:opacity-60 disabled:cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -385,12 +412,13 @@ export const CreateTemplate = () => {
                   <input
                     type="text"
                     required
+                    disabled={isGuest}
                     placeholder="e.g. Welcome to {{appName}}, {{name}}!"
                     value={form.subject}
                     onChange={(e) =>
-                      setForm((prev) => ({ ...prev, subject: e.target.value }))
+                      !isGuest && setForm((prev) => ({ ...prev, subject: e.target.value }))
                     }
-                    className="w-full h-9 px-3 text-sm bg-gray-50 border border-gray-400  text-gray-900 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all"
+                    className="w-full h-9 px-3 text-sm bg-gray-50 border border-gray-400 text-gray-900 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     Use {"{{variableName}}"} for dynamic values
@@ -409,37 +437,41 @@ export const CreateTemplate = () => {
                       <span className="text-[11px] text-gray-400 mr-1">Starters:</span>
                       <button
                         type="button"
+                        disabled={isGuest}
                         onClick={() =>
-                          setForm((prev) => ({ ...prev, html: BLANK_TEMPLATE }))
+                          !isGuest && setForm((prev) => ({ ...prev, html: BLANK_TEMPLATE }))
                         }
-                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-400  hover:bg-gray-50 text-gray-700 transition-colors"
+                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-400 hover:bg-gray-50 text-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Blank
                       </button>
                       <button
                         type="button"
+                        disabled={isGuest}
                         onClick={() =>
-                          setForm((prev) => ({ ...prev, html: SIMPLE_TEMPLATE }))
+                          !isGuest && setForm((prev) => ({ ...prev, html: SIMPLE_TEMPLATE }))
                         }
-                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-400  hover:bg-gray-50 text-gray-700 transition-colors"
+                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-400 hover:bg-gray-50 text-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Simple
                       </button>
                       <button
                         type="button"
+                        disabled={isGuest}
                         onClick={() =>
-                          setForm((prev) => ({ ...prev, html: WELCOME_TEMPLATE }))
+                          !isGuest && setForm((prev) => ({ ...prev, html: WELCOME_TEMPLATE }))
                         }
-                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-400  hover:bg-gray-50 text-gray-700 transition-colors"
+                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-400 hover:bg-gray-50 text-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Welcome
                       </button>
                       <button
                         type="button"
+                        disabled={isGuest}
                         onClick={() =>
-                          setForm((prev) => ({ ...prev, html: OTP_TEMPLATE }))
+                          !isGuest && setForm((prev) => ({ ...prev, html: OTP_TEMPLATE }))
                         }
-                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-400  hover:bg-gray-50 text-gray-700 transition-colors"
+                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-400 hover:bg-gray-50 text-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         OTP
                       </button>
@@ -449,13 +481,14 @@ export const CreateTemplate = () => {
                   {/* HTML Textarea */}
                   <textarea
                     required
+                    disabled={isGuest}
                     rows={16}
                     value={form.html}
                     onChange={(e) =>
-                      setForm((prev) => ({ ...prev, html: e.target.value }))
+                      !isGuest && setForm((prev) => ({ ...prev, html: e.target.value }))
                     }
                     placeholder="Write your HTML email here. Use {{variableName}} for dynamic content."
-                    className="w-full font-mono text-xs leading-relaxed min-h-[400px] resize-y bg-gray-950 text-gray-300 border border-gray-800  p-4 focus:outline-none focus:border-gray-500 transition-all"
+                    className="w-full font-mono text-xs leading-relaxed min-h-[400px] resize-y bg-gray-950 text-gray-300 border border-gray-800 p-4 focus:outline-none focus:border-gray-500 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -465,8 +498,9 @@ export const CreateTemplate = () => {
             <div className="space-y-3 pt-2">
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full h-9 px-4 bg-gray-600 text-white text-sm font-medium  hover:bg-gray-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+                disabled={isSubmitting || isGuest}
+                className="w-full h-9 px-4 bg-gray-600 text-white text-sm font-medium hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+                title={isGuest ? "Guest users cannot save templates" : undefined}
               >
                 {isSubmitting ? (
                   <>
@@ -483,8 +517,10 @@ export const CreateTemplate = () => {
                   {!showDeleteConfirm ? (
                     <button
                       type="button"
-                      onClick={() => setShowDeleteConfirm(true)}
-                      className="w-full h-9 px-4 bg-white text-red-500 border border-red-200 hover:bg-red-50 text-sm font-medium  transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                      disabled={isGuest}
+                      onClick={() => !isGuest && setShowDeleteConfirm(true)}
+                      className="w-full h-9 px-4 bg-white text-red-500 border border-red-200 hover:bg-red-50 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+                      title={isGuest ? "Guest users cannot delete templates" : undefined}
                     >
                       <Trash2 size={15} />
                       <span>Delete Template</span>
@@ -497,9 +533,10 @@ export const CreateTemplate = () => {
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
-                          disabled={isDeleting}
+                          disabled={isDeleting || isGuest}
                           onClick={handleDelete}
-                          className="h-8 px-3 bg-red-600 text-white text-xs font-medium  hover:bg-red-700 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                          className="h-8 px-3 bg-red-600 text-white text-xs font-medium hover:bg-red-700 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                          title={isGuest ? "Guest users cannot delete templates" : undefined}
                         >
                           {isDeleting && <Loader2 size={13} className="animate-spin" />}
                           Confirm Delete
@@ -508,7 +545,7 @@ export const CreateTemplate = () => {
                           type="button"
                           disabled={isDeleting}
                           onClick={() => setShowDeleteConfirm(false)}
-                          className="h-8 px-3 bg-white border border-gray-300 text-gray-700 text-xs font-medium  hover:bg-gray-50 transition-colors cursor-pointer"
+                          className="h-8 px-3 bg-white border border-gray-300 text-gray-700 text-xs font-medium hover:bg-gray-50 transition-colors cursor-pointer"
                         >
                           Cancel
                         </button>
