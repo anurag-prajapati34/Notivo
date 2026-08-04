@@ -228,7 +228,7 @@ export const CreateTemplate = () => {
         return (
           <span
             key={index}
-            className="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono bg-indigo-100 text-indigo-700 font-semibold border border-indigo-200 mx-0.5"
+            className="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono bg-gray-100 text-gray-700 font-semibold border border-gray-200 mx-0.5"
           >
             {match[1]}
           </span>
@@ -239,7 +239,7 @@ export const CreateTemplate = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-full">
+    <div className="">
       {/* Back navigation */}
       <button
         onClick={() => navigate("/templates")}
@@ -265,20 +265,20 @@ export const CreateTemplate = () => {
         /* Skeleton Loading State for Edit Mode */
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           <div className="lg:col-span-3 space-y-6">
-            <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-4 animate-pulse">
+            <div className="bg-white border border-gray-400 p-6 space-y-4 animate-pulse">
               <div className="h-4 bg-gray-200 rounded w-1/4"></div>
               <div className="h-9 bg-gray-200 rounded w-full"></div>
               <div className="h-9 bg-gray-200 rounded w-full"></div>
               <div className="h-16 bg-gray-200 rounded w-full"></div>
             </div>
-            <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-4 animate-pulse">
+            <div className="bg-white border border-gray-400 p-6 space-y-4 animate-pulse">
               <div className="h-4 bg-gray-200 rounded w-1/4"></div>
               <div className="h-9 bg-gray-200 rounded w-full"></div>
               <div className="h-64 bg-gray-200 rounded w-full"></div>
             </div>
           </div>
           <div className="lg:col-span-2">
-            <div className="bg-white border border-gray-200 rounded-xl p-6 h-96 animate-pulse"></div>
+            <div className="bg-white border border-gray-400 p-6 h-96 animate-pulse"></div>
           </div>
         </div>
       ) : (
@@ -287,9 +287,9 @@ export const CreateTemplate = () => {
           {/* LEFT PANEL — Form (3/5 width) */}
           <div className="lg:col-span-3 space-y-6">
             {/* Section 1 — Basic Info Card */}
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div className="bg-white border border-gray-400 p-6 ">
               <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
-                <FileText size={16} className="text-indigo-600" />
+                <FileText size={16} className="text-gray-600" />
                 <h2 className="text-sm font-medium text-gray-900">
                   Basic Information
                 </h2>
@@ -307,7 +307,7 @@ export const CreateTemplate = () => {
                     placeholder="e.g. Welcome Email"
                     value={form.name}
                     onChange={handleNameChange}
-                    className="w-full h-9 px-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all"
+                    className="w-full h-9 px-3 text-sm bg-gray-50 border border-gray-400  text-gray-900 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all"
                   />
                 </div>
 
@@ -322,11 +322,10 @@ export const CreateTemplate = () => {
                     placeholder="e.g. welcome-email"
                     value={form.slug}
                     onChange={handleSlugChange}
-                    className={`w-full h-9 px-3 text-sm bg-gray-50 border rounded-lg text-gray-900 focus:outline-none transition-all ${
-                      isSlugInvalid
-                        ? "border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100"
-                        : "border-gray-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
-                    }`}
+                    className={`w-full h-9 px-3 text-sm bg-gray-50 border  text-gray-900 focus:outline-none transition-all ${isSlugInvalid
+                      ? "border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100"
+                      : "border-gray-400 focus:border-gray-400 focus:ring-2 focus:ring-gray-100"
+                      }`}
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     This is the templateId you pass in your API call
@@ -342,7 +341,7 @@ export const CreateTemplate = () => {
 
                   {/* Amber Warning in Edit Mode */}
                   {isEditMode && initialSlug && form.slug !== initialSlug && (
-                    <div className="mt-2.5 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2 text-xs text-amber-800">
+                    <div className="mt-2.5 p-3 bg-amber-50 border border-amber-200  flex items-start gap-2 text-xs text-amber-800">
                       <AlertTriangle size={15} className="shrink-0 text-amber-600 mt-0.5" />
                       <span>
                         Changing the template ID will break existing API calls using the old ID
@@ -363,14 +362,14 @@ export const CreateTemplate = () => {
                     onChange={(e) =>
                       setForm((prev) => ({ ...prev, description: e.target.value }))
                     }
-                    className="w-full px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all resize-none"
+                    className="w-full px-3 py-2 text-sm bg-gray-50 border border-gray-400  text-gray-900 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all resize-none"
                   />
                 </div>
               </div>
             </div>
 
             {/* Section 2 — Email Content Card */}
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div className="bg-white border border-gray-400 p-6 ">
               <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
                 <h2 className="text-sm font-medium text-gray-900">
                   Email Content
@@ -391,7 +390,7 @@ export const CreateTemplate = () => {
                     onChange={(e) =>
                       setForm((prev) => ({ ...prev, subject: e.target.value }))
                     }
-                    className="w-full h-9 px-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all"
+                    className="w-full h-9 px-3 text-sm bg-gray-50 border border-gray-400  text-gray-900 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all"
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     Use {"{{variableName}}"} for dynamic values
@@ -413,7 +412,7 @@ export const CreateTemplate = () => {
                         onClick={() =>
                           setForm((prev) => ({ ...prev, html: BLANK_TEMPLATE }))
                         }
-                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-200 rounded-md hover:bg-gray-50 text-gray-700 transition-colors"
+                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-400  hover:bg-gray-50 text-gray-700 transition-colors"
                       >
                         Blank
                       </button>
@@ -422,7 +421,7 @@ export const CreateTemplate = () => {
                         onClick={() =>
                           setForm((prev) => ({ ...prev, html: SIMPLE_TEMPLATE }))
                         }
-                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-200 rounded-md hover:bg-gray-50 text-gray-700 transition-colors"
+                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-400  hover:bg-gray-50 text-gray-700 transition-colors"
                       >
                         Simple
                       </button>
@@ -431,7 +430,7 @@ export const CreateTemplate = () => {
                         onClick={() =>
                           setForm((prev) => ({ ...prev, html: WELCOME_TEMPLATE }))
                         }
-                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-200 rounded-md hover:bg-gray-50 text-gray-700 transition-colors"
+                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-400  hover:bg-gray-50 text-gray-700 transition-colors"
                       >
                         Welcome
                       </button>
@@ -440,7 +439,7 @@ export const CreateTemplate = () => {
                         onClick={() =>
                           setForm((prev) => ({ ...prev, html: OTP_TEMPLATE }))
                         }
-                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-200 rounded-md hover:bg-gray-50 text-gray-700 transition-colors"
+                        className="px-2.5 py-1 text-xs font-medium bg-white border border-gray-400  hover:bg-gray-50 text-gray-700 transition-colors"
                       >
                         OTP
                       </button>
@@ -456,7 +455,7 @@ export const CreateTemplate = () => {
                       setForm((prev) => ({ ...prev, html: e.target.value }))
                     }
                     placeholder="Write your HTML email here. Use {{variableName}} for dynamic content."
-                    className="w-full font-mono text-xs leading-relaxed min-h-[400px] resize-y bg-gray-950 text-gray-300 border border-gray-800 rounded-lg p-4 focus:outline-none focus:border-indigo-500 transition-all"
+                    className="w-full font-mono text-xs leading-relaxed min-h-[400px] resize-y bg-gray-950 text-gray-300 border border-gray-800  p-4 focus:outline-none focus:border-gray-500 transition-all"
                   />
                 </div>
               </div>
@@ -467,7 +466,7 @@ export const CreateTemplate = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full h-9 px-4 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full h-9 px-4 bg-gray-600 text-white text-sm font-medium  hover:bg-gray-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isSubmitting ? (
                   <>
@@ -485,13 +484,13 @@ export const CreateTemplate = () => {
                     <button
                       type="button"
                       onClick={() => setShowDeleteConfirm(true)}
-                      className="w-full h-9 px-4 bg-white text-red-500 border border-red-200 hover:bg-red-50 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full h-9 px-4 bg-white text-red-500 border border-red-200 hover:bg-red-50 text-sm font-medium  transition-colors flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <Trash2 size={15} />
                       <span>Delete Template</span>
                     </button>
                   ) : (
-                    <div className="p-4 bg-red-50 border border-red-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-in fade-in">
+                    <div className="p-4 bg-red-50 border border-red-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-in fade-in">
                       <p className="text-xs font-medium text-red-800">
                         Are you sure? This cannot be undone
                       </p>
@@ -500,7 +499,7 @@ export const CreateTemplate = () => {
                           type="button"
                           disabled={isDeleting}
                           onClick={handleDelete}
-                          className="h-8 px-3 bg-red-600 text-white text-xs font-medium rounded-lg hover:bg-red-700 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                          className="h-8 px-3 bg-red-600 text-white text-xs font-medium  hover:bg-red-700 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                         >
                           {isDeleting && <Loader2 size={13} className="animate-spin" />}
                           Confirm Delete
@@ -509,7 +508,7 @@ export const CreateTemplate = () => {
                           type="button"
                           disabled={isDeleting}
                           onClick={() => setShowDeleteConfirm(false)}
-                          className="h-8 px-3 bg-white border border-gray-300 text-gray-700 text-xs font-medium rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                          className="h-8 px-3 bg-white border border-gray-300 text-gray-700 text-xs font-medium  hover:bg-gray-50 transition-colors cursor-pointer"
                         >
                           Cancel
                         </button>
@@ -525,11 +524,11 @@ export const CreateTemplate = () => {
           <div className="lg:col-span-2">
             <div className="sticky top-4 h-[calc(100vh-6rem)] flex flex-col gap-4">
               {/* Card 1 — Live Preview */}
-              <div className="flex-1 flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+              <div className="flex-1 flex flex-col bg-white border border-gray-400 overflow-hidden ">
                 {/* Header */}
                 <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
                   <div className="flex items-center gap-2">
-                    <Eye size={16} className="text-indigo-600" />
+                    <Eye size={16} className="text-gray-600" />
                     <span className="text-xs font-semibold text-gray-900">
                       Live preview
                     </span>
@@ -553,9 +552,9 @@ export const CreateTemplate = () => {
               </div>
 
               {/* Card 2 — Detected Variables */}
-              <div className="bg-white border border-gray-200 rounded-xl p-4 shrink-0 shadow-sm max-h-[220px] overflow-y-auto">
+              <div className="bg-white border border-gray-400 p-4 shrink-0  max-h-[220px] overflow-y-auto">
                 <div className="flex items-center gap-2 mb-3">
-                  <Variable size={16} className="text-indigo-600" />
+                  <Variable size={16} className="text-gray-600" />
                   <span className="text-xs font-semibold text-gray-900">
                     Detected variables
                   </span>
@@ -572,7 +571,7 @@ export const CreateTemplate = () => {
                       {detectedVars.map((v) => (
                         <span
                           key={v}
-                          className="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono bg-indigo-50 text-indigo-700 border border-indigo-200 font-medium"
+                          className="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono bg-gray-50 text-gray-700 border border-gray-200 font-medium"
                         >
                           {`{{${v}}}`}
                         </span>
@@ -580,17 +579,17 @@ export const CreateTemplate = () => {
                     </div>
 
                     {/* b) API snippet */}
-                    <div className="bg-gray-950 rounded-lg p-3 font-mono text-xs text-gray-300 border border-gray-800 overflow-x-auto">
+                    <div className="bg-gray-950  p-3 font-mono text-xs text-gray-300 border border-gray-800 overflow-x-auto">
                       <p className="text-[10px] text-gray-500 mb-1.5">
                         // Developer API variables payload
                       </p>
-                      <pre className="text-[11px] leading-relaxed text-indigo-300">
-{`"variables": [
+                      <pre className="text-[11px] leading-relaxed text-gray-300">
+                        {`"variables": [
 ${detectedVars
-  .map(
-    (v) => `  { "variableName": "${v}", "variableValue": "..." }`
-  )
-  .join(",\n")}
+                            .map(
+                              (v) => `  { "variableName": "${v}", "variableValue": "..." }`
+                            )
+                            .join(",\n")}
 ]`}
                       </pre>
                     </div>

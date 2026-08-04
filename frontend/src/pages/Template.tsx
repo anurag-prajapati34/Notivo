@@ -81,14 +81,14 @@ export const Template = () => {
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => navigate('/templates/create')}
-                            className="h-9 px-4 bg-indigo-600 text-white text-sm font-medium rounded-lg flex items-center gap-1.5 hover:bg-indigo-700 transition-colors cursor-pointer"
+                            className="h-9 px-4 bg-gray-600 text-white text-sm font-medium  flex items-center gap-1.5 hover:bg-gray-700 transition-colors cursor-pointer"
                         >
                             <Plus size={15} />
                             New Template
                         </button>
                         <button
                             onClick={fetchTemplates}
-                            className="h-9 px-3 bg-white border border-gray-400 flex items-center gap-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors rounded-lg cursor-pointer"
+                            className="h-9 px-3 bg-white border border-gray-400 flex items-center gap-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors  cursor-pointer"
                         >
                             <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
                             Refresh
