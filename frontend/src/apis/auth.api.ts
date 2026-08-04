@@ -27,6 +27,18 @@ export const login = async (input: Login) => {
   )) as ApiResponseType<LoginResponseType>;
 
   localStorage.setItem(getAuthTokenKey(), response.data.token);
+  localStorage.setItem(
+    "user",
+    JSON.stringify({
+      email: response.data.email,
+      mobile: response.data.mobile,
+      dialCode: response.data.dialCode,
+      firstName: response.data.firstName,
+      middleName: response.data.middleName,
+      lastName: response.data.lastName,
+      userType: response.data.userType,
+    }),
+  );
 
   return response;
 };

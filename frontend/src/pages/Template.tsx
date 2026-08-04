@@ -2,17 +2,17 @@
 
 import {
     LayoutTemplate,
+    Plus,
     RefreshCw,
     Search
 } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { getEmailTemplatesApi } from "../apis/email.api"
 import { EmailTemplatePreview } from "../components/EmailTemplatePreview"
 import { TemplateCard } from "../components/TemplateCard"
+import { useAuthContext } from "../hooks"
 import type { EmailTemplate } from "../types"
-
-
-
 
 // ─── Empty state ──────────────────────────────────────────────────────────────
 
@@ -35,6 +35,10 @@ const EmptyState = ({ filtered }: { filtered: boolean }) => (
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export const Template = () => {
+    const navigate = useNavigate()
+    const { user } = useAuthContext()
+    const isGuest = user?.userType?.toLowerCase() === "guest"
+
     const [templates, setTemplates] = useState<EmailTemplate[]>([])
     const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate | null>(null)
     const [isLoading, setIsLoading] = useState(true)
@@ -73,18 +77,36 @@ export const Template = () => {
                 {/* Page header */}
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h1 className="text-lg font-medium text-gray-900">Templates</h1>
+                        <div className="flex items-baseline gap-2 flex-wrap">
+                            <h1 className="text-lg font-medium text-gray-900">Templates</h1>
+                            {isGuest && (
+                                <span className="text-xs text-gray-500">
+                                    (Guest users cannot create, edit, or delete templates.)
+                                </span>
+                            )}
+                        </div>
                         <p className="text-sm text-gray-500 mt-0.5">
                             {templates.length} template{templates.length !== 1 ? "s" : ""} available
                         </p>
                     </div>
-                    <button
-                        onClick={fetchTemplates}
-                        className="h-9 px-3 bg-white border border-gray-400  flex items-center gap-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
-                    >
-                        <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
-                        Refresh
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => !isGuest && navigate('/templates/create')}
+                            disabled={isGuest}
+                            className="h-9 px-4 bg-gray-600 text-white text-sm font-medium flex items-center gap-1.5 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                            title={isGuest ? "Guest users cannot create templates" : undefined}
+                        >
+                            <Plus size={15} />
+                            New Template
+                        </button>
+                        <button
+                            onClick={fetchTemplates}
+                            className="h-9 px-3 bg-white border border-gray-400 flex items-center gap-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors cursor-pointer"
+                        >
+                            <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
+                            Refresh
+                        </button>
+                    </div>
                 </div>
 
                 {/* Search */}
@@ -126,6 +148,7 @@ export const Template = () => {
                                     key={template.templateId}
                                     template={template}
                                     onPreview={setSelectedTemplate}
+                                    isGuest={isGuest}
                                 />
                             ))
                         )}

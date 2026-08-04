@@ -2,10 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { signup } from "../apis/auth.api";
-import { useAuthContext } from "../hooks";
 
 export const Signup = () => {
-    const { setIsLoggedIn } = useAuthContext();
+
     const navigate = useNavigate();
     const [signupDetails, setSignupDetails] = useState<{
         email: string | null;
@@ -41,7 +40,6 @@ export const Signup = () => {
         const result = await signup(signupDetails as any);
         // console.log("result--", result?.message)
         if (result?.success) {
-            setIsLoggedIn(true);
             toast.success('Account created successfully, please login');
             navigate('/login')
         } else {

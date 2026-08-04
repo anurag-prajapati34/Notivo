@@ -6,13 +6,13 @@ import {
     Copy,
     Eye,
     Hash,
+    Pencil,
     Variable
 } from "lucide-react"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useCopy } from "../hooks"
 import type { EmailTemplate, EmailTemplateVariable } from "../types"
-
-
 
 const VariablePill = ({ variable }: { variable: EmailTemplateVariable }) => (
     <span
@@ -30,10 +30,13 @@ const VariablePill = ({ variable }: { variable: EmailTemplateVariable }) => (
 export const TemplateCard = ({
     template,
     onPreview,
+    isGuest,
 }: {
     template: EmailTemplate
     onPreview: (t: EmailTemplate) => void
+    isGuest?: boolean
 }) => {
+    const navigate = useNavigate()
     const { copiedKey, copy } = useCopy()
     const [showSnippet, setShowSnippet] = useState(false)
 
@@ -158,14 +161,23 @@ ${template.variables
             <div className="px-5 pb-5 pt-3 flex gap-2 border-t border-gray-50">
                 <button
                     onClick={() => onPreview(template)}
-                    className="flex-1 h-8 flex items-center justify-center gap-1.5 text-xs font-medium text-gray-700 bg-gray-50 border border-gray-400  hover:bg-gray-100 transition-colors"
+                    className="flex-1 h-8 flex items-center justify-center gap-1.5 text-xs font-medium text-gray-700 bg-gray-50 border border-gray-400  hover:bg-gray-100 transition-colors cursor-pointer"
                 >
                     <Eye size={13} />
                     Preview
                 </button>
                 <button
+                    onClick={() => !isGuest && navigate(`/templates/edit/${template.templateId}`)}
+                    disabled={isGuest}
+                    className="flex-1 h-8 flex items-center justify-center gap-1.5 text-xs font-medium text-gray-700 bg-gray-50 border border-gray-400 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                    title={isGuest ? "Guest users cannot edit templates" : undefined}
+                >
+                    <Pencil size={13} />
+                    Edit
+                </button>
+                <button
                     onClick={() => setShowSnippet((p) => !p)}
-                    className={`flex-1 h-8 flex items-center justify-center gap-1.5 text-xs font-medium  border transition-colors ${showSnippet
+                    className={`flex-1 h-8 flex items-center justify-center gap-1.5 text-xs font-medium  border transition-colors cursor-pointer ${showSnippet
                         ? "bg-gray-50 text-gray-700 border-gray-200"
                         : "text-gray-700 bg-gray-50 border-gray-400 hover:bg-gray-100"
                         }`}
