@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import { useAuthContext } from './hooks'
+import { CreateTemplate } from './pages/CreateTemplate'
 import { Dashboard } from './pages/Dashboard'
 import { EmailDetails } from './pages/EmailDetails'
 import { Emails } from './pages/Emails'
@@ -39,6 +40,8 @@ function App() {
           <Route index element={<Dashboard />} />
           {/* <Route path="dashboard" element={<Dashboard />} /> */}
           <Route path="templates" element={<Template />} />
+          <Route path="templates/create" element={<CreateTemplate />} />
+          <Route path="templates/edit/:templateId" element={<CreateTemplate />} />
           <Route path="emails" element={<Emails />} />
           <Route path="emails/:id" element={<EmailDetails />} />
           <Route path="send-email" element={<SendEmail />} />

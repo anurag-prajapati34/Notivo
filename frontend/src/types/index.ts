@@ -30,22 +30,39 @@ export interface ApiResponseType<T> {
 }
 
 export interface EmailTemplateVariable {
-  variableName: string;
-  isRequired: boolean;
+  emailTemplateVariableId?: number;
   templateId: string;
-  defaultValue: string | null;
+  variableName: string;
+  isRequired?: boolean;
+  defaultValue?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface EmailTemplate {
+  emailTemplateId?: number;
   templateId: string;
+  userId?: number;
   name: string;
-  subject: string;
   slug: string;
+  subject: string;
   html: string;
-  description: string;
-  userId: number;
+  description?: string | null;
+  status?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
   variables: EmailTemplateVariable[];
 }
+
+export interface CreateTemplatePayload {
+  name: string;
+  slug: string;
+  subject: string;
+  html: string;
+  description?: string;
+}
+
+export type UpdateTemplatePayload = Partial<CreateTemplatePayload>;
 
 export interface Email {
   templateId: string;

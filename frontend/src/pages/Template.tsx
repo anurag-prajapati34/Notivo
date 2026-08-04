@@ -2,17 +2,16 @@
 
 import {
     LayoutTemplate,
+    Plus,
     RefreshCw,
     Search
 } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { getEmailTemplatesApi } from "../apis/email.api"
 import { EmailTemplatePreview } from "../components/EmailTemplatePreview"
 import { TemplateCard } from "../components/TemplateCard"
 import type { EmailTemplate } from "../types"
-
-
-
 
 // ─── Empty state ──────────────────────────────────────────────────────────────
 
@@ -35,6 +34,7 @@ const EmptyState = ({ filtered }: { filtered: boolean }) => (
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export const Template = () => {
+    const navigate = useNavigate()
     const [templates, setTemplates] = useState<EmailTemplate[]>([])
     const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate | null>(null)
     const [isLoading, setIsLoading] = useState(true)
@@ -78,13 +78,22 @@ export const Template = () => {
                             {templates.length} template{templates.length !== 1 ? "s" : ""} available
                         </p>
                     </div>
-                    <button
-                        onClick={fetchTemplates}
-                        className="h-9 px-3 bg-white border border-gray-400  flex items-center gap-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
-                    >
-                        <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
-                        Refresh
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => navigate('/templates/create')}
+                            className="h-9 px-4 bg-indigo-600 text-white text-sm font-medium rounded-lg flex items-center gap-1.5 hover:bg-indigo-700 transition-colors cursor-pointer"
+                        >
+                            <Plus size={15} />
+                            New Template
+                        </button>
+                        <button
+                            onClick={fetchTemplates}
+                            className="h-9 px-3 bg-white border border-gray-400 flex items-center gap-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors rounded-lg cursor-pointer"
+                        >
+                            <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
+                            Refresh
+                        </button>
+                    </div>
                 </div>
 
                 {/* Search */}

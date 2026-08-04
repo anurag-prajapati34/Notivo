@@ -25,6 +25,7 @@ export const makeGetReuqest = async (
     return await response.data;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
@@ -40,5 +41,37 @@ export const makePostRequest = async (
     return response.data as ApiResponseType<any>;
   } catch (error) {
     console.error(error);
+    throw error;
+  }
+};
+
+export const makePutRequest = async (
+  url: string,
+  data: any,
+  options?: {
+    headers?: any;
+  },
+) => {
+  try {
+    const response = await axios.put(url, data, options);
+    return response.data as ApiResponseType<any>;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const makeDeleteRequest = async (
+  url: string,
+  options?: {
+    headers?: any;
+  },
+) => {
+  try {
+    const response = await axios.delete(url, options);
+    return response.data as ApiResponseType<any>;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 };

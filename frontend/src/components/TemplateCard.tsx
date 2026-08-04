@@ -6,13 +6,13 @@ import {
     Copy,
     Eye,
     Hash,
+    Pencil,
     Variable
 } from "lucide-react"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useCopy } from "../hooks"
 import type { EmailTemplate, EmailTemplateVariable } from "../types"
-
-
 
 const VariablePill = ({ variable }: { variable: EmailTemplateVariable }) => (
     <span
@@ -34,6 +34,7 @@ export const TemplateCard = ({
     template: EmailTemplate
     onPreview: (t: EmailTemplate) => void
 }) => {
+    const navigate = useNavigate()
     const { copiedKey, copy } = useCopy()
     const [showSnippet, setShowSnippet] = useState(false)
 
@@ -162,6 +163,13 @@ ${template.variables
                 >
                     <Eye size={13} />
                     Preview
+                </button>
+                <button
+                    onClick={() => navigate(`/templates/edit/${template.templateId}`)}
+                    className="flex-1 h-8 flex items-center justify-center gap-1.5 text-xs font-medium text-gray-700 bg-gray-50 border border-gray-400 hover:bg-gray-100 transition-colors"
+                >
+                    <Pencil size={13} />
+                    Edit
                 </button>
                 <button
                     onClick={() => setShowSnippet((p) => !p)}
