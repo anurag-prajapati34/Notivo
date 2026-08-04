@@ -21,6 +21,13 @@ export interface Signup {
 
 export interface LoginResponseType {
   token: string;
+  email: string;
+  mobile: string;
+  dialCode: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  userType: string;
 }
 
 export interface ApiResponseType<T> {

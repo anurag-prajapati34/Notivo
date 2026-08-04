@@ -5,11 +5,9 @@ import { TopBar } from "../components/TopBar";
 import { useAuthContext } from "../hooks";
 
 export const Home = () => {
-    const { isLoggedIn, checkAuth } = useAuthContext()
+    const { isLoggedIn } = useAuthContext()
     const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    
-    checkAuth();
     useEffect(() => {
         if (!isLoggedIn) {
             navigate('/login')

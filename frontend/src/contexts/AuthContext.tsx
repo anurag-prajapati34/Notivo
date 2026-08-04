@@ -1,41 +1,36 @@
 import { createContext, useState } from "react";
 import type { User } from "../types";
-import { getAuthTokenKey } from "../utils/auth-helpers";
+import { getAuthTokenKey, getAuthUser, getAuthUserKey } from "../utils/auth-helpers";
 
 
 interface AuthContextType {
     user: User | null
-    setUser: React.Dispatch<React.SetStateAction<User | null>>
     isLoggedIn: boolean
-    setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
-    checkAuth: () => void
     logout: () => void
+    setUser: React.Dispatch<React.SetStateAction<User | null>>
 }
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [user, setUser] = useState<User | null>(null);
-    const checkAuth = () => {
+    const [user, setUser] = useState<User | null>(() => {
         const token = localStorage.getItem(getAuthTokenKey());
-        // console.log("token----", token)
-        if (token) {
-            setIsLoggedIn(true);
-        }
-    }
+        return token ? getAuthUser() : null;
+    });
+
+    const isLoggedIn = !!user;
+
     const logout = () => {
         localStorage.removeItem(getAuthTokenKey());
-        setIsLoggedIn(false);
+        localStorage.removeItem(getAuthUserKey());
         setUser(null);
-    }
+    };
+
     return (
         <AuthContext.Provider value={{
             user,
-            setUser,
             isLoggedIn,
-            setIsLoggedIn,
-            checkAuth,
-            logout
+            logout,
+            setUser
 
         }} >
             {children}

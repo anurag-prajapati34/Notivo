@@ -256,7 +256,7 @@ const Step = ({
 export const Landing = () => {
   const featuresRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate();
-  const { setIsLoggedIn, setUser } = useAuthContext();
+  const { setUser } = useAuthContext();
 
   const handleGuestLogin = async (e: any) => {
     e.preventDefault();
@@ -274,7 +274,7 @@ export const Landing = () => {
       });
       // console.log("result---", result)
       if (result.success) {
-        setIsLoggedIn(true);
+
         const { token, ...user } = result.data
         setUser(user as any);
         toast.success('Logged in successfully');

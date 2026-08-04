@@ -5,7 +5,7 @@ import { login } from "../apis/auth.api";
 import { useAuthContext } from "../hooks";
 
 export const LoginPage = () => {
-    const { setIsLoggedIn, isLoggedIn, checkAuth, setUser } = useAuthContext();
+    const { isLoggedIn, setUser } = useAuthContext();
     const navigate = useNavigate();
     const [loginDetails, setLoginDetails] = useState<{
         email: string | null;
@@ -44,10 +44,9 @@ export const LoginPage = () => {
 
             // console.log("result---", result)
             if (result.success) {
-                setIsLoggedIn(true);
-                const { token, ...user } = result.data
-                setUser(user as any);
                 toast.success('Logged in successfully');
+                const { token, ...user } = result.data
+                setUser(user);
                 navigate('/')
             } else {
                 toast.error(result.message ?? 'Failed to login');
@@ -57,7 +56,6 @@ export const LoginPage = () => {
         }
     }
 
-    checkAuth();
 
     useEffect(() => {
         if (!isLoggedIn) {
