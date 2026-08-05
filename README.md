@@ -87,7 +87,6 @@ D --> F[(MySQL Logs)]
 | Retry strategy | Exponential backoff | Prevents hammering a struggling SMTP server |
 | Worker process | Separate Node process | Isolates failures — API stays up if worker crashes |
 | Email delivery | SendGrid HTTP API | HTTPS (port 443) — no hosting platform port restrictions |
-| Credential storage | AES-256 encrypted | DB breach doesn't expose usable credentials |
 
 ---
 
@@ -102,7 +101,6 @@ D --> F[(MySQL Logs)]
 | **Custom template builder** | Live HTML editor with real-time preview, automatic variable detection, and starter templates. |
 | **Scheduled delivery** | BullMQ delayed jobs fire at exact timestamp. No cron jobs, no DB polling. |
 | **Multi-recipient sending** | Single API call sends to multiple recipients — each queued as an independent job with its own retry lifecycle. |
-| **Encrypted credential storage** | SendGrid API keys stored AES-256 encrypted. Encryption key stored separately in environment variables. |
 | **Multi-tenant isolation** | Every query filters by `userId`. Templates, emails, and credentials are never shared across accounts. |
 | **Dashboard analytics** | Delivery rate, 7-day volume chart, template usage distribution, delivery time metrics. |
 | **API key authentication** | Prefixed API keys (`notivo_xxx`) with single-click regeneration. |
