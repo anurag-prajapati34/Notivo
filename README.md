@@ -12,7 +12,7 @@
 
 **A developer-facing email notification delivery service with async job processing, exponential backoff retry logic, and full per-attempt delivery tracking.**
 
-[🌐 Live Demo](https://notivo.vercel.app) · [💻 GitHub](https://github.com/anurag-prajapati34/notivo) · [👤 Portfolio](https://anurag-prajapati.vercel.app)
+[🌐 Live Demo](https://notivo.anuragdev.com) · [💻 GitHub](https://github.com/anurag-prajapati34/notivo) · [👤 Portfolio](https://anuragdev.com/)
 
 > Built to demonstrate async backend architecture — BullMQ job queues, retry patterns, multi-tenant credential isolation, and delivery observability.
 
@@ -24,11 +24,11 @@
 
 > Dashboard showing delivery analytics, email status breakdown, and retry timeline
 
-![Notivo Dashboard](./assets/dashboard-preview.png)
+![Notivo Dashboard](./assets/dashboard.png)
 
 > Log Detail — full retry timeline showing per-attempt timestamps and error messages
 
-![Notivo Log Detail](./assets/log-detail-preview.png)
+![Notivo Log Detail](./assets/email-log.png)
 
 ---
 
@@ -544,7 +544,7 @@ Backend Developer · Bangalore, India
 
 [![GitHub](https://img.shields.io/badge/GitHub-anurag--prajapati34-181717?style=flat-square&logo=github)](https://github.com/anurag-prajapati34)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-anurag--prajapati34-0A66C2?style=flat-square&logo=linkedin)](https://linkedin.com/in/anurag-prajapati34)
-[![Portfolio](https://img.shields.io/badge/Portfolio-anurag--prajapati.vercel.app-6366f1?style=flat-square)](https://anurag-prajapati.vercel.app)
+[![Portfolio](https://img.shields.io/badge/Portfolio-anurag--prajapati.vercel.app-6366f1?style=flat-square)](https://anuragdev.com/)
 
 ---
 
