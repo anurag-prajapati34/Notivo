@@ -10,9 +10,9 @@
 
 # Notivo
 
-**A developer-facing email notification delivery service with async job processing, exponential backoff retry logic, and full per-attempt delivery tracking.**
+**Notivo is a developer-first email notification platform that enables applications to send transactional and scheduled emails through a simple REST API while handling asynchronous processing, retries, template management, and delivery tracking behind the scenes.**
 
-[🌐 Live Demo](https://notivo.vercel.app) · [💻 GitHub](https://github.com/anurag-prajapati34/notivo) · [👤 Portfolio](https://anurag-prajapati.vercel.app)
+<!-- [🌐 Live Demo](https://notivo.vercel.app) · [💻 GitHub](https://github.com/anurag-prajapati34/notivo) · [👤 Portfolio](https://anurag-prajapati.vercel.app)
 
 > Built to demonstrate async backend architecture — BullMQ job queues, retry patterns, multi-tenant credential isolation, and delivery observability.
 
@@ -30,8 +30,8 @@
 
 ![Notivo Log Detail](./assets/log-detail-preview.png)
 
----
-
+--- -->
+<!--
 ## 📖 About
 
 Notivo is a notification delivery service built for developers. Instead of managing email infrastructure inside their own backend, developers integrate a single REST API. Notivo handles everything — template rendering, job queuing, SMTP delivery, retry on failure, and delivery logging.
@@ -42,78 +42,51 @@ Notivo is a notification delivery service built for developers. Instead of manag
 
 **Why I built this:** As a backend developer with 1 year of experience, I built Notivo to demonstrate async system design — specifically job queue architecture, retry patterns, encrypted credential storage, and delivery observability at a platform level.
 
----
+--- -->
 
 ## 🏗️ Architecture
 
 ```mermaid
-flowchart TD
-    A[Developer App] -->|POST /api/v1/send\nAuthorization: Bearer notivo_xxx| B[Express API Server]
-    
-    B -->|1. Validate API key| C{API Key Valid?}
-    C -->|No| D[401 Unauthorized]
-    C -->|Yes| E[Find Template by slug + userId]
-    
-    E -->|2. Validate variables| F{All required vars present?}
-    F -->|No| G[400 Missing variables]
-    F -->|Yes| H[Render HTML — replace variables]
-    
-    H -->|3. Save email log\nstatus: PENDING| I[(MySQL - Railway)]
-    H -->|4. addJob to queue| J[BullMQ Queue\nUpstash Redis]
-    
-    J -->|Returns immediately| K[200 OK\njobId returned]
-    
-    J -->|Worker picks up job| L[Worker Process]
-    
-    L -->|Attempt 1| M{SMTP Success?}
-    M -->|Yes| N[Update status: DELIVERED\nLog attempt: success]
-    M -->|No| O[Log attempt: failed\nwith error message]
-    
-    O -->|Wait 30s backoff| P[Attempt 2]
-    P -->|Fail| Q[Wait 60s backoff]
-    Q -->|Attempt 3| R{Final attempt}
-    R -->|Success| N
-    R -->|Fail| S[Update status: FAILED\nAll 3 attempts exhausted]
-    
-    N --> I
-    S --> I
+flowchart LR
 
-    style A fill:#6366f1,color:#fff
-    style J fill:#DC382D,color:#fff
-    style L fill:#f59e0b,color:#fff
-    style I fill:#10b981,color:#fff
+A[Developer]
+--> |POST /send| B[REST API]
+
+B -->|Queue Job| C[BullMQ + Redis]
+
+B -->|Immediate Response| A
+
+C --> D[Worker]
+
+D --> E[SendGrid]
+
+D --> F[(MySQL Logs)]
 ```
 
 ### Key Architectural Decisions
 
-| Decision | Choice | Reasoning |
-|---|---|---|
-| Sync vs Async email | Async (BullMQ) | API response must not block on SMTP latency |
-| Queue store | Redis (Upstash) | In-memory, persistent, native BullMQ support |
-| Retry strategy | Exponential backoff | Prevents hammering a struggling SMTP server |
-| Worker process | Separate Node process | Isolates failures — API stays up if worker crashes |
-| Email delivery | SendGrid HTTP API | HTTPS (port 443) — no hosting platform port restrictions |
-| Credential storage | AES-256 encrypted | DB breach doesn't expose usable credentials |
-| Multi-tenancy | userId filter on every query | Complete data isolation per account |
+| Decision            | Choice                | Reasoning                                                |
+| ------------------- | --------------------- | -------------------------------------------------------- |
+| Sync vs Async email | Async (BullMQ)        | API response must not block on SMTP latency              |
+| Queue store         | Redis (Upstash)       | In-memory, persistent, native BullMQ support             |
+| Retry strategy      | Exponential backoff   | Prevents hammering a struggling SMTP server              |
+| Worker process      | Separate Node process | Isolates failures — API stays up if worker crashes       |
+| Email delivery      | SendGrid HTTP API     | HTTPS (port 443) — no hosting platform port restrictions |
 
 ---
 
 ## ✨ Features
 
-| Feature | What's built |
-|---|---|
-| **Async job processing** | BullMQ queue backed by Upstash Redis. API returns in <5ms regardless of SMTP speed. |
-| **Exponential backoff retry** | Failed jobs retry 3 times — 30s → 60s → 120s delays. Each attempt saved with error message and timestamp. |
-| **Per-attempt delivery timeline** | Log Detail page shows full retry history — which attempt failed, the exact error, when each attempt fired. |
-| **Template system** | HTML templates with `{{variable}}` placeholders. Variables auto-extracted, validated before queuing, replaced at render time. |
-| **Custom template builder** | Live HTML editor with real-time preview, automatic variable detection, and starter templates. |
-| **Scheduled delivery** | BullMQ delayed jobs fire at exact timestamp. No cron jobs, no DB polling. |
-| **Multi-recipient sending** | Single API call sends to multiple recipients — each queued as independent job with its own retry lifecycle. |
-| **Encrypted credential storage** | SendGrid API keys stored AES-256 encrypted. Encryption key stored separately in environment variables. |
-| **Multi-tenant isolation** | Every query filters by `userId`. Templates, emails, and credentials are never shared across accounts. |
-| **Dashboard analytics** | Delivery rate, 7-day volume chart, template usage distribution, delivery time metrics. |
-| **API key authentication** | Prefixed API keys (`notivo_xxx`) with single-click regeneration. |
-| **Demo account** | One-click demo login with pre-seeded realistic data — no signup required. |
+| Feature                                | Description                                                                                   |
+| -------------------------------------- | --------------------------------------------------------------------------------------------- |
+| **Transactional Email API**            | Send emails through a simple REST API with template-based payloads.                           |
+| **Asynchronous Job Processing**        | Email requests are queued with BullMQ and processed in the background for fast API responses. |
+| **Automatic Retry Mechanism**          | Failed deliveries are retried with exponential backoff to improve reliability.                |
+| **Template Management**                | Create, edit, and manage reusable HTML email templates with dynamic variables.                |
+| **Scheduled & Multi-Recipient Emails** | Schedule emails for future delivery and send to multiple recipients in a single request.      |
+| **Delivery Tracking & Logs**           | Monitor email status and view detailed delivery history for every email.                      |
+| **Dashboard Analytics**                | Track email activity, delivery statistics, and template usage from a centralized dashboard.   |
+| **Secure Multi-Tenant Architecture**   | API key authentication with isolated user data and encrypted email credentials.               |
 
 ---
 
@@ -121,44 +94,44 @@ flowchart TD
 
 ### Backend
 
-| Technology | Purpose | Why chosen |
-|---|---|---|
-| Node.js | Runtime | Non-blocking I/O suits async email processing |
-| TypeScript | Language | Type safety across job payloads, DB queries, API contracts |
-| Express.js | HTTP framework | Minimal, flexible — familiar from production work |
-| BullMQ | Job queue | Redis-backed, supports delayed jobs, retries, priority, events |
-| Upstash Redis | Redis host | Serverless Redis with free tier and TLS — no self-hosted infra |
-| MySQL | Database | Relational — email logs and attempts have clear relational structure |
-| Drizzle ORM | DB queries | Type-safe, lightweight, familiar from current job |
-| SendGrid | Email delivery | HTTP API (port 443) — works on all hosting platforms |
-| Zod | Validation | Runtime validation + TypeScript inference in one |
-| AES-256 (crypto-js) | Encryption | Industry standard for symmetric encryption at rest |
-| JWT | Authentication | Stateless auth via httpOnly cookies |
-| bcryptjs | Password hashing | One-way hash — plain text passwords never stored |
+| Technology          | Purpose          | Why chosen                                                           |
+| ------------------- | ---------------- | -------------------------------------------------------------------- |
+| Node.js             | Runtime          | Non-blocking I/O suits async email processing                        |
+| TypeScript          | Language         | Type safety across job payloads, DB queries, API contracts           |
+| Express.js          | HTTP framework   | Minimal, flexible — familiar from production work                    |
+| BullMQ              | Job queue        | Redis-backed, supports delayed jobs, retries, priority, events       |
+| Upstash Redis       | Redis host       | Serverless Redis with free tier and TLS — no self-hosted infra       |
+| MySQL               | Database         | Relational — email logs and attempts have clear relational structure |
+| Drizzle ORM         | DB queries       | Type-safe, lightweight, familiar from current job                    |
+| SendGrid            | Email delivery   | HTTP API (port 443) — works on all hosting platforms                 |
+| Zod                 | Validation       | Runtime validation + TypeScript inference in one                     |
+| AES-256 (crypto-js) | Encryption       | Industry standard for symmetric encryption at rest                   |
+| JWT                 | Authentication   | Stateless auth via httpOnly cookies                                  |
+| bcryptjs            | Password hashing | One-way hash — plain text passwords never stored                     |
 
 ### Frontend
 
-| Technology | Purpose | Why chosen |
-|---|---|---|
-| React 18 | UI framework | Component model, ecosystem, familiarity |
-| TypeScript | Language | Type-safe API responses and component props |
-| Vite | Build tool | Faster dev server than CRA, native ESM |
-| Tailwind CSS v4 | Styling | Utility-first, consistent design without CSS files |
-| React Query | Server state | Caching, loading states, refetching without manual useEffect |
-| Axios | HTTP client | Interceptors for auth headers, better error handling than fetch |
-| React Router v6 | Navigation | Nested routes, layout pattern |
-| Recharts | Charts | Composable chart components, good TypeScript support |
-| Lucide React | Icons | Consistent stroke weight, tree-shakeable |
+| Technology      | Purpose      | Why chosen                                                      |
+| --------------- | ------------ | --------------------------------------------------------------- |
+| React 18        | UI framework | Component model, ecosystem, familiarity                         |
+| TypeScript      | Language     | Type-safe API responses and component props                     |
+| Vite            | Build tool   | Faster dev server than CRA, native ESM                          |
+| Tailwind CSS v4 | Styling      | Utility-first, consistent design without CSS files              |
+| React Query     | Server state | Caching, loading states, refetching without manual useEffect    |
+| Axios           | HTTP client  | Interceptors for auth headers, better error handling than fetch |
+| React Router v6 | Navigation   | Nested routes, layout pattern                                   |
+| Recharts        | Charts       | Composable chart components, good TypeScript support            |
+| Lucide React    | Icons        | Consistent stroke weight, tree-shakeable                        |
 
 ### Infrastructure
 
-| Service | What runs there |
-|---|---|
-| Vercel | React frontend |
-| Render | Express API server + BullMQ worker |
-| Railway | MySQL database |
-| Upstash | Redis (BullMQ queue store) |
-| SendGrid | Email delivery |
+| Service  | What runs there                    |
+| -------- | ---------------------------------- |
+| Vercel   | React frontend                     |
+| Render   | Express API server + BullMQ worker |
+| Aiven    | MySQL database                     |
+| Upstash  | Redis (BullMQ queue store)         |
+| SendGrid | Email delivery                     |
 
 ---
 
@@ -167,9 +140,9 @@ flowchart TD
 ### Prerequisites
 
 - Node.js 18+
-- MySQL database (local or Railway)
-- Redis instance (local or Upstash)
-- SendGrid account (free tier — 100 emails/day)
+- MySQL database
+- Redis instance
+- SendGrid account
 
 ### Clone the repository
 
@@ -227,7 +200,7 @@ npm run dev
 Frontend runs at `http://localhost:5173`
 Backend runs at `http://localhost:3000`
 
----
+## <!--
 
 ## 🔑 Environment Variables
 
@@ -257,7 +230,7 @@ NODE_ENV=development
 VITE_API_URL=http://localhost:3000
 ```
 
----
+--- -->
 
 ## 📡 API Reference
 
@@ -299,11 +272,11 @@ Content-Type: application/json
 }
 ```
 
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `templateId` | string | ✅ | The slug of your template (e.g. `welcome-email`) |
-| `recipients` | string[] | ✅ | Array of recipient email addresses |
-| `variables` | object[] | Depends | Required variables for the selected template |
+| Field        | Type     | Required | Description                                      |
+| ------------ | -------- | -------- | ------------------------------------------------ |
+| `templateId` | string   | ✅       | The slug of your template (e.g. `welcome-email`) |
+| `recipients` | string[] | ✅       | Array of recipient email addresses               |
+| `variables`  | object[] | Depends  | Required variables for the selected template     |
 
 **Responses**
 
@@ -443,7 +416,7 @@ This is the core of the system. Understanding this flow is understanding Notivo:
 8. 200 OK returned immediately ← API is done
          │
          ↓ (background, separate process)
-         
+
 9. Worker picks up job
          │
 10. Fetch SendGrid credentials for userId
@@ -552,6 +525,6 @@ Backend Developer · Bangalore, India
 
 Built with Node.js · BullMQ · Redis · MySQL · React · TypeScript
 
-*A portfolio project demonstrating async backend architecture and system design.*
+_A portfolio project demonstrating async backend architecture and system design._
 
 </div>
