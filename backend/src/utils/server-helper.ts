@@ -81,7 +81,7 @@ export async function startScheduledSelfPinging(url: string) {
           );
         }
 
-        if (currentHour === startHour && totalPings === 1) {
+        if (totalPings === 1 || totalPings === 5 || totalPings === 10) {
           logger.info(
             `🌱[SEED][${timestamp}] Starting demo data seeding process`,
           );
