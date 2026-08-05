@@ -4,7 +4,7 @@ import { emailTemplateVariables } from "@/database/schema/email-template-variabl
 import { emailTemplates } from "@/database/schema/email-templates.js";
 import { emails } from "@/database/schema/emails.js";
 import { dayjs, getCurrentIndianDate } from "@/utils/date-helpers.js";
-import { emailStatus } from "@/utils/enum.js";
+import { emailProviders, emailStatus } from "@/utils/enum.js";
 import { logger } from "@/utils/logger.js";
 import "dotenv/config.js";
 import { eq, inArray } from "drizzle-orm";
@@ -658,6 +658,7 @@ export const seedDemoData = async (input: {
           attempts: plan.totalAttempts,
           lastErrorMessage: lastError,
           deliveredAt,
+          provider: emailProviders.SENDGRID,
           createdAt: createdAt,
           updatedAt: createdAt,
         });
