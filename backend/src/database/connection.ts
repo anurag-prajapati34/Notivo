@@ -9,6 +9,11 @@ const pool = mysql.createPool({
   password: config.DB.PASSWORD,
   database: config.DB.DATABASE,
   port: config.DB.PORT,
+
+  waitForConnections: true,
+  connectionLimit: 10,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0,
 });
 
 export const db = drizzle(pool);
