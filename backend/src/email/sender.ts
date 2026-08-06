@@ -1,3 +1,4 @@
+import { dcrypt } from "@/utils/encryption.js";
 import { emailProviders } from "@/utils/enum.js";
 import { logger } from "@/utils/logger.js";
 import sgMail from "@sendgrid/mail";
@@ -59,7 +60,10 @@ export const sendEmail = async (
 ): Promise<EmailResult> => {
   const { creds, emailData } = options;
   try {
-    const transporter = await createTransporter(creds);
+    const transporter = await createTransporter({
+      ...creds,
+      passKey: dcrypt(creds.passKey),
+    });
 
     const mailOptions = {
       from: {
@@ -112,7 +116,7 @@ export const sendEmailUsingSendGrid = async (
   const { creds, emailData } = options;
 
   try {
-    const SEND_GRID_API_KEY = creds.apiKey;
+    const SEND_GRID_API_KEY = dcrypt(creds.apiKey);
     if (!SEND_GRID_API_KEY) {
       throw new Error("SendGrid API key is missing");
     }

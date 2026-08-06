@@ -4,6 +4,7 @@ import { slugs } from "@/database/seed/email-templates.js";
 import { EmailJobData } from "@/email/index.js";
 import { addEmailJob } from "@/jobs/email-queue.js";
 import { dayjs, getCurrentIndianDate } from "@/utils/date-helpers.js";
+import { encrypt } from "@/utils/encryption.js";
 import { emailProviders, emailStatus } from "@/utils/enum.js";
 import { CustomError } from "@/utils/error-helpers.js";
 import { eq } from "drizzle-orm";
@@ -17,7 +18,6 @@ import {
   insertEmailsQuery,
 } from "./queries.js";
 import { EmailCredentials, SendEmail, SendTestEmail } from "./validator.js";
-
 export const setEmailCredsService = async (
   input: EmailCredentials & { userId: number },
 ) => {
@@ -31,7 +31,7 @@ export const setEmailCredsService = async (
       const dbPayload = {
         userId: input.userId,
         email: input.creds.email,
-        passKey: input.creds.passKey,
+        passKey: encrypt(input.creds.passKey),
         name: input.creds.name,
         username: input.creds.username,
         host: input.creds.host,
@@ -63,7 +63,7 @@ export const setEmailCredsService = async (
 
       const dbPayload = {
         userId: input.userId,
-        apiKey: input.creds.apiKey,
+        apiKey: encrypt(input.creds.apiKey),
         email: input.creds.email,
         name: input.creds.name,
         status: true,
@@ -274,14 +274,22 @@ export const sendTestEmailService = async (
       throw new CustomError("Template not found", 400);
     }
 
+    const emailCreds = await getEmailCredsService({
+      provider: input.provider,
+      userId: input.userId,
+    });
+
+    if (!emailCreds) {
+      throw new CustomError("Email credentials not found", 400);
+    }
     const recipient =
       input.provider === emailProviders.SMTP
-        ? input.creds.email
-        : input.creds.email;
+        ? emailCreds?.creds.email
+        : emailCreds?.creds.email;
     const senderName =
       input.provider === emailProviders.SMTP
-        ? input.creds.name
-        : input.creds.name || "User";
+        ? emailCreds?.creds.name
+        : emailCreds?.creds.name || "User";
 
     const variables = [
       {
@@ -310,6 +318,13 @@ export const sendTestEmailService = async (
       templateVariables,
     );
 
+    // console.log("---email creds---", {
+    //   apiKey: dcrypt((emailCreds?.creds as any).apiKey),
+    //   email: (emailCreds?.creds as any).email,
+    //   name: (emailCreds?.creds as any).name,
+    // });
+
+    // return;
     await db.transaction(async (trx) => {
       for (const toEmail of [recipient]) {
         const insertResult = await insertEmailsQuery(
@@ -347,13 +362,13 @@ export const sendTestEmailService = async (
           await addEmailJob({
             provider: emailProviders.SMTP,
             creds: {
-              email: input.creds.email,
-              passKey: input.creds.passKey,
-              name: input.creds.name,
-              host: input.creds.host,
-              port: input.creds.port,
-              secure: input.creds.secure,
-              username: input.creds.username,
+              email: (emailCreds?.creds as any).email,
+              passKey: (emailCreds?.creds as any).passKey,
+              name: (emailCreds?.creds as any).name,
+              host: (emailCreds?.creds as any).host,
+              port: (emailCreds?.creds as any).port,
+              secure: (emailCreds?.creds as any).secure,
+              username: (emailCreds?.creds as any).username,
             },
             emailData,
           });
@@ -361,9 +376,9 @@ export const sendTestEmailService = async (
           await addEmailJob({
             provider: emailProviders.SENDGRID,
             creds: {
-              apiKey: input.creds.apiKey,
-              email: input.creds.email,
-              name: input.creds.name,
+              apiKey: (emailCreds?.creds as any).apiKey,
+              email: (emailCreds?.creds as any).email,
+              name: (emailCreds?.creds as any).name,
             },
             emailData,
           });

@@ -35,7 +35,15 @@ export const getSmtpEmailCredsQuery = async (input: { userId?: number }) => {
     whereConditions.push(eq(smtpEmailCreds.userId, input.userId));
   }
   return await db
-    .select()
+    .select({
+      username: smtpEmailCreds.username,
+      passKey: smtpEmailCreds.passKey,
+      email: smtpEmailCreds.email,
+      name: smtpEmailCreds.name,
+      host: smtpEmailCreds.host,
+      port: smtpEmailCreds.port,
+      secure: smtpEmailCreds.secure,
+    })
     .from(smtpEmailCreds)
     .where(and(...whereConditions));
 };
@@ -49,7 +57,11 @@ export const getSendgridEmailCredsQuery = async (input: {
     whereConditions.push(eq(sendgridEmailCreds.userId, input.userId));
   }
   return await db
-    .select()
+    .select({
+      apiKey: sendgridEmailCreds.apiKey,
+      email: sendgridEmailCreds.email,
+      name: sendgridEmailCreds.name,
+    })
     .from(sendgridEmailCreds)
     .where(and(...whereConditions));
 };

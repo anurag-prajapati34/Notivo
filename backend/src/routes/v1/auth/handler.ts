@@ -1,4 +1,4 @@
-import { emailProviders } from "@/utils/enum.js";
+import { emailProviders, userTypes } from "@/utils/enum.js";
 import { handleHandlerError } from "@/utils/error-helpers.js";
 import { created, success } from "@/utils/response.js";
 import { AuthRequest } from "@/utils/types.js";
@@ -11,6 +11,7 @@ import {
   signupService,
 } from "./service.js";
 import { SignupRequestBodyType } from "./validator.js";
+import { maskString } from "@/utils/string-helpers.js";
 
 /**
  * Express controller handler for the user signup route.
@@ -84,8 +85,16 @@ export const getApiKeyHandler = async (req: AuthRequest, res: Response) => {
     if (!userId) throw new Error("User not found");
     const user = await getUserQuery({ userId });
     if (!user) throw new Error("User not found");
-    const apiKey = await user.apiKey;
 
+    let apiKey = await user.apiKey;
+    if (
+      user.userType &&
+      user.userType.toLocaleLowerCase() ===
+        userTypes.GUEST.toLocaleLowerCase() &&
+      apiKey
+    ) {
+      apiKey = maskString({ str: apiKey, start: 6, end: 6 });
+    }
     return created(res, { apiKey }, "User created successfully");
   } catch (error) {
     handleHandlerError(res, error);
