@@ -206,6 +206,7 @@ export const sendEmailService = async (
 
     const delayMs = scheduleAt ? scheduleAt.getTime() - Date.now() : 0;
 
+    const emailJobPayloads: { emailId: number; recipient: string }[] = [];
     await db.transaction(async (trx) => {
       for (const recipient of input.recipients) {
         const insertResult = await insertEmailsQuery(
@@ -231,25 +232,30 @@ export const sendEmailService = async (
             "Something went wrong while inserting email",
             400,
           );
-        await addEmailJob(
-          {
-            provider: emailCreds.provider,
-            creds: emailCreds.creds,
-            emailData: {
-              emailId,
-              templateId: template.templateId,
-              to: recipient,
-              subject: subject,
-              html,
-            },
-          } as EmailJobData,
-          "email-queue",
-          {
-            delay: delayMs,
-          },
-        );
+
+        emailJobPayloads.push({ emailId, recipient });
       }
     });
+
+    for (const { emailId, recipient } of emailJobPayloads) {
+      await addEmailJob(
+        {
+          provider: emailCreds.provider,
+          creds: emailCreds.creds,
+          emailData: {
+            emailId,
+            templateId: template.templateId,
+            to: recipient,
+            subject: subject,
+            html,
+          },
+        } as EmailJobData,
+        "email-queue",
+        {
+          delay: delayMs,
+        },
+      );
+    }
   } catch (error) {
     throw error;
   }
