@@ -87,14 +87,7 @@ export const getApiKeyHandler = async (req: AuthRequest, res: Response) => {
     if (!user) throw new Error("User not found");
 
     let apiKey = await user.apiKey;
-    if (
-      user.userType &&
-      user.userType.toLocaleLowerCase() ===
-        userTypes.GUEST.toLocaleLowerCase() &&
-      apiKey
-    ) {
-      apiKey = maskString({ str: apiKey, start: 6, end: 6 });
-    }
+
     return created(res, { apiKey }, "User created successfully");
   } catch (error) {
     handleHandlerError(res, error);
