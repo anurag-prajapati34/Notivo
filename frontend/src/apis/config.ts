@@ -1,4 +1,6 @@
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
+const apiServerUrl = import.meta.env.VITE_API_SERVER_URL;
+const workerServerUrl = import.meta.env.VITE_WORKER_SERVER_URL;
 const endpoints = {
   login: `${baseUrl}/auth/login`,
   signup: `${baseUrl}/auth/signup`,
@@ -13,6 +15,8 @@ const endpoints = {
   sendTestEmail: `${baseUrl}/email/test`,
   getEmailDetails: `${baseUrl}/email/details`,
   sendEmail: `${baseUrl}/email/send`,
+  apiServerHealth: `${apiServerUrl}/health`,
+  workerServerHealth: `${workerServerUrl}/health`,
 };
 
 export { endpoints };

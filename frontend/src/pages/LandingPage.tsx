@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { login } from "../apis/auth.api.js"
 import { useAuthContext } from "../hooks"
+import { pingServers } from "../apis/system.api.js"
 
 // ─── Terminal animation ───────────────────────────────────────────────────────
 
@@ -286,6 +287,10 @@ export const Landing = () => {
       toast.error('Failed to login');
     }
   }
+
+  useEffect(() => {
+    pingServers();
+  }, [])
   return (
     <div className="min-h-screen bg-[#080810] text-gray-100">
 
